@@ -20,6 +20,8 @@ import Spis from '../figurer/spis/Spis.jsx';
 import SpisText from '../figurer/spis/Textversion.astro';
 import Dammsugare from '../figurer/dammsugare/Dammsugare.jsx';
 import DammsugareText from '../figurer/dammsugare/Textversion.astro';
+import Tavla from '../figurer/tavla/Tavla.jsx';
+import TavlaText from '../figurer/tavla/Textversion.astro';
 
 interface Props {
   id: string;
@@ -41,6 +43,7 @@ const { id, del } = Astro.props;
       {id === 'diskmaskin' && <Diskmaskin client:visible />}
       {id === 'spis' && <Spis client:visible />}
       {id === 'dammsugare' && <Dammsugare client:visible />}
+      {id === 'tavla' && <Tavla client:visible />}
     </>
   ) : (
     <>
@@ -54,6 +57,7 @@ const { id, del } = Astro.props;
       {id === 'diskmaskin' && <DiskmaskinText />}
       {id === 'spis' && <SpisText />}
       {id === 'dammsugare' && <DammsugareText />}
+      {id === 'tavla' && <TavlaText />}
     </>
   )
 }
