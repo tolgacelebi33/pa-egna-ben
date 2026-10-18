@@ -1,123 +1,97 @@
-/* Gemensamt för alla figurer. Scenen är alltid ljust papper, även i mörkt läge, så att illustrationerna ser likadana ut. */
+/* Gemensamt för alla SVG-figurer. Scenen är alltid ljust papper, även i mörkt läge. */
 .figur {
   --f-black: #2a2522;
-  --f-papper: #f4eee3;
+  --f-papper: #f6f1e7;
   --f-lera: #c8664a;
   --f-salvia: #8fa58a;
   --f-ockra: #d9a441;
   --f-vatten: #5e7fa0;
+  --f-skiffer: #3b5d7d;
 }
 
 .figur .scen {
-  background-color: var(--f-papper);
-  border-radius: var(--radie);
-  border: 2px solid var(--kant);
-  padding: var(--steg-2);
+  background-color: var(--figurpapper);
+  background-image: var(--korn);
+  border-radius: var(--radie-stor);
+  padding: var(--steg-3) var(--steg-3) var(--steg-7);
+  overflow: hidden;
 }
 
 .figur .scen svg {
   display: block;
   width: 100%;
   height: auto;
+  max-height: 72vh;
   touch-action: manipulation;
 }
 
 .figur .bleck {
   stroke: var(--f-black);
-  stroke-width: 3.2;
+  stroke-width: 3;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
 
-.figur .skugga { fill: var(--f-black); opacity: 0.12; stroke: none; }
-.figur .detalj { fill: none; stroke-width: 1.8; opacity: 0.55; }
+.figur .skugga { fill: var(--f-black); opacity: 0.1; stroke: none; }
+.figur .detalj { fill: none; stroke-width: 1.6; opacity: 0.5; }
 .figur .fokusring { fill: none; stroke: var(--f-black); stroke-width: 2.4; stroke-dasharray: 5 4; }
 .figur .traffyta { fill: transparent; stroke: none; }
+.figur .klickbar { cursor: pointer; outline: none; }
+.figur .ingen-kontur { stroke: none; }
 
-/* Etiketter */
+/* Etiketter i handboksstil: små versaler med fast bredd */
 .figur .etikett,
 .figur .etikett-nr { pointer-events: none; }
-.figur .etikett path { fill: none; stroke: var(--f-black); stroke-width: 1.5; }
-.figur .etikett circle { fill: var(--f-lera); stroke: var(--f-black); stroke-width: 1.5; }
+.figur .etikett path { fill: none; stroke: var(--f-black); stroke-width: 1.4; }
+.figur .etikett circle { fill: var(--f-lera); stroke: var(--f-black); stroke-width: 1.4; }
 .figur .etikett text {
-  font-family: var(--typsnitt-text);
-  font-size: 15px;
-  font-weight: 700;
+  font-family: var(--typsnitt-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   fill: var(--f-black);
   paint-order: stroke;
   stroke: var(--f-papper);
-  stroke-width: 4px;
+  stroke-width: 5px;
 }
 .figur .etikett-nr circle { fill: var(--f-lera); stroke: var(--f-black); stroke-width: 2; }
 .figur .etikett-nr path { stroke: var(--f-black); stroke-width: 2; }
 .figur .etikett-nr .prick { fill: var(--f-black); stroke: none; }
-.figur .etikett-nr text { font-size: 15px; font-weight: 700; fill: #fff; font-family: var(--typsnitt-text); }
+.figur .etikett-nr text { font-size: 15px; font-weight: 700; fill: #fff; font-family: var(--typsnitt-mono); }
+
+/* Namn som står direkt i figuren, utan linje */
+.figur .namn {
+  font-family: var(--typsnitt-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  fill: var(--f-black);
+  stroke: none;
+  pointer-events: none;
+}
 
 .figur .etikettlista {
   columns: 2;
-  margin: var(--steg-2) 0 0;
+  margin: 0;
   padding-left: 1.6rem;
   font-size: var(--text-s);
 }
 
-/* Status och kontroller */
-.figur .status {
-  min-height: 3em;
-  margin: var(--steg-3) 0;
-  padding: var(--steg-2) var(--steg-3);
-  background: var(--yta);
-  border-left: 4px solid var(--tegel);
-  border-radius: 4px;
+.figur .flyttbar {
+  transition: transform 0.8s cubic-bezier(0.5, 0, 0.3, 1), opacity 0.5s ease;
 }
 
-.figur .steg {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 var(--steg-3);
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--steg-2);
-  counter-reset: steg;
+.figur .chip[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
-.figur .steg li { counter-increment: steg; }
-.figur .steg button {
-  width: 100%;
-  height: 100%;
-  justify-content: flex-start;
-  text-align: left;
+@media (prefers-reduced-motion: reduce) {
+  .figur .flyttbar,
+  .figur * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
-
-.figur .steg button::before {
-  content: counter(steg);
-  flex: none;
-  display: inline-grid;
-  place-items: center;
-  width: 1.7rem;
-  height: 1.7rem;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  font-weight: 700;
-  font-size: 0.9rem;
-}
-
-.figur .steg button.klar::before { background: var(--salvia-yta); }
-.figur .borja-om { border-style: dashed; }
-
-.figur .reglage {
-  margin: var(--steg-4) 0 0;
-  display: grid;
-  gap: var(--steg-3);
-}
-
-.figur .vaxel,
-.figur .skjut {
-  display: flex;
-  align-items: center;
-  gap: var(--steg-3);
-  flex-wrap: wrap;
-  min-height: 44px;
-}
-
-.figur .vaxel input { width: 1.4rem; height: 1.4rem; accent-color: var(--black); }
-.figur .skjut input { flex: 1; min-width: 140px; accent-color: var(--black); }

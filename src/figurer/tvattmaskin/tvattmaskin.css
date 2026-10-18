@@ -1,0 +1,62 @@
+/* Tvättmaskinsfiguren. Det gemensamma för alla figurer ligger i ../delat/figur.css. */
+.figur-tvattmaskin .yta-topp { fill: #f6f2ea; }
+.figur-tvattmaskin .yta-sida { fill: #cfc6b6; }
+.figur-tvattmaskin .yta-front { fill: #e7e0d3; }
+.figur-tvattmaskin .halrum { fill: #4a433d; }
+.figur-tvattmaskin .balja { fill: #6f675e; }
+.figur-tvattmaskin .snittkant { fill: none; stroke-width: 3.2; }
+.figur-tvattmaskin .trumma-bak { fill: #a39b90; stroke: none; }
+.figur-tvattmaskin .hal { fill: #6f675e; stroke: none; }
+.figur-tvattmaskin .medbringare { fill: #d4ccbf; stroke-width: 2; }
+.figur-tvattmaskin .kontur-fri { fill: none; stroke-width: 3; }
+.figur-tvattmaskin .vatten { fill: var(--f-vatten); opacity: 0.72; stroke: #3f5a74; stroke-width: 2; }
+.figur-tvattmaskin .ror { fill: none; stroke: var(--f-vatten); stroke-width: 6; stroke-dasharray: 8 7; }
+.figur-tvattmaskin .ror.flodar { animation: tm-flode 0.8s linear infinite; }
+@keyframes tm-flode { to { stroke-dashoffset: -15; } }
+
+.figur-tvattmaskin .fack { fill: #f3eee5; stroke-width: 2.6; }
+.figur-tvattmaskin .fack-grepp { fill: var(--f-black); opacity: 0.35; stroke: none; }
+.figur-tvattmaskin .display { fill: #34443a; stroke-width: 2.6; }
+.figur-tvattmaskin .display-text { fill: #d6e8c2; stroke: none; font-size: 8.5px; font-family: ui-monospace, monospace; }
+.figur-tvattmaskin .panelknapp { cursor: pointer; }
+.figur-tvattmaskin .knapp-temp { fill: var(--f-ockra); stroke-width: 2.4; }
+.figur-tvattmaskin .knapp-start { fill: var(--f-salvia); stroke-width: 2.4; }
+.figur-tvattmaskin .knapp-start.aktiv { fill: #6f8c69; }
+.figur-tvattmaskin .knapp-symbol { stroke-width: 2; }
+.figur-tvattmaskin .knapp-symbol-fylld { fill: var(--f-black); stroke: none; }
+.figur-tvattmaskin .markering { stroke-width: 2.2; opacity: 0.5; }
+.figur-tvattmaskin .markering.vald { opacity: 1; stroke: var(--f-lera); stroke-width: 3; }
+.figur-tvattmaskin .ratt { cursor: grab; outline: none; }
+.figur-tvattmaskin .ratt:active { cursor: grabbing; }
+.figur-tvattmaskin .ratt-knopp { fill: #f3eee5; stroke-width: 3; }
+.figur-tvattmaskin .ratt-mitt { fill: #dcd4c6; stroke-width: 1.8; }
+.figur-tvattmaskin .ratt-visare { stroke: var(--f-lera); stroke-width: 4; }
+
+.figur-tvattmaskin .lucka-ring { fill: #dcd5c8; }
+.figur-tvattmaskin .lucka-fals { fill: #bfb6a7; stroke-width: 2; }
+.figur-tvattmaskin .glas { fill: #a8c0d2; opacity: 0.3; stroke-width: 3.2; }
+.figur-tvattmaskin .glans { fill: none; stroke: #fff; stroke-width: 5; opacity: 0.6; }
+.figur-tvattmaskin .handtag { fill: #bfb6a7; stroke-width: 2.4; }
+
+.figur-tvattmaskin .korg-botten { fill: #5e4a37; }
+.figur-tvattmaskin .korg-insida { fill: #8a6f52; }
+.figur-tvattmaskin .korg-insida-v { fill: #765e45; }
+.figur-tvattmaskin .korg-front { fill: #c79b6b; }
+.figur-tvattmaskin .korg-sida { fill: #a9805a; }
+.figur-tvattmaskin .plagg path { stroke-width: 2.2; }
+
+.figur-tvattmaskin .flyttbar {
+  transition: transform 0.9s cubic-bezier(0.5, 0, 0.3, 1), opacity 0.6s ease 0.5s;
+}
+
+.figur-tvattmaskin .korg-namn { pointer-events: none; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; fill: var(--f-black); font-family: var(--typsnitt-mono); }
+
+.figur-tvattmaskin .steg li:last-child button { background: var(--black); color: var(--papper); }
+
+@media (prefers-reduced-motion: reduce) {
+  .figur-tvattmaskin .flyttbar,
+  .figur-tvattmaskin .ror.flodar {
+    transition: none !important;
+    animation: none !important;
+  }
+}

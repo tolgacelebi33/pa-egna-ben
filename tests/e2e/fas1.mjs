@@ -243,8 +243,7 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   await page.goto(BAS + '/figur/tvattmaskin/', { waitUntil: 'networkidle' });
   await page.locator('.figur3d-steg').scrollIntoViewIfNeeded();
   await page.waitForSelector('.figur3d-steg button');
-  const webgl = await page.locator('.tre-canvas').count();
-  kontroll('tvättmaskin: 3D-figur eller reservtext visas', webgl > 0 || (await page.locator('.figur-reserv').count()) > 0, `canvas: ${webgl}`);
+  kontroll('tvättmaskin: figuren visas', (await page.locator('.figur-tvattmaskin .scen svg').count()) === 1);
   await page.getByRole('button', { name: /Starta tvätten/ }).click();
   kontroll('tvättmaskin: start kräver sorterad tvätt', ((await page.locator('.figur3d-status').textContent()) ?? '').includes('Sortera'));
   await page.getByRole('button', { name: /Sortera tvätten/ }).click();
@@ -263,7 +262,7 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   const ctx = await browser.newContext({ ...DATOR, reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(BAS + '/figur/brandvarnare/', { waitUntil: 'networkidle' });
-  await page.waitForSelector('.figur-brandvarnare .figur3d-steg button');
+  await page.waitForSelector('.figur-brandvarnare .testknapp');
   await page.getByRole('button', { name: /Tryck på testknappen/ }).focus();
   await page.keyboard.press('Enter');
   const bvStatus = (await page.locator('.figur-brandvarnare .figur3d-status').textContent()) ?? '';
@@ -277,7 +276,7 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   kontroll('brandvarnare: ljudet är avstängt från början', (await page.getByRole('button', { name: 'Spela upp ljud' }).getAttribute('aria-pressed')) === 'false');
 
   await page.goto(BAS + '/figur/elskap/', { waitUntil: 'networkidle' });
-  await page.waitForSelector('.figur-elskap .brytare button');
+  await page.waitForSelector('.figur-elskap .spak');
   await page.getByRole('button', { name: /Koppla in fler apparater i köket/ }).click();
   const kok = page.getByRole('switch', { name: 'Säkring 1, Kök' });
   kontroll('elskåp: överlast löser ut köksäkringen direkt vid reducerad rörelse', (await kok.getAttribute('aria-checked')) === 'false');
@@ -291,9 +290,9 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   await page.getByRole('button', { name: 'Testknapp på jordfelsbrytaren' }).click();
   const jfb = page.getByRole('switch', { name: 'Jordfelsbrytare' });
   kontroll('elskåp: testknappen löser ut jordfelsbrytaren', (await jfb.getAttribute('aria-checked')) === 'false');
-  kontroll('elskåp: alla rum blir strömlösa', ((await page.locator('.figur-elskap .brytare [aria-live]').textContent()) ?? '').startsWith('0 av 4'));
+  kontroll('elskåp: alla rum blir strömlösa', (await page.locator('.figur-elskap .rum.tand').count()) === 0);
   await page.getByRole('button', { name: /Slå på jordfelsbrytaren igen/ }).click();
-  kontroll('elskåp: jordfelsbrytaren går att slå på igen', ((await page.locator('.figur-elskap .brytare [aria-live]').textContent()) ?? '').startsWith('4 av 4'));
+  kontroll('elskåp: jordfelsbrytaren går att slå på igen', (await page.locator('.figur-elskap .rum.tand').count()) === 4);
   await ctx.close();
 }
 

@@ -2,11 +2,11 @@
 import Bas from '../../layouts/Bas.astro';
 import AmneKort from '../../components/AmneKort.astro';
 import Figurlista from '../../components/Figurlista.astro';
-import Tvattmaskin3D from '../../figurer/tvattmaskin/Tvattmaskin3D.jsx';
+import Tvattmaskin from '../../figurer/tvattmaskin/Tvattmaskin.jsx';
 import TvattmaskinText from '../../figurer/tvattmaskin/Textversion.astro';
-import Brandvarnare3D from '../../figurer/brandvarnare/Brandvarnare3D.jsx';
+import Brandvarnare from '../../figurer/brandvarnare/Brandvarnare.jsx';
 import BrandvarnareText from '../../figurer/brandvarnare/Textversion.astro';
-import Elskap3D from '../../figurer/elskap/Elskap3D.jsx';
+import Elskap from '../../figurer/elskap/Elskap.jsx';
 import ElskapText from '../../figurer/elskap/Textversion.astro';
 import { t } from '../../i18n/index.js';
 import { FIGURER } from '../../data/figurer.js';
@@ -32,9 +32,9 @@ const nummer = String(nr).padStart(2, '0');
       </header>
 
       {!fig.klar && <p class="ingress">{t('figurer.inte.klar')}</p>}
-      {fig.id === 'tvattmaskin' && <Tvattmaskin3D client:visible />}
-      {fig.id === 'brandvarnare' && <Brandvarnare3D client:visible />}
-      {fig.id === 'elskap' && <Elskap3D client:visible />}
+      {fig.id === 'tvattmaskin' && <Tvattmaskin client:visible />}
+      {fig.id === 'brandvarnare' && <Brandvarnare client:visible />}
+      {fig.id === 'elskap' && <Elskap client:visible />}
 
       {
         fig.klar && (
