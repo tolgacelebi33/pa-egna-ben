@@ -1,0 +1,17 @@
+/* Cisternfiguren. */
+.figur-cistern .golv { fill: #ddd3c3; }
+.figur-cistern .vagg { fill: #e4ece9; stroke-width: 2; }
+.figur-cistern .insida { fill: #f1f4f6; stroke: none; }
+.figur-cistern .kant { fill: none; stroke-width: 4; }
+.figur-cistern .vatten { fill: #9cc0e2; stroke: none; opacity: 0.85; transition: transform 1.2s ease-in-out; }
+.figur-cistern .metall { fill: #c5ccd1; stroke-width: 2.4; }
+.figur-cistern .flottor { transition: transform 1.2s ease-in-out; }
+.figur-cistern .arm { fill: none; stroke-width: 3; }
+.figur-cistern .flottor-boll { fill: #d9a441; stroke-width: 2.4; }
+.figur-cistern .tatning rect { fill: #c8664a; stroke-width: 2.4; }
+.figur-cistern .tatning { transform-box: fill-box; transform-origin: left center; transition: transform 0.4s ease; }
+.figur-cistern .flode { fill: none; stroke: #5e7fa0; stroke-width: 5; stroke-dasharray: 6 8; animation: ci-flode 0.6s linear infinite; }
+.figur-cistern .stralar { fill: none; stroke: #5e7fa0; stroke-width: 3; }
+@keyframes ci-flode { to { stroke-dashoffset: -14; } }
+.figur-cistern .krusning { animation: ci-krus 1s ease-in-out infinite alternate; }
+@keyframes ci-krus { to { opacity: 0.6; } }

@@ -10,6 +10,8 @@ import Kyl from '../figurer/kyl/Kyl.jsx';
 import KylText from '../figurer/kyl/Textversion.astro';
 import Vattenlas from '../figurer/vattenlas/Vattenlas.jsx';
 import VattenlasText from '../figurer/vattenlas/Textversion.astro';
+import Cistern from '../figurer/cistern/Cistern.jsx';
+import CisternText from '../figurer/cistern/Textversion.astro';
 
 interface Props {
   id: string;
@@ -26,6 +28,7 @@ const { id, del } = Astro.props;
       {id === 'elskap' && <Elskap client:visible />}
       {id === 'kyl' && <Kyl client:visible />}
       {id === 'vattenlas' && <Vattenlas client:visible />}
+      {id === 'cistern' && <Cistern client:visible />}
     </>
   ) : (
     <>
@@ -34,6 +37,7 @@ const { id, del } = Astro.props;
       {id === 'elskap' && <ElskapText />}
       {id === 'kyl' && <KylText />}
       {id === 'vattenlas' && <VattenlasText />}
+      {id === 'cistern' && <CisternText />}
     </>
   )
 }
