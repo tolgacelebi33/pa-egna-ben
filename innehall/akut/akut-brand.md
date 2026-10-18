@@ -3,7 +3,7 @@ id: akut-brand
 titel: "Det brinner: vad man gör"
 titel_en: ""
 kategori: akut
-sammanfattning: "Steg för steg när det brinner, och vad du aldrig ska göra."
+sammanfattning: ""
 niva: vecka1
 risk: hog
 regelberoende: true
@@ -15,8 +15,8 @@ filter:
   utrustning: []
 kallor: []
 kalltyper:
-  - "Myndighet för samhällsskydd och beredskap"
-  - "Räddningstjänst"
+  - Myndighet för samhällsskydd och beredskap
+  - Räddningstjänst
 granskning:
   status: utkast
   senast_kontrollerad: null
@@ -25,18 +25,22 @@ granskning:
   faktagranskad_av: ""
   fackgranskad_av: ""
   fackgranskare_kompetens: ""
-relaterade: 
+relaterade:
   - nar-det-brinner
+  - akut-fettbrand
+  - huset-brandvarnare
 ---
 
 ## Vad gör jag nu
 
-1. TODO-KONTROLL: stegen fastställs med källa och fackgranskas.
+1. TODO-KONTROLL: vad man gör när det brinner, steg 1. Fastställs med källa och fackgranskas.
+2. TODO-KONTROLL: vad man gör när det brinner, steg 2. Fastställs med källa och fackgranskas.
+3. TODO-KONTROLL: vad man gör när det brinner, steg 3. Fastställs med källa och fackgranskas.
 
 :::varning
 TODO-KONTROLL: vad man aldrig ska göra vid brand, med källa.
 :::
 
-## Förbered dig
+## Bra att veta
 
-- TODO-KONTROLL: utrymningsväg, brandvarnare och brandsläckare.
+- Förbered dig: utrymningsväg, brandvarnare, brandsläckare.

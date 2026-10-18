@@ -3,7 +3,7 @@ id: bostad-andrahand
 titel: "Hyra i andra hand: godkännande, skälig hyra, risker"
 titel_en: ""
 kategori: bostad
-sammanfattning: "Vad du ska kontrollera innan du hyr i andra hand."
+sammanfattning: ""
 niva: vecka1
 risk: medel
 regelberoende: true
@@ -11,13 +11,13 @@ varierar_per_kommun: false
 akut: false
 figur: null
 filter:
-  boendeform: 
+  boendeform:
     - andrahand
   utrustning: []
 kallor: []
 kalltyper:
-  - "Lagtext om hyra"
-  - "Organisation som ger råd till hyresgäster"
+  - Lagtext om hyra
+  - Organisation som ger råd till hyresgäster
 granskning:
   status: utkast
   senast_kontrollerad: null
@@ -26,8 +26,9 @@ granskning:
   faktagranskad_av: ""
   fackgranskad_av: ""
   fackgranskare_kompetens: ""
-relaterade: 
-  - flytt-checklista-fore
+relaterade:
+  - bostad-kontrakt
+  - bostad-deposition
 ---
 
 ## Vad gör jag nu
@@ -38,4 +39,5 @@ relaterade:
 
 ## Bra att veta
 
-- Appen kan inte bedöma ditt kontrakt. Vid frågor, kontakta en organisation som ger råd till hyresgäster.
+- Risker om uthyrningen inte är godkänd.
+- Appen kan inte bedöma ditt kontrakt. Hänvisning till organisation som ger råd till hyresgäster.

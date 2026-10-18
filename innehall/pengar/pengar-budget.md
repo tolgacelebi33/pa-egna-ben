@@ -1,9 +1,9 @@
 ---
 id: pengar-budget
-titel: "Göra en budget och följa upp den"
+titel: Göra en budget och följa upp den
 titel_en: ""
 kategori: pengar
-sammanfattning: "Så gör du en enkel budget och håller koll på den."
+sammanfattning: ""
 niva: vecka1
 risk: lag
 regelberoende: false
@@ -15,8 +15,7 @@ filter:
   utrustning: []
 kallor: []
 kalltyper:
-  - "Myndighet för konsumentfrågor"
-  - "Bankernas egna budgetmallar, endast som jämförelse"
+  - Myndighet för konsumentfrågor
 granskning:
   status: utkast
   senast_kontrollerad: null
@@ -25,17 +24,18 @@ granskning:
   faktagranskad_av: ""
   fackgranskad_av: ""
   fackgranskare_kompetens: ""
-relaterade: 
-  - flytt-checklista-fore
+relaterade:
+  - pengar-vad-kostar-det
+  - pengar-buffert
 ---
 
 ## Vad gör jag nu
 
-1. Skriv ned allt som kommer in varje månad.
-2. Skriv ned de fasta kostnaderna.
-3. Skriv ned de rörliga kostnaderna.
-4. Jämför. TODO-KONTROLL: hur stor buffert som brukar rekommenderas och av vem.
+- Skriv ned allt som kommer in varje månad.
+- Skriv ned fasta och rörliga kostnader.
+- Jämför och justera.
 
-## Följ upp
+## Bra att veta
 
-- Titta på budgeten en gång i månaden och justera.
+- Följ upp en gång i månaden.
+- Buffert: se eget ämne.

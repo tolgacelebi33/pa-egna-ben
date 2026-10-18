@@ -1,9 +1,9 @@
 ---
 id: flytt-checklista-fore
-titel: "Checklista före flytten"
+titel: Checklista före flytten
 titel_en: ""
 kategori: bostad
-sammanfattning: "Det du behöver ordna innan du flyttar in."
+sammanfattning: ""
 niva: vecka1
 risk: lag
 regelberoende: false
@@ -15,8 +15,8 @@ filter:
   utrustning: []
 kallor: []
 kalltyper:
-  - "Myndighet för folkbokföring"
-  - "Hyresvärdens information"
+  - Myndighet för folkbokföring
+  - Hyresvärdens information
 granskning:
   status: utkast
   senast_kontrollerad: null
@@ -25,15 +25,16 @@ granskning:
   faktagranskad_av: ""
   fackgranskad_av: ""
   fackgranskare_kompetens: ""
-relaterade: 
-  - bostad-andrahand
-  - pengar-budget
+relaterade:
+  - bostad-flyttanmalan
+  - bostad-hemforsakring
+  - flytt-forsta-natten
 ---
 
 ## Vad gör jag nu
 
 - Läs kontraktet en gång till.
 - Ordna hemförsäkring. TODO-KONTROLL: när den ska gälla från.
-- Anmäl flytt. TODO-KONTROLL: var och när.
+- Anmäl flytt.
 - Boka flytthjälp eller flyttbil.
 - Packa en låda med det du behöver första natten.

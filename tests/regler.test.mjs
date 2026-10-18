@@ -178,6 +178,13 @@ test('akut: kontakter utan källa stoppar bygget när publicerat akutinnehåll f
   assert.ok(kontrolleraKontakter(kontakter, true).length > 0);
 });
 
+test('akut: telefonnummer i brödtexten stoppar bygget, även i utkast', () => {
+  assert.ok(harRegel(kor(publicerat(), 'Ring 112 direkt.'), 'akut'));
+  assert.ok(harRegel(kor(publicerat({ granskning: { status: 'utkast' } }), 'Ring 1177.'), 'akut'));
+  assert.ok(harRegel(kor(publicerat(), 'Ring 08-123 45 67.'), 'akut'));
+  assert.deepEqual(kor(publicerat(), 'År 2026 kostade det 1500 kronor.').fel, []);
+});
+
 test('delaFrontmatter delar fil i yaml och text', () => {
   assert.deepEqual(delaFrontmatter('---\na: 1\n---\nText'), { yaml: 'a: 1', text: 'Text' });
   assert.equal(delaFrontmatter('Ingen frontmatter'), null);

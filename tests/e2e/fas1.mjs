@@ -143,7 +143,8 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   await page.goto(BAS + '/sok/?q=budget', { waitUntil: 'networkidle' });
   await page.locator('[data-sokresultat] li').first().waitFor({ timeout: 5000 }).catch(() => {});
   const budget = await page.locator('[data-sokresultat] li').count();
-  kontroll('/sok/?q= söker direkt', budget === 1, `${budget} träffar`);
+  const forsta = await page.locator('[data-sokresultat] li a').first().getAttribute('href');
+  kontroll('/sok/?q= söker direkt', budget >= 1 && forsta === '/amne/pengar-budget/', `${budget} träffar, först ${forsta}`);
   await ctx.close();
 }
 

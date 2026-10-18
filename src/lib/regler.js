@@ -3,6 +3,8 @@
 import { amneSchema } from './schema.js';
 
 export const TODO = 'TODO-KONTROLL';
+// Kända korta nummer och svenska telefonnummer med riktnummer. Årtal och belopp ska inte fångas.
+const TELEFONNUMMER = /\b(?:112|1177|114 ?14|90 ?101)\b|\b0\d{1,3}[- ]\d{2,3}[ ]?\d{2}[ ]?\d{2}\b/;
 const MANAD_MS = 1000 * 60 * 60 * 24 * 30.44;
 
 const tomt = (v) => v === undefined || v === null || String(v).trim() === '';
@@ -42,6 +44,11 @@ export function kontrolleraAmne(amne, ctx) {
   if (amne.mapp !== undefined && d.kategori !== amne.mapp) {
     ut(fel, 'schema', `kategori "${d.kategori}" ska vara samma som mappen "${amne.mapp}"`);
   }
+
+  // Säkerhetsregel för akut (avsnitt 4): telefonnummer får aldrig skrivas i löptext, de hämtas från den centrala filen.
+  // Gäller alla statusar, så att numren inte smyger in redan i utkast.
+  const nummer = TELEFONNUMMER.exec(amne.text);
+  if (nummer) ut(fel, 'akut', `brödtexten innehåller ett telefonnummer ("${nummer[0]}"). Använd den centrala kontaktfilen.`);
 
   // Regel 8 gäller alla, en trasig länk är fel oavsett status.
   for (const r of d.relaterade) {

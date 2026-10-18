@@ -277,7 +277,7 @@
   {
     "namn": "sökning på \"tvatt\" ger träffar",
     "ok": true,
-    "detalj": "2 träffar"
+    "detalj": "20 träffar"
   },
   {
     "namn": "sökstatus läses upp",
@@ -287,7 +287,7 @@
   {
     "namn": "/sok/?q= söker direkt",
     "ok": true,
-    "detalj": "1 träffar"
+    "detalj": "3 träffar, först /amne/pengar-budget/"
   },
   {
     "namn": "offline /amne/akut-brand/",
@@ -327,7 +327,7 @@
   {
     "namn": "delad länk innehåller bara ämnes-id",
     "ok": true,
-    "detalj": "http://localhost:4323/foraldralage/#klara=flytt-checklista-fore,pengar-budget"
+    "detalj": "http://localhost:4323/foraldralage/#klara=flytt-checklista-fore,pengar-vad-kostar-det"
   },
   {
     "namn": "länken öppnar listan med samma avbockningar",
