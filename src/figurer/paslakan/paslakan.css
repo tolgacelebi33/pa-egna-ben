@@ -1,0 +1,6 @@
+/* Påslakansfiguren. */
+.figur-paslakan .golv { fill: #d9cbb2; }
+.figur-paslakan .tyg { stroke-width: 2.6; }
+.figur-paslakan .oppning { stroke-width: 3; stroke-dasharray: 6 5; }
+.figur-paslakan .hand { fill: #e3b493; stroke-width: 2.2; }
+.figur-paslakan .skak { fill: none; stroke-width: 2.6; }

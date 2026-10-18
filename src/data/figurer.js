@@ -11,7 +11,7 @@ export const FIGURER = [
   { id: 'spis', titel: 'Spis, ugn och induktion', klar: true },
   { id: 'dammsugare', titel: 'Dammsugaren', klar: true },
   { id: 'tavla', titel: 'Väggen i genomskärning', klar: true },
-  { id: 'paslakan', titel: 'Påslakanet', klar: false },
+  { id: 'paslakan', titel: 'Påslakanet', klar: true },
   { id: 'cykel', titel: 'Cykeln', klar: false },
   { id: 'faktura', titel: 'Fakturan', klar: false },
   { id: 'budget', titel: 'Budgetkalkylator', klar: false },

@@ -10,5 +10,6 @@ import diskmaskin from './diskmaskin/sv.js';
 import spis from './spis/sv.js';
 import dammsugare from './dammsugare/sv.js';
 import tavla from './tavla/sv.js';
+import paslakan from './paslakan/sv.js';
 
-export const FIGURORDLISTOR = { tvattmaskin, brandvarnare, elskap, kyl, 'vattenlas': vattenlas, 'cistern': cistern, 'huvudkran': huvudkran, 'diskmaskin': diskmaskin, 'spis': spis, 'dammsugare': dammsugare, 'tavla': tavla };
+export const FIGURORDLISTOR = { tvattmaskin, brandvarnare, elskap, kyl, 'vattenlas': vattenlas, 'cistern': cistern, 'huvudkran': huvudkran, 'diskmaskin': diskmaskin, 'spis': spis, 'dammsugare': dammsugare, 'tavla': tavla, 'paslakan': paslakan };
