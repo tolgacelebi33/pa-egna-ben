@@ -39,7 +39,7 @@ interface Props {
 }
 const { id, del } = Astro.props;
 // Figurer som består av AI-bilder, ett läge per steg (filer i public/figurer/bilder/<id>/).
-const BILDLAGEN: Record<string, string[]> = {"kyl": ["stangd", "oppen", "oppen-mat", "frys-ute"], "cistern": ["grund", "spolar", "fylls", "lacker"], "diskmaskin": ["stangd", "oppen", "korg-ute", "filter"], "dammsugare": ["grund", "oppen", "munstycken", "filter"], "paslakan": ["steg1", "steg2", "steg3", "klar"], "cykel": ["grund", "punktering", "pump", "kedja"], "vattenlas": ["grund", "torr", "loss"], "spis": ["grund", "kastrull", "ugn-oppen"], "tavla": ["gips", "betong", "tra"], "faktura": ["grund"]};
+const BILDLAGEN: Record<string, string[]> = {"kyl": ["oppen", "oppen-mat", "frys-ute"], "cistern": ["grund", "spolar", "fylls", "lacker"], "diskmaskin": ["stangd", "oppen", "korg-ute", "filter"], "dammsugare": ["grund", "oppen", "munstycken", "filter"], "paslakan": ["steg1", "steg2", "steg3", "klar"], "cykel": ["grund", "punktering", "pump", "kedja"], "vattenlas": ["grund", "torr", "loss"], "spis": ["grund", "kastrull", "ugn-oppen"], "tavla": ["gips", "betong", "tra"], "faktura": ["grund"]};
 const alla = id === 'beslutstrad' ? await hamtaAmnen() : [];
 const titlar = Object.fromEntries(amnenI().map((a) => [a, alla.find((p) => p.data.id === a)?.data.titel ?? a]));
 ---

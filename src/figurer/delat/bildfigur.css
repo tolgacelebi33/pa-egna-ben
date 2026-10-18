@@ -18,3 +18,16 @@
 .bildstack img.synlig {
   opacity: 1;
 }
+
+.bildpunkter {
+  margin: 0;
+  padding: var(--steg-4) var(--steg-4) var(--steg-4) var(--steg-6);
+  border-radius: var(--radie);
+  background: var(--ark);
+  box-shadow: var(--skugga);
+  display: grid;
+  gap: var(--steg-2);
+}
+.bildpunkter li::marker {
+  color: var(--tegel);
+}
