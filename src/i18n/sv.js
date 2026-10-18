@@ -6,6 +6,7 @@ export default {
 
   'meny.rubrik': 'Huvudmeny',
   'meny.start': 'Start',
+  'meny.sok': 'Sök',
   'meny.figurer': 'Figurer',
   'meny.foraldralage': 'Föräldraläge',
   'meny.installningar': 'Inställningar',
@@ -100,7 +101,9 @@ export default {
   'figurer.lista': 'Alla figurer',
   'figurer.kommer': 'kommer senare',
   'figurer.inte.klar': 'Den här figuren är inte byggd än.',
-  'figurer.text.rubrik': 'Textversion',
+  'figurer.text.rubrik': 'Samma sak i text',
+  'figurer.text.over': 'Textversion',
+  'figurer.figur': 'Figur',
   'figurer.amnen': 'Ämnen som använder figuren',
 
   'onb.rubrik': 'Anpassa appen',
@@ -202,6 +205,10 @@ export default {
   'kallor.tabell.kontrollerad': 'Senast kontrollerad',
 
   'kommer.senare': 'kommer senare',
+  'figur3d.ingen.webgl': 'Din webbläsare kan inte visa 3D-figuren. Läs textversionen nedan, den innehåller samma kunskap.',
+  'figur3d.aterstall': 'Återställ vyn',
+  'figur3d.handritad': 'Handritat',
+  'figur3d.hjalp': 'Dra för att vrida. Nyp eller skrolla för att zooma. Med tangentbord: piltangenter och plus eller minus.',
   'brodsmulor': 'Du är här',
   '404.rubrik': 'Sidan finns inte',
   '404.text': 'Sidan kan ha flyttats eller tagits bort.',

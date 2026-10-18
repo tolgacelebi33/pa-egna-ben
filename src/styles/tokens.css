@@ -1,39 +1,44 @@
 /*
-  Designsystem. Sex namngivna färger:
-  papper  bakgrund, varm och dämpad så att figurerna ser ritade på papper ut
-  black   text och konturer, nästan svart men varm
-  tegel   akut och varning, en dov röd som inte skriker
-  salvia  klart och lugnt, för avbockat och positiva besked
-  ockra   markering, utkast och fokus i figurer (inte för text)
-  skiffer länkar och vatten, en grå blå som skiljer sig från tegel även vid färgblindhet
+  Designsystem, version 2: "handboken". Lugna pappersark med mycket luft, figurerna är det djärva.
+  Sex namngivna färger (godkända i fas 1):
+  papper  bakgrund, varm och dämpad
+  black   text och konturer
+  tegel   akut och varning
+  salvia  klart och lugnt
+  ockra   markering och utkast (inte för text)
+  skiffer länkar
   Kontrasten testas i tests/kontrast.test.mjs.
 */
 
 /* ljust */
 :root {
-  --papper: #f4eee3;
-  --yta: #fbf8f2;
-  --yta-2: #ebe3d5;
+  --papper: #efe8dc;
+  --ark: #faf6ef;
+  --yta: #faf6ef;
+  --yta-2: #e9e1d3;
   --black: #2a2522;
-  --text-svag: #5a524b;
+  --text-svag: #5d554d;
   --tegel: #a34a32;
-  --tegel-yta: #f6e1d8;
+  --tegel-yta: #f5e0d6;
   --salvia: #5f7a59;
   --salvia-yta: #e2ebdf;
   --ockra: #d9a441;
   --ockra-yta: #f6e7c4;
   --skiffer: #3b5d7d;
-  --skiffer-yta: #dfe8f0;
-  --kant: #d3c8b6;
+  --skiffer-yta: #e1e9f0;
+  --kant: #d9cfbf;
+  --linje: rgb(42 37 34 / 0.14);
+  --skugga: 0 1px 0 rgb(42 37 34 / 0.04), 0 10px 30px -18px rgb(42 37 34 / 0.35);
   color-scheme: light;
 }
 /* slut ljust */
 
 /* morkt */
 :root[data-tema='morkt'] {
-  --papper: #1e1b19;
-  --yta: #2a2623;
-  --yta-2: #36312d;
+  --papper: #1b1816;
+  --ark: #26221f;
+  --yta: #26221f;
+  --yta-2: #332e2a;
   --black: #efe8dc;
   --text-svag: #bfb5a8;
   --tegel: #ec9479;
@@ -45,15 +50,18 @@
   --skiffer: #9cc0e2;
   --skiffer-yta: #22303d;
   --kant: #4a433d;
+  --linje: rgb(239 232 220 / 0.14);
+  --skugga: 0 10px 30px -18px rgb(0 0 0 / 0.6);
   color-scheme: dark;
 }
 /* slut morkt */
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-tema='ljust']) {
-    --papper: #1e1b19;
-    --yta: #2a2623;
-    --yta-2: #36312d;
+    --papper: #1b1816;
+    --ark: #26221f;
+    --yta: #26221f;
+    --yta-2: #332e2a;
     --black: #efe8dc;
     --text-svag: #bfb5a8;
     --tegel: #ec9479;
@@ -65,22 +73,29 @@
     --skiffer: #9cc0e2;
     --skiffer-yta: #22303d;
     --kant: #4a433d;
+    --linje: rgb(239 232 220 / 0.14);
+    --skugga: 0 10px 30px -18px rgb(0 0 0 / 0.6);
     color-scheme: dark;
   }
 }
 
 :root {
-  /* Typsnitt: Atkinson Hyperlegible Next för brödtext (byggt för läsbarhet, tydliga skillnader mellan lika bokstäver),
-     Bricolage Grotesque för rubriker (egen karaktär med lite ojämn, handgjord känsla). Båda OFL-1.1, lokalt hostade. */
+  /* Figurerna står alltid på ljust papper, även i mörkt läge, så att illustrationerna ser likadana ut. */
+  --figurpapper: #f6f1e7;
+  --korn: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.14 0 0 0 0 0.12 0 0 0 0.075 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* Typsnitt: Atkinson Hyperlegible Next för text (läsbarhet), Bricolage Grotesque för rubriker,
+     IBM Plex Mono för små etiketter, figurnummer och knappar i figurerna (handbokskänsla). Alla OFL-1.1, lokalt hostade. */
   --typsnitt-text: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
   --typsnitt-rubrik: 'Bricolage Grotesque Variable', 'Atkinson Hyperlegible Next', system-ui, sans-serif;
-  --typsnitt-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  --typsnitt-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
+  --text-xs: 0.75rem;
   --text-s: 0.9rem;
   --text-m: 1.0625rem;
   --text-l: 1.25rem;
   --text-xl: 1.6rem;
-  --text-xxl: 2.1rem;
+  --text-xxl: clamp(2rem, 6vw, 3.2rem);
 
   --steg-1: 0.25rem;
   --steg-2: 0.5rem;
@@ -89,11 +104,14 @@
   --steg-5: 1.5rem;
   --steg-6: 2rem;
   --steg-7: 3rem;
+  --steg-8: 4.5rem;
 
-  --radie: 10px;
-  --radie-s: 6px;
-  --kantlinje: 2px solid var(--black);
-  --max-bredd: 46rem;
-  --max-bredd-bred: 72rem;
+  --radie-s: 8px;
+  --radie: 14px;
+  --radie-stor: 22px;
+  --radie-pill: 999px;
+  --kantlinje: 1.5px solid var(--black);
+  --max-bredd: 44rem;
+  --max-bredd-bred: 76rem;
   --tryckyta: 48px;
 }

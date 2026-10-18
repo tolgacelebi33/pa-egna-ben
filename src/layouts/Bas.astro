@@ -15,7 +15,7 @@ interface Props {
 const { titel, beskrivning = t('app.beskrivning'), bred = false } = Astro.props;
 const sokvag = Astro.url.pathname;
 const meny = [
-  { href: url(), text: t('meny.start') },
+  { href: url('sok/'), text: t('meny.sok') },
   { href: url('figur/'), text: t('meny.figurer') },
   { href: url('foraldralage/'), text: t('meny.foraldralage') },
   { href: url('installningar/'), text: t('meny.installningar') },
@@ -47,9 +47,15 @@ const sidtitel = sokvag === url() ? t('app.namn') : `${titel} | ${t('app.namn')}
   <body>
     <a class="hoppa" href="#innehall">{t('hoppa.till.innehall')}</a>
     {VISA_UTKAST && <p class="utkastband">{t('utkastlage.band')}</p>}
-    <header class="sidhuvud">
+    <header class="sidhuvud inte-utskrift">
       <div class="sidhuvud-inre">
-        <a class="logga" href={url()}>{t('app.namn')}</a>
+        <a class="logga" href={url()}>
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M14 30 L32 15 L50 30 L50 50 L14 50 Z" fill="#c8664a" stroke="currentColor" stroke-width="4" stroke-linejoin="round" />
+            <rect x="27" y="35" width="10" height="15" fill="#f6f1e7" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" />
+          </svg>
+          {t('app.namn')}
+        </a>
         <nav class="huvudmeny" aria-label={t('meny.rubrik')}>
           <ul>
             {

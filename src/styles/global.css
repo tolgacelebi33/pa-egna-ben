@@ -2,6 +2,8 @@
 @import '@fontsource/atkinson-hyperlegible-next/400-italic.css';
 @import '@fontsource/atkinson-hyperlegible-next/700.css';
 @import '@fontsource-variable/bricolage-grotesque/index.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/600.css';
 @import './tokens.css';
 
 * {
@@ -16,27 +18,29 @@ body {
   margin: 0;
   font-family: var(--typsnitt-text);
   font-size: var(--text-m);
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--black);
   background-color: var(--papper);
+  background-image: var(--korn);
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--typsnitt-rubrik);
-  line-height: 1.2;
+  line-height: 1.15;
   font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 h1 {
   font-size: var(--text-xxl);
-  margin: var(--steg-5) 0 var(--steg-3);
+  margin: var(--steg-6) 0 var(--steg-3);
 }
 
 h2 {
   font-size: var(--text-xl);
-  margin: var(--steg-6) 0 var(--steg-3);
+  margin: var(--steg-7) 0 var(--steg-4);
 }
 
 h3 {
@@ -46,17 +50,20 @@ h3 {
 
 a {
   color: var(--skiffer);
-  text-underline-offset: 0.18em;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
 }
 
 :focus-visible {
   outline: 3px solid var(--black);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .visuellt-dold {
   position: absolute;
+  left: 0;
+  top: 0;
   width: 1px;
   height: 1px;
   overflow: hidden;
@@ -68,9 +75,10 @@ a {
   position: absolute;
   left: var(--steg-4);
   top: -100px;
-  background: var(--yta);
+  background: var(--ark);
   padding: var(--steg-2) var(--steg-3);
   border: var(--kantlinje);
+  border-radius: var(--radie-s);
   z-index: 10;
 }
 
@@ -78,26 +86,30 @@ a {
   top: var(--steg-2);
 }
 
+/* Små etiketter i handboksstil */
+.mono {
+  font-family: var(--typsnitt-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .sida {
   max-width: var(--max-bredd);
   margin: 0 auto;
-  padding: 0 var(--steg-4) var(--steg-7);
+  padding: 0 var(--steg-4) var(--steg-8);
 }
 
 .sida.bred {
   max-width: var(--max-bredd-bred);
 }
 
-/* Sidhuvud och sidfot */
-.sidhuvud {
-  border-bottom: 2px solid var(--kant);
-  background: var(--papper);
-}
-
+/* Sidhuvud: tunt och tyst */
 .sidhuvud-inre {
   max-width: var(--max-bredd-bred);
   margin: 0 auto;
-  padding: var(--steg-3) var(--steg-4);
+  padding: var(--steg-4) var(--steg-4) var(--steg-2);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -106,11 +118,19 @@ a {
 }
 
 .logga {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--steg-2);
   font-family: var(--typsnitt-rubrik);
   font-weight: 800;
-  font-size: var(--text-l);
+  font-size: 1.15rem;
   color: var(--black);
   text-decoration: none;
+}
+
+.logga svg {
+  width: 28px;
+  height: 28px;
 }
 
 .huvudmeny ul {
@@ -125,28 +145,45 @@ a {
 .huvudmeny a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 40px;
   padding: 0 var(--steg-3);
   color: var(--black);
   text-decoration: none;
-  border-radius: var(--radie-s);
+  border-radius: var(--radie-pill);
+  font-family: var(--typsnitt-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.huvudmeny a:hover {
+  background: var(--yta-2);
 }
 
 .huvudmeny a[aria-current='page'] {
-  background: var(--yta-2);
-  font-weight: 700;
+  background: var(--black);
+  color: var(--papper);
 }
 
 .sidfot {
-  border-top: 2px solid var(--kant);
-  padding: var(--steg-5) var(--steg-4) var(--steg-7);
+  margin-top: var(--steg-7);
+  padding: var(--steg-6) var(--steg-4) var(--steg-7);
   font-size: var(--text-s);
   color: var(--text-svag);
+  border-top: 1px solid var(--linje);
 }
 
 .sidfot-inre {
   max-width: var(--max-bredd-bred);
   margin: 0 auto;
+  display: grid;
+  gap: var(--steg-3);
+}
+
+.sidfot p {
+  margin: 0;
+  max-width: 40rem;
 }
 
 .sidfot ul {
@@ -155,6 +192,7 @@ a {
   gap: var(--steg-2) var(--steg-4);
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sidfot a {
@@ -163,15 +201,33 @@ a {
 
 .utkastband {
   margin: 0;
-  padding: var(--steg-2) var(--steg-4);
+  padding: 0.3rem var(--steg-4);
   background: var(--ockra);
   color: #2a2522;
-  font-weight: 700;
-  font-size: var(--text-s);
   text-align: center;
+  font-family: var(--typsnitt-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-/* Knappar och formulär */
+/* Ark: det lugna pappersarket som innehåll ligger på */
+.ark {
+  background: var(--ark);
+  border-radius: var(--radie-stor);
+  box-shadow: var(--skugga);
+  padding: var(--steg-5);
+}
+
+@media (max-width: 640px) {
+  .ark {
+    padding: var(--steg-4);
+    border-radius: var(--radie);
+  }
+}
+
+/* Knappar */
 .knapp,
 button {
   font: inherit;
@@ -180,14 +236,20 @@ button {
   justify-content: center;
   gap: var(--steg-2);
   min-height: var(--tryckyta);
-  padding: var(--steg-2) var(--steg-4);
+  padding: var(--steg-2) var(--steg-5);
   border: var(--kantlinje);
-  border-radius: var(--radie);
-  background: var(--yta);
+  border-radius: var(--radie-pill);
+  background: transparent;
   color: var(--black);
   cursor: pointer;
   text-decoration: none;
   text-align: center;
+  font-weight: 700;
+}
+
+.knapp:hover,
+button:hover {
+  background: var(--yta-2);
 }
 
 .knapp.primar,
@@ -206,44 +268,118 @@ button:disabled {
   cursor: not-allowed;
   border-style: dashed;
   color: var(--text-svag);
-  background: var(--yta-2);
+  background: transparent;
+}
+
+/* Chip: liten knapp i handboksstil, används i figurerna */
+.chip {
+  min-height: 40px;
+  padding: 0.3rem 0.9rem 0.3rem 0.4rem;
+  font-family: var(--typsnitt-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: var(--ark);
+}
+
+.chip-nr {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  font-size: 0.72rem;
+}
+
+.chip.gjort .chip-nr {
+  background: var(--black);
+  color: var(--papper);
+}
+
+.chip.pa {
+  background: var(--black);
+  color: var(--papper);
+}
+
+.chip.streckad {
+  border-style: dashed;
+  padding-left: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .chip {
+    min-height: 36px;
+    font-size: 0.7rem;
+    padding-right: 0.7rem;
+  }
+  .chip-nr {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+  .huvudmeny a {
+    min-height: 36px;
+    padding: 0 var(--steg-2);
+    font-size: 0.66rem;
+    letter-spacing: 0.05em;
+  }
+  .sidhuvud-inre {
+    padding-top: var(--steg-3);
+    gap: var(--steg-2);
+  }
+  h1 {
+    margin-top: var(--steg-5);
+  }
 }
 
 input[type='text'],
 input[type='search'],
 select {
   font: inherit;
-  min-height: var(--tryckyta);
-  padding: var(--steg-2) var(--steg-3);
+  min-height: 56px;
+  padding: var(--steg-2) var(--steg-5);
   border: var(--kantlinje);
-  border-radius: var(--radie);
-  background: var(--yta);
+  border-radius: var(--radie-pill);
+  background: var(--ark);
   color: var(--black);
   width: 100%;
 }
 
 fieldset {
-  border: 2px solid var(--kant);
+  border: 0;
   border-radius: var(--radie);
-  padding: var(--steg-3) var(--steg-4) var(--steg-4);
-  margin: 0 0 var(--steg-4);
+  padding: 0;
+  margin: 0 0 var(--steg-5);
 }
 
 legend {
+  font-family: var(--typsnitt-rubrik);
   font-weight: 700;
-  padding: 0 var(--steg-1);
+  font-size: var(--text-l);
+  padding: 0;
+  margin-bottom: var(--steg-2);
 }
 
 .val {
   display: flex;
   align-items: center;
   gap: var(--steg-3);
-  min-height: 44px;
+  min-height: 52px;
+  padding: 0 var(--steg-4);
+  margin-bottom: var(--steg-2);
+  border-radius: var(--radie);
+  background: var(--ark);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+}
+
+.val:has(input:checked) {
+  border-color: var(--black);
 }
 
 .val input {
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.25rem;
+  height: 1.25rem;
   accent-color: var(--black);
   flex: none;
 }
@@ -270,14 +406,18 @@ legend {
 }
 
 .kort {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: var(--steg-1);
   height: 100%;
-  padding: var(--steg-3) var(--steg-4);
-  background: var(--yta);
-  border: 2px solid var(--kant);
+  padding: var(--steg-4) var(--steg-5);
+  background: var(--ark);
   border-radius: var(--radie);
+  box-shadow: var(--skugga);
   color: var(--black);
   text-decoration: none;
+  border: 1.5px solid transparent;
+  transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
 a.kort:hover {
@@ -288,35 +428,42 @@ a.kort:hover {
   display: block;
   font-weight: 700;
   font-size: var(--text-m);
+  line-height: 1.35;
 }
 
 .kort-text {
   display: block;
   color: var(--text-svag);
   font-size: var(--text-s);
-  margin-top: var(--steg-1);
 }
 
 .kort.akut {
-  border-color: var(--tegel);
-  border-left-width: 6px;
+  box-shadow: inset 4px 0 0 var(--tegel), var(--skugga);
 }
 
 .etiketter {
   display: flex;
   flex-wrap: wrap;
   gap: var(--steg-1);
-  margin-top: var(--steg-2);
+  margin: var(--steg-1) 0 0;
   padding: 0;
   list-style: none;
 }
 
 .etikett {
-  font-size: 0.8rem;
-  padding: 0.1rem 0.5rem;
-  border-radius: 999px;
+  font-family: var(--typsnitt-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radie-pill);
   background: var(--yta-2);
   color: var(--black);
+}
+
+.etikett.akut {
+  background: var(--tegel-yta);
 }
 
 .etikett.utkast {
@@ -325,7 +472,7 @@ a.kort:hover {
 
 .todo {
   font-family: var(--typsnitt-mono);
-  font-size: 0.85em;
+  font-size: 0.82em;
   background: var(--ockra-yta);
   padding: 0.05rem 0.3rem;
   border-radius: 3px;
@@ -335,11 +482,17 @@ a.kort:hover {
   font-size: var(--text-l);
   color: var(--text-svag);
   margin-top: 0;
+  line-height: 1.5;
+}
+
+.overrubrik {
+  display: block;
+  margin-bottom: var(--steg-2);
+  color: var(--text-svag);
 }
 
 .bradsmulor {
-  font-size: var(--text-s);
-  margin-top: var(--steg-4);
+  margin-top: var(--steg-5);
 }
 
 .bradsmulor ol {
@@ -349,6 +502,15 @@ a.kort:hover {
   display: flex;
   flex-wrap: wrap;
   gap: var(--steg-2);
+}
+
+.bradsmulor a {
+  color: var(--text-svag);
+  text-decoration: none;
+}
+
+.bradsmulor a:hover {
+  color: var(--black);
 }
 
 .bradsmulor li + li::before {
@@ -367,7 +529,7 @@ th,
 td {
   text-align: left;
   padding: var(--steg-2);
-  border-bottom: 1px solid var(--kant);
+  border-bottom: 1px solid var(--linje);
   vertical-align: top;
 }
 

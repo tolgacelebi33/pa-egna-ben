@@ -1,7 +1,8 @@
 ---
 import Bas from '../../layouts/Bas.astro';
 import AmneKort from '../../components/AmneKort.astro';
-import Tvattmaskin from '../../figurer/tvattmaskin/Tvattmaskin.jsx';
+import Figurlista from '../../components/Figurlista.astro';
+import Tvattmaskin3D from '../../figurer/tvattmaskin/Tvattmaskin3D.jsx';
 import TvattmaskinText from '../../figurer/tvattmaskin/Textversion.astro';
 import Brandvarnare from '../../figurer/brandvarnare/Brandvarnare.jsx';
 import BrandvarnareText from '../../figurer/brandvarnare/Textversion.astro';
@@ -9,49 +10,36 @@ import Elskap from '../../figurer/elskap/Elskap.jsx';
 import ElskapText from '../../figurer/elskap/Textversion.astro';
 import { t } from '../../i18n/index.js';
 import { FIGURER } from '../../data/figurer.js';
-import { hamtaAmnen, figurUrl } from '../../lib/innehall.js';
+import { hamtaAmnen } from '../../lib/innehall.js';
 
 export function getStaticPaths() {
-  return FIGURER.map((f) => ({ params: { id: f.id }, props: { fig: f } }));
+  return FIGURER.map((f, i) => ({ params: { id: f.id }, props: { fig: f, nr: i + 1 } }));
 }
 
-const { fig } = Astro.props;
+const { fig, nr } = Astro.props;
 const amnen = (await hamtaAmnen()).filter((p) => p.data.figur === fig.id);
+const nummer = String(nr).padStart(2, '0');
 ---
 
 <Bas titel={fig.titel} bred>
   <div class="figurvy">
-    <nav class="figurlista" aria-label={t('figurer.lista')}>
-      <ul>
-        {
-          FIGURER.map((f) => (
-            <li>
-              {f.klar ? (
-                <a href={figurUrl(f.id)} aria-current={f.id === fig.id ? 'page' : undefined}>
-                  {f.titel}
-                </a>
-              ) : (
-                <a href={figurUrl(f.id)} class="kommer" aria-current={f.id === fig.id ? 'page' : undefined}>
-                  {f.titel}
-                  <small>{t('figurer.kommer')}</small>
-                </a>
-              )}
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
+    <Figurlista aktiv={fig.id} />
 
-    <div class="figurscen">
-      <h1>{fig.titel}</h1>
-      {!fig.klar && <p>{t('figurer.inte.klar')}</p>}
-      {fig.id === 'tvattmaskin' && <Tvattmaskin client:visible />}
+    <article class="figurark ark" aria-labelledby="figur-rubrik">
+      <header class="figurhuvud">
+        <span class="mono">{t('figurer.figur')} {nummer}</span>
+        <h1 id="figur-rubrik">{fig.titel}</h1>
+      </header>
+
+      {!fig.klar && <p class="ingress">{t('figurer.inte.klar')}</p>}
+      {fig.id === 'tvattmaskin' && <Tvattmaskin3D client:visible />}
       {fig.id === 'brandvarnare' && <Brandvarnare client:visible />}
       {fig.id === 'elskap' && <Elskap client:visible />}
 
       {
         fig.klar && (
           <section class="textversion" aria-labelledby="textversion-rubrik">
+            <span class="mono">{t('figurer.text.over')}</span>
             <h2 id="textversion-rubrik">{t('figurer.text.rubrik')}</h2>
             {fig.id === 'tvattmaskin' && <TvattmaskinText />}
             {fig.id === 'brandvarnare' && <BrandvarnareText />}
@@ -59,87 +47,69 @@ const amnen = (await hamtaAmnen()).filter((p) => p.data.figur === fig.id);
           </section>
         )
       }
-
-      {
-        amnen.length > 0 && (
-          <section aria-labelledby="figur-amnen">
-            <h2 id="figur-amnen">{t('figurer.amnen')}</h2>
-            <ul class="kortlista">
-              {amnen.map((p) => (
-                <AmneKort data={p.data} />
-              ))}
-            </ul>
-          </section>
-        )
-      }
-    </div>
+    </article>
   </div>
+
+  {
+    amnen.length > 0 && (
+      <section class="figuramnen" aria-labelledby="figur-amnen">
+        <h2 id="figur-amnen">{t('figurer.amnen')}</h2>
+        <ul class="kortlista rutnat">
+          {amnen.map((p) => (
+            <AmneKort data={p.data} />
+          ))}
+        </ul>
+      </section>
+    )
+  }
 </Bas>
 
 <style>
+  /* minmax(0, ...) så att den vågräta figurlistan inte kan trycka ut sidan på mobil (fel från fas 0).
+     ".figurvy > *" räcker inte, eftersom Astros avgränsade stilar inte når barn från andra komponenter. */
   .figurvy {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--steg-4);
     margin-top: var(--steg-4);
   }
-  /* Grid-barn får annars minst sin innehållsbredd och trycker ut sidan på mobil (fel som hittades i fas 0). */
-  .figurvy > * {
-    min-width: 0;
-  }
-  .figurlista ul {
+  .figurhuvud {
     display: flex;
-    gap: var(--steg-2);
-    overflow-x: auto;
-    list-style: none;
-    padding: 0 0 var(--steg-2);
+    flex-direction: column;
+    gap: var(--steg-1);
+    margin-bottom: var(--steg-4);
+  }
+  .figurhuvud h1 {
     margin: 0;
+    font-size: var(--text-xl);
   }
-  .figurlista a {
-    display: block;
-    white-space: nowrap;
-    padding: var(--steg-2) var(--steg-3);
-    border: var(--kantlinje);
-    border-radius: var(--radie);
-    color: var(--black);
-    text-decoration: none;
-    background: var(--yta);
+  @media (max-width: 640px) {
+    .figurark {
+      margin-inline: calc(-1 * var(--steg-2));
+    }
+    .figurhuvud {
+      margin-bottom: var(--steg-3);
+    }
   }
-  .figurlista a.kommer {
-    border-style: dashed;
+  .figurhuvud .mono {
     color: var(--text-svag);
   }
-  .figurlista a[aria-current='page'] {
-    background: var(--black);
-    color: var(--papper);
-  }
-  .figurlista small {
-    display: block;
-    font-size: 0.75rem;
-  }
-  .figurscen h1 {
-    margin-top: 0;
-  }
   .textversion {
-    margin-top: var(--steg-6);
-    padding: var(--steg-3) var(--steg-4);
-    background: var(--yta);
-    border: 2px solid var(--kant);
-    border-radius: var(--radie);
+    margin-top: var(--steg-7);
+    padding-top: var(--steg-5);
+    border-top: 1px solid var(--linje);
+    max-width: var(--max-bredd);
+  }
+  .textversion .mono {
+    color: var(--text-svag);
   }
   .textversion h2 {
-    margin-top: var(--steg-2);
+    margin-top: var(--steg-1);
   }
-  @media (min-width: 960px) {
+  @media (min-width: 1000px) {
     .figurvy {
-      grid-template-columns: 220px 1fr;
+      grid-template-columns: 220px minmax(0, 1fr);
       align-items: start;
-    }
-    .figurlista ul {
-      flex-direction: column;
-      overflow: visible;
-    }
-    .figurlista a {
-      white-space: normal;
     }
   }
 </style>

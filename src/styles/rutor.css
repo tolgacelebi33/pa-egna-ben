@@ -1,10 +1,10 @@
 /* Säkerhetsrutor. Används både av Astro-komponenterna och av Markdown-direktiven :::varning och :::anlita-proffs. */
 .ruta {
-  margin: var(--steg-4) 0;
-  padding: var(--steg-3) var(--steg-4);
+  margin: var(--steg-5) 0;
+  padding: var(--steg-4) var(--steg-5);
   border-radius: var(--radie);
-  border: 2px solid var(--kant);
-  background: var(--yta);
+  background: var(--ark);
+  box-shadow: var(--skugga);
 }
 
 .ruta > :last-child {
@@ -13,45 +13,59 @@
 
 .ruta-rubrik {
   margin: 0 0 var(--steg-2);
-  font-family: var(--typsnitt-rubrik);
-  font-weight: 700;
-  font-size: var(--text-l);
+  font-family: var(--typsnitt-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h2.ruta-rubrik {
+  margin-top: 0;
 }
 
 .ruta-akut {
-  border: 3px solid var(--tegel);
   background: var(--tegel-yta);
+  box-shadow: inset 5px 0 0 var(--tegel);
+}
+
+.ruta-akut .ruta-rubrik {
+  color: var(--tegel);
 }
 
 .ruta-akut .nodnummer {
-  font-size: var(--text-xl);
-  font-weight: 700;
-  margin: 0;
+  margin: 0 0 var(--steg-2);
 }
 
 .ruta-akut .nodnummer a {
-  color: var(--black);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tryckyta);
+  padding: 0 var(--steg-5);
+  border-radius: var(--radie-pill);
+  background: var(--tegel);
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--text-l);
+  text-decoration: none;
 }
 
 .ruta-varning {
-  border-color: var(--tegel);
-  border-left-width: 8px;
+  box-shadow: inset 5px 0 0 var(--tegel), var(--skugga);
 }
 
 .ruta-anlita-proffs {
-  border-color: var(--skiffer);
-  border-left-width: 8px;
   background: var(--skiffer-yta);
+  box-shadow: inset 5px 0 0 var(--skiffer);
 }
 
 .ruta-kommun {
-  border-style: dashed;
-  border-color: var(--black);
+  box-shadow: inset 5px 0 0 var(--black), var(--skugga);
 }
 
 .ruta-utkast {
   background: var(--ockra-yta);
-  border-color: var(--ockra);
+  box-shadow: none;
 }
 
 .ruta-kallor ul,
@@ -63,6 +77,7 @@
   display: grid;
   grid-template-columns: max-content 1fr;
   gap: var(--steg-1) var(--steg-4);
+  font-size: var(--text-s);
 }
 
 .ruta-granskning dt {

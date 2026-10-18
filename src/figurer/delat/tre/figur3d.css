@@ -1,0 +1,182 @@
+/* Ramen kring 3D-figurerna. Allt runt figuren är lugnt, det djärva ligger i figuren. */
+.figur3d-ram {
+  position: relative;
+  display: grid;
+  gap: var(--steg-3);
+}
+
+.figur3d-ram > *,
+.figurark {
+  min-width: 0;
+}
+
+.figur3d-steg {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--steg-2);
+}
+
+@media (max-width: 640px) {
+  .figur3d-steg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--steg-1);
+  }
+  .figur3d-steg .chip {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+.figur3d {
+  position: relative;
+}
+
+.figur3d-scen {
+  position: relative;
+  height: min(68vh, 640px);
+  min-height: 380px;
+  border-radius: var(--radie-stor);
+  background-color: var(--figurpapper);
+  background-image: var(--korn);
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* Canvasen ligger absolut så att dess egen storlek aldrig kan trycka ut behållaren (annars växer den i en loop). */
+.tre-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.tre-canvas:focus-visible {
+  outline: 3px solid var(--black);
+  outline-offset: -3px;
+}
+
+.tre-etiketter {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.tre-etikett {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--typsnitt-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #2a2522;
+  background: rgb(251 248 242 / 0.82);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.tre-etikett.korg {
+  background: transparent;
+  font-size: 0.72rem;
+}
+
+.tre-linjer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tre-linjer line {
+  stroke: #2a2522;
+  stroke-width: 1.2;
+}
+
+.tre-linjer circle {
+  fill: #c8664a;
+  stroke: #2a2522;
+  stroke-width: 1.2;
+}
+
+.figur3d-verktyg {
+  position: absolute;
+  left: var(--steg-3);
+  right: var(--steg-3);
+  bottom: var(--steg-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--steg-3);
+  pointer-events: none;
+}
+
+.figur3d-verktyg > * {
+  pointer-events: auto;
+}
+
+.figur3d-verktyg .handritad {
+  display: flex;
+  align-items: center;
+  gap: var(--steg-2);
+  font-family: var(--typsnitt-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #2a2522;
+}
+
+.figur3d-verktyg input[type='range'] {
+  width: 7rem;
+  accent-color: #2a2522;
+}
+
+.figur3d-hjalp {
+  margin: var(--steg-2) 0 0;
+  font-size: var(--text-s);
+  color: var(--text-svag);
+}
+
+.figur3d-fot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--steg-3);
+}
+
+.figur3d-status {
+  margin: 0;
+  flex: 1 1 18rem;
+  min-height: 1.6em;
+}
+
+.figur3d-val {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--steg-2);
+}
+
+.figur-reserv {
+  padding: var(--steg-5);
+  border-radius: var(--radie-stor);
+  background: var(--ark);
+}
+
+@media (max-width: 640px) {
+  .figur3d-scen {
+    height: 56vh;
+    min-height: 340px;
+  }
+  .tre-etikett {
+    font-size: 0.6rem;
+  }
+}
