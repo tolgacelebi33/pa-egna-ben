@@ -1,74 +1,4 @@
-/* Brandvarnarfiguren. Det gemensamma ligger i ../delat/figur.css. */
-.figur-brandvarnare .del-bas .sida { fill: #c9c1b3; }
-.figur-brandvarnare .del-bas .topp { fill: #e3dccf; }
-.figur-brandvarnare .kant-inre { fill: none; stroke-width: 1.6; opacity: 0.5; }
-.figur-brandvarnare .del-rok .sida { fill: #55504a; }
-.figur-brandvarnare .del-rok .topp { fill: #6d6760; }
-.figur-brandvarnare .labyrint { fill: none; stroke: #d8d0c2; stroke-width: 2; stroke-dasharray: 6 5; }
-.figur-brandvarnare .del-ljud .sida { fill: #9aa3ab; }
-.figur-brandvarnare .del-ljud .topp { fill: #c6ccd1; }
-
-.figur-brandvarnare .batteri .sida { fill: #b5862f; }
-.figur-brandvarnare .batteri .sida-2 { fill: #9c7228; }
-.figur-brandvarnare .batteri .topp { fill: var(--f-ockra); }
-.figur-brandvarnare .batteri.gammalt .sida { fill: #8d8675; }
-.figur-brandvarnare .batteri.gammalt .sida-2 { fill: #7a7465; }
-.figur-brandvarnare .batteri.gammalt .topp { fill: #a9a291; }
-.figur-brandvarnare .batteri .pol { fill: #d8d0c2; stroke-width: 1.6; }
-.figur-brandvarnare .batteri .markering { fill: none; stroke-width: 2.4; }
-
-.figur-brandvarnare .del-holje .sida { fill: #ece6da; }
-.figur-brandvarnare .del-holje .topp { fill: #f7f3ec; }
-.figur-brandvarnare .ventil { fill: none; stroke-width: 2.6; opacity: 0.7; }
-.figur-brandvarnare .del-kupol .sida { fill: #e4ddd0; }
-.figur-brandvarnare .del-kupol .topp { fill: #fbf8f2; }
-.figur-brandvarnare .del-knapp .sida { fill: #b9472f; }
-.figur-brandvarnare .del-knapp .topp { fill: var(--f-lera); }
-.figur-brandvarnare .testknapp { cursor: pointer; outline: none; }
-
-.figur-brandvarnare .lock.genomskinligt .sida,
-.figur-brandvarnare .lock.genomskinligt .topp {
-  fill-opacity: 0.18;
-  stroke-dasharray: 7 6;
-}
-.figur-brandvarnare .lock.genomskinligt .del-knapp .sida,
-.figur-brandvarnare .lock.genomskinligt .del-knapp .topp {
-  fill-opacity: 1;
-  stroke-dasharray: none;
-}
-
-.figur-brandvarnare .lysdiod { fill: #6b5f58; stroke-width: 1.8; }
-.figur-brandvarnare .lysdiod.blinkar { fill: #e0402a; animation: bv-blink 0.6s steps(2, jump-none) infinite; }
-@keyframes bv-blink { 50% { fill: #6b5f58; } }
-
-.figur-brandvarnare .vag {
-  fill: none;
-  stroke: var(--f-lera);
-  stroke-width: 4;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: bv-vag 1.05s ease-out infinite;
-  opacity: 0;
-}
-.figur-brandvarnare .vagor.varning .vag { animation-duration: 2.2s; stroke: var(--f-ockra); }
-@keyframes bv-vag {
-  0% { transform: scale(0.45); opacity: 0.95; }
-  100% { transform: scale(1.35); opacity: 0; }
-}
-.figur-brandvarnare .vagor.stilla .vag { animation: none; opacity: 0.8; transform: none; }
-
-.figur-brandvarnare .flyttbar {
-  transition: transform 0.8s cubic-bezier(0.5, 0, 0.3, 1), opacity 0.5s ease;
-}
-
-.figur-brandvarnare .hjalp {
-  margin: calc(-1 * var(--steg-2)) 0 0;
-  font-size: var(--text-s);
-  color: var(--text-svag);
-}
-
-.figur-brandvarnare .borja-om { margin-top: var(--steg-2); }
-
+/* Brandvarnarfiguren: panelen med de två pipen under 3D-figuren. */
 .figur-brandvarnare .pip {
   margin: var(--steg-3) 0;
   padding: var(--steg-3);
@@ -89,11 +19,3 @@
 .figur-brandvarnare .staplar .ton { background: var(--black); }
 .figur-brandvarnare .staplar .paus { background: var(--kant); height: 6px; }
 
-@media (prefers-reduced-motion: reduce) {
-  .figur-brandvarnare .flyttbar,
-  .figur-brandvarnare .lysdiod.blinkar,
-  .figur-brandvarnare .vag {
-    transition: none !important;
-    animation: none !important;
-  }
-}
