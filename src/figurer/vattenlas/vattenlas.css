@@ -1,0 +1,15 @@
+/* Vattenlåsfiguren. */
+.figur-vattenlas .golv { fill: #ddd3c3; }
+.figur-vattenlas .vagg { fill: #ece6da; stroke-width: 2; }
+.figur-vattenlas .skap-sida { fill: #d6cbb9; }
+.figur-vattenlas .ror-yttre { fill: none; stroke: #2a2522; stroke-width: 34; stroke-linecap: butt; }
+.figur-vattenlas .ror-inre { fill: none; stroke: #f2f0ec; stroke-width: 26; stroke-linecap: butt; }
+.figur-vattenlas .vatten-i-ror { fill: none; stroke: #5e7fa0; stroke-width: 26; stroke-linecap: butt; opacity: 0.85; }
+.figur-vattenlas .vattenyta { transition: transform 1.6s ease; }
+.figur-vattenlas .mutter { fill: #d9a441; stroke-width: 2.4; }
+.figur-vattenlas .smuts { fill: none; stroke: #4a3f2e; stroke-width: 6; }
+.figur-vattenlas .flode { fill: none; stroke: #9cc0e2; stroke-width: 8; stroke-dasharray: 10 14; animation: vl-flode 0.7s linear infinite; }
+@keyframes vl-flode { to { stroke-dashoffset: -24; } }
+.figur-vattenlas .kranvatten { fill: #9cc0e2; }
+.figur-vattenlas .lukt path { fill: none; stroke: #8a8f4a; stroke-width: 4; stroke-dasharray: 2 9; animation: vl-lukt 1.6s linear infinite; }
+@keyframes vl-lukt { to { stroke-dashoffset: -22; } }

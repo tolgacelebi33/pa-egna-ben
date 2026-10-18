@@ -8,6 +8,8 @@ import Elskap from '../figurer/elskap/Elskap.jsx';
 import ElskapText from '../figurer/elskap/Textversion.astro';
 import Kyl from '../figurer/kyl/Kyl.jsx';
 import KylText from '../figurer/kyl/Textversion.astro';
+import Vattenlas from '../figurer/vattenlas/Vattenlas.jsx';
+import VattenlasText from '../figurer/vattenlas/Textversion.astro';
 
 interface Props {
   id: string;
@@ -23,6 +25,7 @@ const { id, del } = Astro.props;
       {id === 'brandvarnare' && <Brandvarnare client:visible />}
       {id === 'elskap' && <Elskap client:visible />}
       {id === 'kyl' && <Kyl client:visible />}
+      {id === 'vattenlas' && <Vattenlas client:visible />}
     </>
   ) : (
     <>
@@ -30,6 +33,7 @@ const { id, del } = Astro.props;
       {id === 'brandvarnare' && <BrandvarnareText />}
       {id === 'elskap' && <ElskapText />}
       {id === 'kyl' && <KylText />}
+      {id === 'vattenlas' && <VattenlasText />}
     </>
   )
 }
