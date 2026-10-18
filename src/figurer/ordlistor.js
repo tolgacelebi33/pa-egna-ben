@@ -11,5 +11,6 @@ import spis from './spis/sv.js';
 import dammsugare from './dammsugare/sv.js';
 import tavla from './tavla/sv.js';
 import paslakan from './paslakan/sv.js';
+import cykel from './cykel/sv.js';
 
-export const FIGURORDLISTOR = { tvattmaskin, brandvarnare, elskap, kyl, 'vattenlas': vattenlas, 'cistern': cistern, 'huvudkran': huvudkran, 'diskmaskin': diskmaskin, 'spis': spis, 'dammsugare': dammsugare, 'tavla': tavla, 'paslakan': paslakan };
+export const FIGURORDLISTOR = { tvattmaskin, brandvarnare, elskap, kyl, 'vattenlas': vattenlas, 'cistern': cistern, 'huvudkran': huvudkran, 'diskmaskin': diskmaskin, 'spis': spis, 'dammsugare': dammsugare, 'tavla': tavla, 'paslakan': paslakan, 'cykel': cykel };

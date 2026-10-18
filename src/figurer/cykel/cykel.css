@@ -1,0 +1,27 @@
+/* Cykelfiguren. */
+.figur-cykel .golv { fill: #d9cbb2; }
+.figur-cykel .dack { fill: none; stroke: #2a2522; stroke-width: 12; }
+.figur-cykel .falg { fill: none; stroke: #9ea7ae; stroke-width: 4; }
+.figur-cykel .eker { stroke: #9ea7ae; stroke-width: 1.4; }
+.figur-cykel .nav { fill: #5f676d; stroke-width: 2; }
+.figur-cykel .ram { fill: none; stroke: #3b5d7d; stroke-width: 9; stroke-linejoin: round; }
+.figur-cykel .sadel { fill: #3d3833; stroke-width: 2; }
+.figur-cykel .styre { fill: none; stroke: #3d3833; stroke-width: 7; }
+.figur-cykel .kedjehjul { fill: none; stroke: #5f676d; stroke-width: 4; }
+.figur-cykel .kedja { fill: none; stroke-width: 4; stroke-dasharray: 3 3; }
+.figur-cykel .kedja.torr { stroke: #a8693b; }
+.figur-cykel .kedja.smord { stroke: #2a2522; animation: cy-kedja 1s linear infinite; }
+@keyframes cy-kedja { to { stroke-dashoffset: -12; } }
+.figur-cykel .pedal { fill: none; stroke: #3d3833; stroke-width: 4; }
+.figur-cykel .ventilen { fill: #d9a441; stroke-width: 1.6; }
+.figur-cykel .bromsok { fill: none; stroke: #5f676d; stroke-width: 4; }
+.figur-cykel .kloss { fill: #c8664a; stroke-width: 1.6; transition: x 0.3s ease; }
+.figur-cykel .vajer { fill: none; stroke: #5f676d; stroke-width: 2; }
+.figur-cykel .handtag { fill: none; stroke: #2a2522; stroke-width: 5; }
+.figur-cykel .hal { fill: #c8664a; stroke-width: 2; }
+.figur-cykel .pys { fill: none; stroke: #5e7fa0; stroke-width: 2.4; animation: cy-pys 0.8s ease-out infinite; }
+@keyframes cy-pys { from { opacity: 1; } to { opacity: 0; transform: translateX(8px); } }
+.figur-cykel .lapp { fill: #d9a441; stroke-width: 1.6; }
+.figur-cykel .slang { fill: none; stroke: #2a2522; stroke-width: 4; }
+.figur-cykel .olja { fill: #b8862f; stroke: none; animation: cy-olja 0.9s ease-in infinite; }
+@keyframes cy-olja { to { transform: translateY(16px); opacity: 0; } }

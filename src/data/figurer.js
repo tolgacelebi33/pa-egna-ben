@@ -12,7 +12,7 @@ export const FIGURER = [
   { id: 'dammsugare', titel: 'Dammsugaren', klar: true },
   { id: 'tavla', titel: 'Väggen i genomskärning', klar: true },
   { id: 'paslakan', titel: 'Påslakanet', klar: true },
-  { id: 'cykel', titel: 'Cykeln', klar: false },
+  { id: 'cykel', titel: 'Cykeln', klar: true },
   { id: 'faktura', titel: 'Fakturan', klar: false },
   { id: 'budget', titel: 'Budgetkalkylator', klar: false },
   { id: 'stadschema', titel: 'Städschema', klar: false },

@@ -1,0 +1,21 @@
+// Cykelfigurens texter. Krav på lampor och reflexer är TODO-KONTROLL i textversionen.
+export default {
+  aria: 'Interaktiv figur: cykel från sidan med däck, kedja och bromsar',
+  'steg.hitta': 'Hitta punkteringen',
+  'steg.laga': 'Laga och pumpa',
+  'steg.smorj': 'Smörj kedjan',
+  'steg.broms': 'Kolla bromsen',
+  'etikett.dack': 'Däck',
+  'etikett.kedja': 'Kedja',
+  'etikett.broms': 'Bromsklossar',
+  'etikett.handtag': 'Bromshandtag',
+  'etikett.ventil': 'Ventil',
+  'etikett.hal': 'Hål',
+  'etikett.pump': 'Pump',
+  'status.start': 'Framdäcket är platt. Hitta punkteringen.',
+  'status.hittad': 'Luft pyser ut genom ett litet hål. Där ska lappen sitta.',
+  'status.hitta.forst': 'Hitta punkteringen först.',
+  'status.lagad': 'Hålet är lagat och däcket är pumpat via ventilen.',
+  'status.smord': 'Kedjan är smord. Torka bort det som är över.',
+  'status.broms': 'När du drar i handtaget trycks klossarna mot fälgen.',
+};

@@ -24,6 +24,8 @@ import Tavla from '../figurer/tavla/Tavla.jsx';
 import TavlaText from '../figurer/tavla/Textversion.astro';
 import Paslakan from '../figurer/paslakan/Paslakan.jsx';
 import PaslakanText from '../figurer/paslakan/Textversion.astro';
+import Cykel from '../figurer/cykel/Cykel.jsx';
+import CykelText from '../figurer/cykel/Textversion.astro';
 
 interface Props {
   id: string;
@@ -47,6 +49,7 @@ const { id, del } = Astro.props;
       {id === 'dammsugare' && <Dammsugare client:visible />}
       {id === 'tavla' && <Tavla client:visible />}
       {id === 'paslakan' && <Paslakan client:visible />}
+      {id === 'cykel' && <Cykel client:visible />}
     </>
   ) : (
     <>
@@ -62,6 +65,7 @@ const { id, del } = Astro.props;
       {id === 'dammsugare' && <DammsugareText />}
       {id === 'tavla' && <TavlaText />}
       {id === 'paslakan' && <PaslakanText />}
+      {id === 'cykel' && <CykelText />}
     </>
   )
 }
