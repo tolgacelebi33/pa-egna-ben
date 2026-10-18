@@ -8,7 +8,7 @@ export const FIGURER = [
   { id: 'cistern', titel: 'Toalettens cistern', klar: true },
   { id: 'huvudkran', titel: 'Huvudkranen', klar: true },
   { id: 'diskmaskin', titel: 'Diskmaskinen', klar: true },
-  { id: 'spis', titel: 'Spis, ugn och induktion', klar: false },
+  { id: 'spis', titel: 'Spis, ugn och induktion', klar: true },
   { id: 'dammsugare', titel: 'Dammsugaren', klar: false },
   { id: 'tavla', titel: 'Väggen i genomskärning', klar: false },
   { id: 'paslakan', titel: 'Påslakanet', klar: false },
