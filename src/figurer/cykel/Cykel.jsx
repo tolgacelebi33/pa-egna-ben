@@ -5,40 +5,62 @@ import { useMediaQuery } from '../delat/useMediaQuery.js';
 import HandritadFilter from '../delat/HandritadFilter.jsx';
 import Etiketter from '../delat/Etiketter.jsx';
 import FigurRam from '../delat/FigurRam.jsx';
-import { Lada, Cylinder, Yta } from '../delat/former.jsx';
+import { Cylinder, Lada } from '../delat/former.jsx';
 import './cykel.css';
 
 const tx = (n, v) => t(`cykel.${n}`, v);
 
-// Cykeln ritas från sidan på planet y = 40, med (u, v): u framåt längs x, v nedåt från z = 260.
-const Y = 40;
-const Z = 364;
-const K = 1.4; // skala: cykeln ritas större än sina egna mått
-const P = (u, v) => iso(u * K, Y, Z - v * K);
-const BAK = { u: 70, v: 200 };
-const FRAM = { u: 300, v: 200 };
-const R = 60;
-const VEV = { u: 175, v: 205 };
-const SADEL = { u: 150, v: 95 };
-const STYRE = { u: 268, v: 92 };
+// Cykeln byggs i riktiga 3D-punkter: x längs cykeln, y tvärs (positivt mot betraktaren), z uppåt.
+// Varje del ritas från sina 3D-punkter, så att däck, styre, vevaxel och pedaler får djup.
+const BAK = [0, 0, 70];
+const FRAM = [250, 0, 70];
+const R = 66; // däckets ytterradie
+const FALG = 54;
+const VEV = [95, 0, 62];
+const SADELROR = [70, 0, 190];
+const STYRROR_UPP = [215, 0, 182];
+const STYRROR_NED = [226, 0, 150];
+const STYRE = [218, 0, 204];
+const DACK_BREDD = 4;
 
-const VIEWBOX_BRED = '-310 -400 940 700';
-const VIEWBOX_SMAL = '-120 -400 640 700';
+const P = (p) => iso(...p);
+const linje = (a, b) => {
+  const [x1, y1] = P(a);
+  const [x2, y2] = P(b);
+  return `M${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)}`;
+};
+// En cirkel i planet y = konst, runt navet c. platt: däcket trycks ihop nedtill (punktering).
+function ring(c, r, y, platt = 0) {
+  const pkt = [];
+  for (let i = 0; i <= 64; i++) {
+    const a = (i / 64) * Math.PI * 2;
+    const ned = Math.max(0, -Math.sin(a));
+    const rr = r - platt * ned ** 6;
+    pkt.push(iso(c[0] + rr * Math.cos(a), y, c[2] + rr * Math.sin(a)));
+  }
+  return `M${pkt.map((p) => p.map((n) => n.toFixed(1)).join(' ')).join(' L')} Z`;
+}
+const pa = (c, r, y, grader) => {
+  const a = (grader * Math.PI) / 180;
+  return [c[0] + r * Math.cos(a), y, c[2] + r * Math.sin(a)];
+};
 
-function Hjul({ c, platt, klass = '' }) {
+const VIEWBOX_BRED = '-340 -310 820 560';
+const VIEWBOX_SMAL = '-170 -310 560 560';
+
+function Hjul({ c, platt = 0 }) {
   return (
-    <g className={klass}>
-      {platt ? (
-        <path className="dack" d={`M${c.u - R} ${c.v} A${R} ${R} 0 1 1 ${c.u + R} ${c.v} Q${c.u + R - 6} ${c.v + R - 4} ${c.u} ${c.v + R - 8} Q${c.u - R + 6} ${c.v + R - 4} ${c.u - R} ${c.v} Z`} />
-      ) : (
-        <circle className="dack" cx={c.u} cy={c.v} r={R} />
-      )}
-      <circle className="falg" cx={c.u} cy={c.v} r={R - 10} />
-      {Array.from({ length: 12 }, (_, i) => {
-        const a = (i / 12) * Math.PI * 2;
-        return <line key={i} className="eker" x1={c.u} y1={c.v} x2={c.u + Math.cos(a) * (R - 11)} y2={c.v + Math.sin(a) * (R - 11)} />;
-      })}
-      <circle className="nav" cx={c.u} cy={c.v} r="6" />
+    <g>
+      {/* Bakre däcksidan, sedan ekrar och nav, sist främre däcksidan så att däcket får bredd */}
+      <path className="dack-bak" d={ring(c, R, -DACK_BREDD, platt)} />
+      <path className="falg" d={ring(c, FALG, -3)} />
+      {Array.from({ length: 16 }, (_, i) => (
+        <path key={i} className="eker" d={linje([c[0], i % 2 ? -6 : 6, c[2]], pa(c, FALG - 2, 0, i * 22.5))} />
+      ))}
+      <path className="nav" d={linje([c[0], -8, c[2]], [c[0], 8, c[2]])} />
+      <path className="falg" d={ring(c, FALG, 3)} />
+      <path className="dack" d={ring(c, R, DACK_BREDD, platt)} />
+      <path className="dack-mitt" d={ring(c, R - 4, DACK_BREDD + 2, platt)} />
     </g>
   );
 }
@@ -79,16 +101,21 @@ export default function Cykel() {
   };
 
   const f = handritad > 0 ? 'url(#handritad)' : undefined;
-  const platt = !lagad;
+  const platt = lagad ? 0 : 14;
+  const kloss = bromsar ? 7 : 13;
+  const hal = pa(FRAM, R, DACK_BREDD, -55);
+  const ventil = pa(FRAM, FALG, 3, 125);
+  const vevH = [VEV[0] + 22, 16, VEV[2] - 26];
+  const vevV = [VEV[0] - 22, -16, VEV[2] + 26];
 
   const etiketter = [
-    { id: 'dack', at: P(FRAM.u + 42, FRAM.v + 42), sida: 'h', y: 60, nr: [22, 8] },
-    { id: 'kedja', at: P(120, 210), sida: 'v', y: 40, nr: [-22, 10] },
-    { id: 'broms', at: P(FRAM.u - 6, FRAM.v - R + 2), sida: 'h', y: -170, nr: [22, -10] },
-    { id: 'handtag', at: P(STYRE.u + 16, STYRE.v + 2), sida: 'h', y: -260, nr: [22, -12] },
-    { id: 'ventil', at: P(FRAM.u - 40, FRAM.v - 40), sida: 'v', y: -150, nr: [-22, -6] },
-    ...(hittad && !lagad ? [{ id: 'hal', at: P(FRAM.u + 36, FRAM.v + 48), sida: 'h', y: 140, nr: [22, 12] }] : []),
-    ...(lagad ? [{ id: 'pump', at: iso(491, 1, 80), sida: 'h', y: -60, nr: [22, 4] }] : []),
+    { id: 'handtag', at: P([226, 38, 200]), sida: 'h', y: -250, nr: [22, -12] },
+    { id: 'broms', at: P([FRAM[0] - 4, 12, FRAM[2] + FALG]), sida: 'h', y: -190, nr: [22, -8] },
+    { id: 'ventil', at: P(ventil), sida: 'h', y: -130, nr: [22, -6] },
+    { id: 'dack', at: P(pa(FRAM, R, DACK_BREDD, -20)), sida: 'h', y: -60, nr: [22, 4] },
+    ...(hittad && !lagad ? [{ id: 'hal', at: P(hal), sida: 'h', y: 10, nr: [22, 10] }] : []),
+    { id: 'kedja', at: P([50, 12, 72]), sida: 'v', y: 40, nr: [-22, 8] },
+    ...(lagad ? [{ id: 'pump', at: P([330, -60, 80]), sida: 'h', y: 60, nr: [22, 4] }] : []),
   ].map((e) => ({ ...e, text: tx(`etikett.${e.id}`) }));
 
   return (
@@ -113,65 +140,88 @@ export default function Cykel() {
         </defs>
         <g className="bleck">
           <g filter={f}>
-            <polygon className="golv" points={poly([-40, -60, 0], [560, -60, 0], [560, 160, 0], [-40, 160, 0])} />
-            <polygon className="skugga" points={poly([20, 28, 0], [520, 28, 0], [520, 54, 0], [20, 54, 0])} />
+            <polygon className="golv" points={poly([-110, -80, 0], [380, -80, 0], [380, 80, 0], [-110, 80, 0])} />
+            <polygon className="skugga" points={poly([-60, -10, 0], [320, -10, 0], [320, 26, 0], [-60, 26, 0])} />
           </g>
+
           {/* Pumpen står bakom cykeln */}
           {lagad && (
             <g filter={f}>
-              <Lada x={480} y={-10} z={0} b={22} d={22} h={8} farg="#3d3833" />
-              <Cylinder x={491} y={1} r={9} z0={8} z1={110} farg="#c8664a" />
+              <Lada x={318} y={-72} z={0} b={24} d={24} h={8} farg="#3d3833" />
+              <Cylinder x={330} y={-60} r={9} z0={8} z1={110} farg="#c8664a" />
             </g>
           )}
-          <Yta yta="fram" x={0} y={Y} z={Z}>
-            <g transform={`scale(${K})`}>
-            <g filter={f}>
-              <Hjul c={BAK} />
-              <Hjul c={FRAM} platt={platt} />
-              {/* Ram */}
-              <path className="ram" d={`M${BAK.u} ${BAK.v} L${VEV.u} ${VEV.v} L${SADEL.u} ${SADEL.v + 10} Z M${SADEL.u} ${SADEL.v + 10} L${STYRE.u - 8} ${STYRE.v + 18} L${VEV.u} ${VEV.v} M${STYRE.u - 8} ${STYRE.v + 18} L${FRAM.u} ${FRAM.v}`} />
-              <path className="sadel" d={`M${SADEL.u - 26} ${SADEL.v} q26 -10 48 0 l-6 6 h-38 Z`} />
-              <path className="styre" d={`M${STYRE.u - 8} ${STYRE.v + 18} L${STYRE.u - 4} ${STYRE.v} q14 -8 24 2`} />
-              {/* Kedja och kedjehjul */}
-              <circle className="kedjehjul" cx={VEV.u} cy={VEV.v} r="20" />
-              <circle className="kedjehjul" cx={BAK.u} cy={BAK.v} r="10" />
-              <path className={`kedja ${smord ? 'smord' : 'torr'}`} d={`M${VEV.u} ${VEV.v - 20} L${BAK.u} ${BAK.v - 10} M${VEV.u} ${VEV.v + 20} L${BAK.u} ${BAK.v + 10}`} />
-              <path className="pedal" d={`M${VEV.u} ${VEV.v} l18 22 h12 M${VEV.u} ${VEV.v} l-18 -22 h-12`} />
+
+          <g filter={f}>
+            {/* Bortre sidan: vänster pedal, vänstra stagen och gaffelbenet */}
+            <path className="ror" d={linje([VEV[0], -14, VEV[2]], vevV)} />
+            <polygon className="pedal" points={poly([vevV[0] - 12, -22, vevV[2]], [vevV[0] + 12, -22, vevV[2]], [vevV[0] + 12, -8, vevV[2]], [vevV[0] - 12, -8, vevV[2]])} />
+            <path className="ram tunn" d={linje([BAK[0], -9, BAK[2]], [VEV[0], -5, VEV[2]])} />
+            <path className="ram tunn" d={linje([BAK[0], -9, BAK[2]], [SADELROR[0] - 2, -5, SADELROR[2] - 10])} />
+            <path className="ram" d={linje([STYRROR_NED[0], -6, STYRROR_NED[2]], [FRAM[0], -9, FRAM[2]])} />
+
+            <Hjul c={BAK} />
+            <Hjul c={FRAM} platt={platt} />
+
+            {/* Ramen i mitten */}
+            <path className="ram" d={`${linje(VEV, SADELROR)} ${linje(SADELROR, STYRROR_UPP)} ${linje(STYRROR_NED, VEV)} ${linje(STYRROR_UPP, STYRROR_NED)}`} />
+            <path className="ram" d={linje(SADELROR, [62, 0, 214])} />
+            <path className="ram" d={linje(STYRROR_UPP, STYRE)} />
+
+            {/* Hitre sidan: stagen och gaffelbenet */}
+            <path className="ram tunn" d={linje([BAK[0], 9, BAK[2]], [VEV[0], 5, VEV[2]])} />
+            <path className="ram tunn" d={linje([BAK[0], 9, BAK[2]], [SADELROR[0] - 2, 5, SADELROR[2] - 10])} />
+            <path className="ram" d={linje([STYRROR_NED[0], 6, STYRROR_NED[2]], [FRAM[0], 9, FRAM[2]])} />
+
+            {/* Kedjehjul, kedja och höger vev */}
+            <path className="kedjehjul" d={ring(VEV, 22, 13)} />
+            <path className="kedjehjul" d={ring(BAK, 10, 13)} />
+            <path className={`kedja ${smord ? 'smord' : 'torr'}`} d={`${linje([VEV[0], 13, VEV[2] + 22], [BAK[0], 13, BAK[2] + 10])} ${linje([VEV[0], 13, VEV[2] - 22], [BAK[0], 13, BAK[2] - 10])}`} />
+            <path className="ror" d={linje([VEV[0], 14, VEV[2]], vevH)} />
+            <polygon className="pedal" points={poly([vevH[0] - 12, 8, vevH[2]], [vevH[0] + 12, 8, vevH[2]], [vevH[0] + 12, 24, vevH[2]], [vevH[0] - 12, 24, vevH[2]])} />
+
+            {/* Sadel */}
+            <polygon className="sadel" points={poly([40, -9, 216], [92, -4, 218], [92, 4, 218], [40, 9, 216])} />
+            <polygon className="sadel-sida" points={poly([40, 9, 216], [92, 4, 218], [92, 4, 211], [40, 9, 208])} />
+
+            {/* Styret går tvärs över cykeln */}
+            <path className="styre" d={linje([STYRE[0], -40, STYRE[2]], [STYRE[0], 40, STYRE[2]])} />
+            <path className="grepp" d={`${linje([STYRE[0], -42, STYRE[2]], [STYRE[0], -26, STYRE[2]])} ${linje([STYRE[0], 26, STYRE[2]], [STYRE[0], 42, STYRE[2]])}`} />
+          </g>
+
+          {/* Bromsen: handtaget dras in och klossarna trycks mot fälgen */}
+          <path className="handtag" d={linje([STYRE[0] + 2, 30, STYRE[2] - 2], [STYRE[0] + (bromsar ? 18 : 24), 36, STYRE[2] - (bromsar ? 10 : 16)])} />
+          <path className="vajer" d={`M${P([STYRE[0] + 2, 30, STYRE[2] - 2]).join(' ')} Q${P([240, 30, 190]).join(' ')} ${P([FRAM[0] - 4, 0, FRAM[2] + FALG + 8]).join(' ')}`} />
+          <path className="bromsok" d={linje([FRAM[0] - 4, -14, FRAM[2] + FALG + 6], [FRAM[0] - 4, 14, FRAM[2] + FALG + 6])} />
+          {[-1, 1].map((s) => (
+            <polygon key={s} className="kloss" points={poly([FRAM[0] - 12, s * kloss, FRAM[2] + FALG - 2], [FRAM[0] + 4, s * kloss, FRAM[2] + FALG - 2], [FRAM[0] + 4, s * kloss, FRAM[2] + FALG + 6], [FRAM[0] - 12, s * kloss, FRAM[2] + FALG + 6])} />
+          ))}
+
+          {/* Ventil, hål och lapp */}
+          <circle className="ventilen" cx={P(ventil)[0]} cy={P(ventil)[1]} r="4" />
+          {hittad && !lagad && (
+            <g className="punktering">
+              <circle className="hal" cx={P(hal)[0]} cy={P(hal)[1]} r="4" />
+              {[0, 1, 2].map((i) => (
+                <path key={i} className="pys" d={`M${P(hal)[0] + 6} ${P(hal)[1] + i * 4} q8 ${i * 3 - 3} 16 0`} style={{ animationDelay: `${i * 0.2}s` }} />
+              ))}
             </g>
-            {/* Ventil */}
-            <rect className="ventilen" x={FRAM.u - 44} y={FRAM.v - 46} width="6" height="12" rx="2" transform={`rotate(-45 ${FRAM.u - 41} ${FRAM.v - 40})`} />
-            {/* Bromsen: klossarna går mot fälgen när du bromsar */}
-            <g className="broms">
-              <path className="bromsok" d={`M${FRAM.u - 14} ${FRAM.v - R - 14} h28 M${FRAM.u - 14} ${FRAM.v - R - 14} v14 M${FRAM.u + 14} ${FRAM.v - R - 14} v14`} />
-              <rect className="kloss" x={FRAM.u - 20 + (bromsar ? 6 : 0)} y={FRAM.v - R + 4} width="8" height="14" rx="2" />
-              <rect className="kloss" x={FRAM.u + 12 - (bromsar ? 6 : 0)} y={FRAM.v - R + 4} width="8" height="14" rx="2" />
-              <path className="vajer" d={`M${FRAM.u} ${FRAM.v - R - 14} Q${FRAM.u - 6} ${STYRE.v + 40} ${STYRE.u + 10} ${STYRE.v + 6}`} />
-              <path className="handtag" d={`M${STYRE.u + 10} ${STYRE.v + 2} l${bromsar ? 18 : 22} ${bromsar ? 10 : 16}`} />
-            </g>
-            {hittad && !lagad && (
-              <g className="punktering">
-                <circle className="hal" cx={FRAM.u + 30} cy={FRAM.v + 50} r="4" />
-                {[0, 1, 2].map((i) => (
-                  <path key={i} className="pys" d={`M${FRAM.u + 36} ${FRAM.v + 52 + i * 4} q8 ${i * 3 - 3} 16 0`} style={{ animationDelay: `${i * 0.2}s` }} />
-                ))}
-              </g>
-            )}
-            {lagad && <rect className="lapp" x={FRAM.u + 24} y={FRAM.v + 47} width="12" height="10" rx="2" transform={`rotate(-30 ${FRAM.u + 30} ${FRAM.v + 52})`} />}
-            {smord &&
-              [0, 1, 2].map((i) => <circle key={i} className="olja" cx={128 + i * 6} cy={180 + i * 10} r="3" style={{ animationDelay: `${i * 0.25}s` }} />)}
-            </g>
-          </Yta>
-          {/* Pumpens slang till ventilen, och oljeflaskan vid kedjan */}
-          {lagad && (
-            <path className="slang" d={`M${iso(491, 1, 100)[0]} ${iso(491, 1, 100)[1]} Q${P(FRAM.u, FRAM.v - 90)[0]} ${P(FRAM.u, FRAM.v - 90)[1]} ${P(FRAM.u - 40, FRAM.v - 42)[0]} ${P(FRAM.u - 40, FRAM.v - 42)[1]}`} />
           )}
+          {lagad && <circle className="lapp" cx={P(hal)[0]} cy={P(hal)[1]} r="6" />}
+          {lagad && <path className="slang" d={`M${P([330, -60, 100]).join(' ')} Q${P([300, 20, 160]).join(' ')} ${P(ventil).join(' ')}`} />}
+
+          {/* Oljeflaskan vid kedjan */}
           {smord && (
             <g filter={f}>
-              <Cylinder x={175} y={Y + 26} r={11} z0={Z - 245} z1={Z - 205} farg="#d9a441" />
+              <Cylinder x={40} y={40} r={9} z0={0} z1={30} farg="#d9a441" />
+              {[0, 1, 2].map((i) => {
+                const [ox, oy] = P([40 + i * 6, 13, 78 - i * 2]);
+                return <circle key={i} className="olja" cx={ox} cy={oy} r="3" style={{ animationDelay: `${i * 0.25}s` }} />;
+              })}
             </g>
           )}
         </g>
-        <Etiketter lista={etiketter} smal={smal} vansterX={-80} hogerX={450} />
+        <Etiketter lista={etiketter} smal={smal} vansterX={-170} hogerX={330} />
       </svg>
     </FigurRam>
   );
