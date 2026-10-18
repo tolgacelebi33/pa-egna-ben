@@ -40,11 +40,14 @@ export default function Tvattmaskin3D() {
     if (upptagen() || lageRef.current.sorterad) return;
     setLage('sorterar');
     setStatus(tx('status.sorterar'));
-    api.current?.sortera(() => {
+    const klar = () => {
       setSorterad(true);
       setLage('vilar');
       setStatus(tx('status.sorterad'));
-    });
+    };
+    // Utan WebGL finns ingen figur, men stegen ska ändå gå att göra.
+    if (api.current) api.current.sortera(klar);
+    else klar();
   };
   const starta = () => {
     const s = lageRef.current;
@@ -61,10 +64,12 @@ export default function Tvattmaskin3D() {
     if (api.current?.luckaOppen()) return setStatus(tx('status.saknas.lucka'));
     setLage('igang');
     setStatus(tx(reduceraRorelse ? 'status.igang.stilla' : 'status.igang'));
-    api.current?.starta(() => {
+    const klar = () => {
       setLage('klar');
       setStatus(tx('status.klar'));
-    });
+    };
+    if (api.current) api.current.starta(klar);
+    else window.setTimeout(klar, 4000);
   };
   const lucka = (oppna) => {
     if (upptagen()) return setStatus(tx('status.lucka.last'));

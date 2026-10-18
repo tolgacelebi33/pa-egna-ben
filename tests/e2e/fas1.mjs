@@ -236,17 +236,25 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   await ctx.close();
 }
 
-// 9. Figuren i appen, med reducerad rörelse
+// 9. Tvättmaskinen i 3D, med reducerad rörelse. Stegen ska fungera även om WebGL saknas.
 {
   const ctx = await browser.newContext({ ...MOBIL, reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(BAS + '/figur/tvattmaskin/', { waitUntil: 'networkidle' });
-  await page.locator('.figur-tvattmaskin').scrollIntoViewIfNeeded();
-  await page.waitForSelector('.figur-tvattmaskin .steg button');
-  for (const n of ['Sortera tvätten', 'Vrid ratten', 'Välj temperatur', 'Starta tvätten']) await page.getByRole('button', { name: n }).click();
-  const status = (await page.locator('.figur-tvattmaskin .status').textContent()) ?? '';
-  kontroll('figurens status stämmer vid reducerad rörelse', status.includes('Animationen är avstängd'), status);
-  await page.locator('.figur-tvattmaskin .scen').screenshot({ path: `${UT}figur-i-appen.png` });
+  await page.locator('.figur3d-steg').scrollIntoViewIfNeeded();
+  await page.waitForSelector('.figur3d-steg button');
+  const webgl = await page.locator('.tre-canvas').count();
+  kontroll('tvättmaskin: 3D-figur eller reservtext visas', webgl > 0 || (await page.locator('.figur-reserv').count()) > 0, `canvas: ${webgl}`);
+  await page.getByRole('button', { name: /Starta tvätten/ }).click();
+  kontroll('tvättmaskin: start kräver sorterad tvätt', ((await page.locator('.figur3d-status').textContent()) ?? '').includes('Sortera'));
+  await page.getByRole('button', { name: /Sortera tvätten/ }).click();
+  await page.waitForTimeout(300);
+  await page.getByRole('button', { name: /Vrid ratten/ }).click();
+  await page.getByRole('button', { name: /Välj temperatur/ }).click();
+  await page.getByRole('button', { name: /Starta tvätten/ }).click();
+  const status = (await page.locator('.figur3d-status').textContent()) ?? '';
+  kontroll('tvättmaskin: status stämmer vid reducerad rörelse', status.includes('Animationen är avstängd'), status);
+  kontroll('tvättmaskin: textversionen står under figuren', await page.locator('.textversion').isVisible());
   await ctx.close();
 }
 

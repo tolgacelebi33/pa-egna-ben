@@ -44,7 +44,7 @@ h2.ruta-rubrik {
   padding: 0 var(--steg-5);
   border-radius: var(--radie-pill);
   background: var(--tegel);
-  color: #fff;
+  color: var(--papper);
   font-weight: 700;
   font-size: var(--text-l);
   text-decoration: none;

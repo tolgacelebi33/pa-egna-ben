@@ -405,9 +405,24 @@
     "detalj": ""
   },
   {
-    "namn": "figurens status stämmer vid reducerad rörelse",
+    "namn": "tvättmaskin: 3D-figur eller reservtext visas",
+    "ok": true,
+    "detalj": "canvas: 1"
+  },
+  {
+    "namn": "tvättmaskin: start kräver sorterad tvätt",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "tvättmaskin: status stämmer vid reducerad rörelse",
     "ok": true,
     "detalj": "Maskinen tvättar. Animationen är avstängd eftersom din enhet är inställd på minskad rörelse."
+  },
+  {
+    "namn": "tvättmaskin: textversionen står under figuren",
+    "ok": true,
+    "detalj": ""
   },
   {
     "namn": "brandvarnare: testknappen fungerar med Enter",

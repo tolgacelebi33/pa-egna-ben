@@ -34,6 +34,7 @@ export default function Figur3D({ bygg, onKlar, aria, hojd = 12, mal, reduceraRo
 
   return (
     <div className="figur3d">
+      <div className="figur3d-yta">
       <div className="figur3d-scen" ref={ref} role="img" aria-label={aria} />
       <div className="figur3d-verktyg">
         <button type="button" className="chip streckad" onClick={() => motorRef.current?.aterstallVy()}>
@@ -53,6 +54,7 @@ export default function Figur3D({ bygg, onKlar, aria, hojd = 12, mal, reduceraRo
             }}
           />
         </label>
+      </div>
       </div>
       <p className="figur3d-hjalp">{t('figur3d.hjalp')}</p>
     </div>
