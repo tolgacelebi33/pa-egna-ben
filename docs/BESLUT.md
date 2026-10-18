@@ -26,3 +26,8 @@ Beslut som har tagits vid kontrollpunkterna. Öppna beslut finns i `CLAUDE.md`, 
 - Figurerna ska vara i riktig 3D som går att snurra. Teknik: three.js (MIT) med ortografisk kamera, toon-material och bläckkonturer (inverted hull). Ersätter beslutet efter fas 0 om SVG-figurer och om raka konturer på rörliga delar.
 - Figurerna ska vara självförklarande. Fokus på bilden, textversionen står alltid under.
 - Typografi: IBM Plex Mono (OFL-1.1) tillkommer för små etiketter och figurknappar.
+
+## 2026-10-18, efter provet med riktig 3D
+
+- Användaren tyckte inte att 3D-modellen höll. Beslut: figurerna görs som statisk 3D, det vill säga isometriska SVG-bilder med djup och genomskärning, interaktiva med steg men inte vridbara. three.js är borttaget.
+- Alla 19 figurer i katalogen byggs i den stilen, med gemensam ram (FigurRam) och gemensamma byggstenar (src/figurer/delat/former.jsx).
