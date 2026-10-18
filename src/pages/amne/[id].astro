@@ -7,6 +7,7 @@ import Kallor from '../../components/Kallor.astro';
 import Granskning from '../../components/Granskning.astro';
 import AmneKort from '../../components/AmneKort.astro';
 import { t } from '../../i18n/index.js';
+import { url } from '../../lib/url.js';
 import { hamtaAmnen, arUtkast, kategoriUrl, figurUrl, VISA_UTKAST } from '../../lib/innehall.js';
 import { kategori } from '../../data/kategorier.js';
 import { figur } from '../../data/figurer.js';
@@ -35,7 +36,7 @@ const rapport = `mailto:${CONFIG.felrapportEpost}?subject=${encodeURIComponent(
 <Bas titel={d.titel} beskrivning={d.sammanfattning || undefined}>
   <nav class="bradsmulor" aria-label={t('brodsmulor')}>
     <ol>
-      <li><a href="/">{t('meny.start')}</a></li>
+      <li><a href={url()}>{t('meny.start')}</a></li>
       <li><a href={kategoriUrl(d.kategori)}>{kat?.titel}</a></li>
     </ol>
   </nav>

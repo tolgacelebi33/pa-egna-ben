@@ -74,6 +74,7 @@ import { BOENDEFORMER } from '../lib/schema.js';
 
 <script>
   import { las, spara, taBort, NYCKLAR } from '../lib/lagring.js';
+  import { url } from '../lib/url.js';
 
   const form = document.querySelector<HTMLFormElement>('[data-onboarding]');
 
@@ -98,11 +99,11 @@ import { BOENDEFORMER } from '../lib/schema.js';
     spara(NYCKLAR.profil, ny);
     spara(NYCKLAR.onboardingKlar, true);
     taBort(NYCKLAR.visaAlla);
-    location.href = '/';
+    location.href = url();
   });
 
   document.querySelector('[data-hoppa]')?.addEventListener('click', () => {
     spara(NYCKLAR.onboardingKlar, true);
-    location.href = '/';
+    location.href = url();
   });
 </script>

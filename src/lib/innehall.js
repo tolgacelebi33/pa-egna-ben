@@ -1,6 +1,7 @@
 // Hämtar ämnen till sidorna. Utkast tas bara med i utvecklingsläge eller när VISA_UTKAST=1 är satt.
 import { getCollection } from 'astro:content';
 import { KATEGORIER } from '../data/kategorier.js';
+import { url } from './url.js';
 
 export const VISA_UTKAST = import.meta.env.DEV || process.env.VISA_UTKAST === '1';
 
@@ -30,8 +31,8 @@ export async function kategorierMedAntal() {
   return KATEGORIER.map((k) => ({ ...k, antal: amnen.filter((p) => p.data.kategori === k.id).length }));
 }
 
-export const amneUrl = (id) => `/amne/${id}/`;
-export const kategoriUrl = (id) => `/kategori/${id}/`;
-export const figurUrl = (id) => `/figur/${id}/`;
+export const amneUrl = (id) => url(`amne/${id}/`);
+export const kategoriUrl = (id) => url(`kategori/${id}/`);
+export const figurUrl = (id) => url(`figur/${id}/`);
 
 export const arUtkast = (data) => data.granskning.status !== 'publicerad';

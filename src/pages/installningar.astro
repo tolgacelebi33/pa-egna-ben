@@ -1,6 +1,7 @@
 ---
 import Bas from '../layouts/Bas.astro';
 import { t } from '../i18n/index.js';
+import { url } from '../lib/url.js';
 ---
 
 <Bas titel={t('inst.rubrik')}>
@@ -9,7 +10,7 @@ import { t } from '../i18n/index.js';
   <section aria-labelledby="val-rubrik">
     <h2 id="val-rubrik">{t('inst.val.rubrik')}</h2>
     <p data-val-text data-har={t('inst.val.text')} data-inga={t('inst.val.inga')}>{t('inst.val.inga')}</p>
-    <p><a class="knapp" href="/kom-igang/">{t('inst.val.andra')}</a></p>
+    <p><a class="knapp" href={url('kom-igang/')}>{t('inst.val.andra')}</a></p>
   </section>
 
   <section aria-labelledby="tema-rubrik">

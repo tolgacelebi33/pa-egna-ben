@@ -2,6 +2,7 @@
 // Sökning helt på klienten mot /sokindex.json, som förcachas så att sökningen fungerar offline.
 // Utan JavaScript skickar formuläret till /sok/ som visar en länk till alla kategorier.
 import { t } from '../i18n/index.js';
+import { url } from '../lib/url.js';
 
 interface Props {
   autofokus?: boolean;
@@ -9,7 +10,7 @@ interface Props {
 const { autofokus = false } = Astro.props;
 ---
 
-<form class="sok" action="/sok/" method="get" role="search" data-sok>
+<form class="sok" action={url('sok/')} method="get" role="search" data-sok>
   <label for="sokfalt">{t('start.sok.etikett')}</label>
   <div class="sokrad">
     <input
@@ -56,6 +57,7 @@ const { autofokus = false } = Astro.props;
 
 <script>
   import { sok, type SokPost } from '../lib/sok.js';
+  import { url } from '../lib/url.js';
 
   const form = document.querySelector<HTMLFormElement>('[data-sok]');
   const falt = document.querySelector<HTMLInputElement>('[data-sokfalt]');
@@ -65,7 +67,7 @@ const { autofokus = false } = Astro.props;
 
   async function laddaIndex() {
     if (index) return index;
-    const svar = await fetch('/sokindex.json');
+    const svar = await fetch(url('sokindex.json'));
     index = (await svar.json()) as SokPost[];
     return index;
   }

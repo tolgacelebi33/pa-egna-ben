@@ -5,8 +5,9 @@
 // - personuppgiftsansvarig och kontaktuppgifter
 import Sidtext from '../components/Sidtext.astro';
 import { t } from '../i18n/index.js';
+import { url } from '../lib/url.js';
 ---
 
 <Sidtext rubrik={t('integritet.rubrik')} stycken={t('integritet.text')} kraverJurist>
-  <p><a href="/installningar/">{t('inst.radera.rubrik')}</a></p>
+  <p><a href={url('installningar/')}>{t('inst.radera.rubrik')}</a></p>
 </Sidtext>

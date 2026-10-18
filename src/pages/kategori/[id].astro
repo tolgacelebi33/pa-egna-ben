@@ -3,6 +3,7 @@ import Bas from '../../layouts/Bas.astro';
 import AmneKort from '../../components/AmneKort.astro';
 import Filtrering from '../../components/Filtrering.astro';
 import { t } from '../../i18n/index.js';
+import { url } from '../../lib/url.js';
 import { KATEGORIER } from '../../data/kategorier.js';
 import { amnenIKategori } from '../../lib/innehall.js';
 import { NIVAER } from '../../lib/schema.js';
@@ -21,7 +22,7 @@ const grupper = NIVAER.map((n) => ({ niva: n, amnen: amnen.filter((p) => p.data.
 <Bas titel={kat.titel}>
   <nav class="bradsmulor" aria-label={t('brodsmulor')}>
     <ol>
-      <li><a href="/">{t('meny.start')}</a></li>
+      <li><a href={url()}>{t('meny.start')}</a></li>
     </ol>
   </nav>
   <h1>{kat.titel}</h1>

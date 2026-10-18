@@ -4,6 +4,7 @@ import '../styles/rutor.css';
 import { t } from '../i18n/index.js';
 import { nodnummer } from '../lib/kontakter.js';
 import { VISA_UTKAST } from '../lib/innehall.js';
+import { url } from '../lib/url.js';
 
 interface Props {
   titel: string;
@@ -14,13 +15,13 @@ interface Props {
 const { titel, beskrivning = t('app.beskrivning'), bred = false } = Astro.props;
 const sokvag = Astro.url.pathname;
 const meny = [
-  { href: '/', text: t('meny.start') },
-  { href: '/figur/', text: t('meny.figurer') },
-  { href: '/foraldralage/', text: t('meny.foraldralage') },
-  { href: '/installningar/', text: t('meny.installningar') },
+  { href: url(), text: t('meny.start') },
+  { href: url('figur/'), text: t('meny.figurer') },
+  { href: url('foraldralage/'), text: t('meny.foraldralage') },
+  { href: url('installningar/'), text: t('meny.installningar') },
 ];
-const aktiv = (href: string) => (href === '/' ? sokvag === '/' : sokvag.startsWith(href));
-const sidtitel = sokvag === '/' ? t('app.namn') : `${titel} | ${t('app.namn')}`;
+const aktiv = (href: string) => (href === url() ? sokvag === url() : sokvag.startsWith(href));
+const sidtitel = sokvag === url() ? t('app.namn') : `${titel} | ${t('app.namn')}`;
 ---
 
 <html lang="sv">
@@ -31,9 +32,9 @@ const sidtitel = sokvag === '/' ? t('app.namn') : `${titel} | ${t('app.namn')}`;
     <meta name="theme-color" content="#f4eee3" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1e1b19" media="(prefers-color-scheme: dark)" />
     {VISA_UTKAST && <meta name="robots" content="noindex" />}
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/ikon-180.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
+    <link rel="apple-touch-icon" href={url('ikon-180.png')} />
+    <link rel="manifest" href={url('manifest.webmanifest')} />
     <title>{sidtitel}</title>
     <script is:inline>
       // Sätts före första målningen så att mörkt läge inte blinkar.
@@ -48,7 +49,7 @@ const sidtitel = sokvag === '/' ? t('app.namn') : `${titel} | ${t('app.namn')}`;
     {VISA_UTKAST && <p class="utkastband">{t('utkastlage.band')}</p>}
     <header class="sidhuvud">
       <div class="sidhuvud-inre">
-        <a class="logga" href="/">{t('app.namn')}</a>
+        <a class="logga" href={url()}>{t('app.namn')}</a>
         <nav class="huvudmeny" aria-label={t('meny.rubrik')}>
           <ul>
             {
@@ -72,18 +73,18 @@ const sidtitel = sokvag === '/' ? t('app.namn') : `${titel} | ${t('app.namn')}`;
         <p>{t('sidfot.kortform', { nodnummer: nodnummer() })}</p>
         <nav aria-label={t('sidfot.lankar')}>
           <ul>
-            <li><a href="/om/">{t('sida.om')}</a></li>
-            <li><a href="/ansvarsfriskrivning/">{t('sida.ansvar')}</a></li>
-            <li><a href="/integritet/">{t('sida.integritet')}</a></li>
-            <li><a href="/kallor-och-granskning/">{t('sida.kallor')}</a></li>
-            <li><a href="/rapportera-fel/">{t('sida.rapportera')}</a></li>
+            <li><a href={url('om/')}>{t('sida.om')}</a></li>
+            <li><a href={url('ansvarsfriskrivning/')}>{t('sida.ansvar')}</a></li>
+            <li><a href={url('integritet/')}>{t('sida.integritet')}</a></li>
+            <li><a href={url('kallor-och-granskning/')}>{t('sida.kallor')}</a></li>
+            <li><a href={url('rapportera-fel/')}>{t('sida.rapportera')}</a></li>
           </ul>
         </nav>
       </div>
     </footer>
     <script>
       if ('serviceWorker' in navigator && import.meta.env.PROD) {
-        window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+        window.addEventListener('load', () => navigator.serviceWorker.register(`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}sw.js`));
       }
     </script>
   </body>

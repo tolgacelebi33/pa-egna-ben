@@ -17,7 +17,9 @@ const { manifestEntries } = await getManifest(installningar);
 const cachade = manifestEntries.map((e) => e.url);
 
 const index = JSON.parse(readFileSync('dist/sokindex.json', 'utf8'));
-const akut = index.filter((p) => p.akut).map((p) => `${p.url.replace(/^\//, '')}index.html`);
+// Sökindexets adresser börjar med undermappen (BASE_PATH), förcachens gör det inte.
+const bas = (process.env.BASE_PATH || '/').replace(/\/?$/, '/');
+const akut = index.filter((p) => p.akut).map((p) => `${p.url.slice(bas.length)}index.html`);
 const fel = kontrolleraOfflineCache(akut, cachade);
 if (!cachade.includes('sokindex.json')) fel.push('[regel 7] sökindexet saknas i offline-cachen');
 
@@ -41,7 +43,7 @@ const { count, size, warnings } = await generateSW({
     {
       urlPattern: ({ request }) => request.mode === 'navigate',
       handler: 'NetworkOnly',
-      options: { precacheFallback: { fallbackURL: '/404.html' } },
+      options: { precacheFallback: { fallbackURL: `${bas}404.html` } },
     },
   ],
 });

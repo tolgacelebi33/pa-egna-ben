@@ -4,6 +4,7 @@ import Sok from '../components/Sok.astro';
 import AmneKort from '../components/AmneKort.astro';
 import Filtrering from '../components/Filtrering.astro';
 import { t } from '../i18n/index.js';
+import { url } from '../lib/url.js';
 import { amnenIKategori, kategorierMedAntal, kategoriUrl, figurUrl } from '../lib/innehall.js';
 import { FIGURER } from '../data/figurer.js';
 
@@ -25,12 +26,12 @@ const antalText = (n: number) => (n === 1 ? t('antal.amne') : t('antal.amnen', {
     <p class="ruta-rubrik">{t('start.anpassa.rubrik')}</p>
     <p>{t('start.anpassa.text')}</p>
     <p class="knapprad">
-      <a class="knapp primar" href="/kom-igang/">{t('start.anpassa.knapp')}</a>
+      <a class="knapp primar" href={url('kom-igang/')}>{t('start.anpassa.knapp')}</a>
       <button type="button" data-hoppa-over>{t('start.anpassa.hoppa')}</button>
     </p>
   </aside>
   <p class="anpassad inte-utskrift" data-anpassad hidden>
-    {t('start.anpassad')} <a href="/kom-igang/">{t('start.anpassad.andra')}</a>
+    {t('start.anpassad')} <a href={url('kom-igang/')}>{t('start.anpassad.andra')}</a>
   </p>
 
   <section aria-labelledby="nar-rubrik">
