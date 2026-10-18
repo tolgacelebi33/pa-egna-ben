@@ -12,7 +12,7 @@
     "build": "node scripts/validera.mjs innehall && astro build && node scripts/generate-sw.mjs",
     "build:utkast": "VISA_UTKAST=1 npm run build",
     "preview": "astro preview",
-    "test": "node --test tests/",
+    "test": "node --test \"tests/*.test.mjs\"",
     "test:e2e": "node tests/e2e/fas1.mjs"
   },
   "dependencies": {
