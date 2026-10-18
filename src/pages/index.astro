@@ -1,30 +1,31 @@
 ---
 import Bas from '../layouts/Bas.astro';
 import Sok from '../components/Sok.astro';
-import AmneKort from '../components/AmneKort.astro';
 import Filtrering from '../components/Filtrering.astro';
 import { t } from '../i18n/index.js';
 import { url } from '../lib/url.js';
-import { amnenIKategori, kategorierMedAntal, kategoriUrl, figurUrl } from '../lib/innehall.js';
+import { amnenIKategori, kategorierMedAntal, kategoriUrl, figurUrl, amneUrl, arUtkast } from '../lib/innehall.js';
 import { FIGURER } from '../data/figurer.js';
 
 const nar = await amnenIKategori('nar');
 const kategorier = (await kategorierMedAntal()).filter((k) => k.id !== 'nar');
-const klaraFigurer = FIGURER.filter((f) => f.klar);
+const figurer = FIGURER.map((f, i) => ({ ...f, nr: String(i + 1).padStart(2, '0') }));
+const klara = figurer.filter((f) => f.klar);
 const antalText = (n: number) => (n === 1 ? t('antal.amne') : t('antal.amnen', { antal: n }));
 ---
 
 <Bas titel={t('app.namn')} bred>
-  <h1 class="visuellt-dold">{t('app.namn')}</h1>
-
-  <section class="startsok" aria-labelledby="sok-rubrik">
-    <h2 id="sok-rubrik">{t('start.rubrik')}</h2>
-    <Sok />
+  <section class="hjalte" aria-labelledby="sok-rubrik">
+    <span class="mono overrubrik">{t('start.overrubrik')}</span>
+    <h1 id="sok-rubrik">{t('start.rubrik')}</h1>
+    <Sok stor />
   </section>
 
-  <aside class="ruta anpassa inte-utskrift" data-anpassa hidden>
-    <p class="ruta-rubrik">{t('start.anpassa.rubrik')}</p>
-    <p>{t('start.anpassa.text')}</p>
+  <aside class="anpassa ark inte-utskrift" data-anpassa hidden>
+    <div>
+      <p class="mono">{t('start.anpassa.rubrik')}</p>
+      <p>{t('start.anpassa.text')}</p>
+    </div>
     <p class="knapprad">
       <a class="knapp primar" href={url('kom-igang/')}>{t('start.anpassa.knapp')}</a>
       <button type="button" data-hoppa-over>{t('start.anpassa.hoppa')}</button>
@@ -34,22 +35,61 @@ const antalText = (n: number) => (n === 1 ? t('antal.amne') : t('antal.amnen', {
     {t('start.anpassad')} <a href={url('kom-igang/')}>{t('start.anpassad.andra')}</a>
   </p>
 
-  <section aria-labelledby="nar-rubrik">
-    <h2 id="nar-rubrik">{t('start.nar.rubrik')}</h2>
-    <p>{t('start.nar.ingress')}</p>
+  <section class="nar" aria-labelledby="nar-rubrik">
+    <div class="sektionshuvud">
+      <span class="mono akutmarke">{t('akut.etikett')}</span>
+      <h2 id="nar-rubrik">{t('start.nar.rubrik')}</h2>
+      <p>{t('start.nar.ingress')}</p>
+    </div>
     {nar.length === 0 && <p>{t('inga.amnen')}</p>}
-    <ul class="kortlista rutnat">
-      {nar.map((p) => <AmneKort data={p.data} visaNiva={false} />)}
+    <ul class="radlista ark">
+      {
+        nar.map(({ data: d }) => (
+          <li data-amne={d.id} data-filter={JSON.stringify(d.filter)}>
+            <a href={amneUrl(d.id)}>
+              <span class="rad-titel">{d.titel}</span>
+              {arUtkast(d) && <span class="etikett utkast">{t('utkast.kort')}</span>}
+              <span class="pil" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))
+      }
     </ul>
   </section>
 
-  <section aria-labelledby="kategori-rubrik">
-    <h2 id="kategori-rubrik">{t('start.kategorier.rubrik')}</h2>
-    <ul class="kortlista rutnat">
+  <section aria-labelledby="figur-rubrik">
+    <div class="sektionshuvud">
+      <span class="mono">{t('figurer.rubrik')}</span>
+      <h2 id="figur-rubrik">{t('start.figurer.rubrik')}</h2>
+      <p>{t('start.figurer.ingress')}</p>
+    </div>
+    <ul class="figurkort">
       {
-        kategorier.map((k) => (
+        klara.map((f) => (
+          <li>
+            <a href={figurUrl(f.id)} class="ark">
+              <img src={url(`figurer/${f.id}.jpg`)} alt="" width="600" height="420" loading="lazy" decoding="async" />
+              <span class="mono">{t('figurer.figur')} {f.nr}</span>
+              <span class="figurkort-titel">{f.titel}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p><a href={url('figur/')}>{t('start.figurer.alla', { antal: figurer.length })}</a></p>
+  </section>
+
+  <section aria-labelledby="kategori-rubrik">
+    <div class="sektionshuvud">
+      <span class="mono">{t('start.kategorier.over')}</span>
+      <h2 id="kategori-rubrik">{t('start.kategorier.rubrik')}</h2>
+    </div>
+    <ul class="kategorier">
+      {
+        kategorier.map((k, i) => (
           <li>
             <a class="kort" href={kategoriUrl(k.id)}>
+              <span class="mono">{String(i + 1).padStart(2, '0')}</span>
               <span class="kort-titel">{k.titel}</span>
               <span class="kort-text">{antalText(k.antal)}</span>
             </a>
@@ -59,29 +99,31 @@ const antalText = (n: number) => (n === 1 ? t('antal.amne') : t('antal.amnen', {
     </ul>
   </section>
 
-  {
-    klaraFigurer.length > 0 && (
-      <section aria-labelledby="figur-rubrik">
-        <h2 id="figur-rubrik">{t('start.figurer.rubrik')}</h2>
-        <ul class="kortlista rutnat">
-          {klaraFigurer.map((f) => (
-            <li>
-              <a class="kort" href={figurUrl(f.id)}>
-                <span class="kort-titel">{f.titel}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )
-  }
-
   <Filtrering />
 </Bas>
 
 <style>
-  .startsok h2 {
-    margin-top: var(--steg-5);
+  .hjalte {
+    padding: var(--steg-6) 0 var(--steg-5);
+    max-width: 46rem;
+  }
+  .hjalte h1 {
+    margin: 0 0 var(--steg-5);
+  }
+  .anpassa {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--steg-3) var(--steg-5);
+    margin-top: var(--steg-4);
+  }
+  .anpassa p {
+    margin: 0;
+  }
+  .anpassa .mono {
+    margin-bottom: var(--steg-1);
+    color: var(--text-svag);
   }
   .knapprad {
     display: flex;
@@ -91,6 +133,127 @@ const antalText = (n: number) => (n === 1 ? t('antal.amne') : t('antal.amnen', {
   .anpassad {
     font-size: var(--text-s);
     margin-top: var(--steg-4);
+    color: var(--text-svag);
+  }
+  .sektionshuvud {
+    margin: var(--steg-8) 0 var(--steg-4);
+    max-width: 40rem;
+  }
+  .sektionshuvud .mono {
+    color: var(--text-svag);
+  }
+  .sektionshuvud h2 {
+    margin: var(--steg-1) 0 var(--steg-2);
+  }
+  .sektionshuvud p {
+    margin: 0;
+    color: var(--text-svag);
+  }
+  .akutmarke {
+    color: var(--tegel) !important;
+  }
+
+  /* Akutlistan: rader med tunn linje emellan, två kolumner på bred skärm */
+  .radlista {
+    list-style: none;
+    margin: 0;
+    padding: var(--steg-2) var(--steg-4);
+    display: grid;
+    column-gap: var(--steg-6);
+  }
+  @media (min-width: 800px) {
+    .radlista {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .radlista li {
+    border-bottom: 1px solid var(--linje);
+  }
+  .radlista a {
+    display: flex;
+    align-items: center;
+    gap: var(--steg-3);
+    min-height: 56px;
+    padding: var(--steg-2) var(--steg-1);
+    color: var(--black);
+    text-decoration: none;
+  }
+  .radlista a::before {
+    content: '';
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--tegel);
+  }
+  .rad-titel {
+    flex: 1;
+    font-weight: 700;
+  }
+  .pil {
+    color: var(--text-svag);
+    transition: transform 0.15s ease;
+  }
+  .radlista a:hover .pil {
+    transform: translateX(3px);
+    color: var(--black);
+  }
+
+  /* Figurkort med stillbild */
+  .figurkort {
+    list-style: none;
+    margin: 0 0 var(--steg-3);
+    padding: 0;
+    display: grid;
+    gap: var(--steg-4);
+  }
+  @media (min-width: 700px) {
+    .figurkort {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .figurkort a {
+    display: flex;
+    flex-direction: column;
+    gap: var(--steg-1);
+    padding: var(--steg-3) var(--steg-3) var(--steg-4);
+    color: var(--black);
+    text-decoration: none;
+    border: 1.5px solid transparent;
+  }
+  .figurkort a:hover {
+    border-color: var(--black);
+  }
+  .figurkort img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 10 / 7;
+    object-fit: cover;
+    border-radius: var(--radie);
+    margin-bottom: var(--steg-2);
+    background: var(--figurpapper);
+  }
+  .figurkort .mono {
+    color: var(--text-svag);
+    padding-inline: var(--steg-1);
+  }
+  .figurkort-titel {
+    font-family: var(--typsnitt-rubrik);
+    font-weight: 700;
+    font-size: var(--text-l);
+    padding-inline: var(--steg-1);
+  }
+
+  .kategorier {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--steg-3);
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  }
+  .kategorier .mono {
+    color: var(--text-svag);
   }
 </style>
 

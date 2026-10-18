@@ -19,14 +19,17 @@ const grupper = NIVAER.map((n) => ({ niva: n, amnen: amnen.filter((p) => p.data.
 );
 ---
 
-<Bas titel={kat.titel}>
+<Bas titel={kat.titel} bred>
   <nav class="bradsmulor" aria-label={t('brodsmulor')}>
     <ol>
       <li><a href={url()}>{t('meny.start')}</a></li>
     </ol>
   </nav>
-  <h1>{kat.titel}</h1>
-  {kat.regel && <p class="ingress">{kat.regel}</p>}
+  <header class="kategorihuvud">
+    <span class="mono">{t('kategori.over')} · {amnen.length === 1 ? t('antal.amne') : t('antal.amnen', { antal: amnen.length })}</span>
+    <h1>{kat.titel}</h1>
+    {kat.regel && <p class="ingress">{kat.regel}</p>}
+  </header>
 
   <Filtrering />
 
@@ -34,8 +37,10 @@ const grupper = NIVAER.map((n) => ({ niva: n, amnen: amnen.filter((p) => p.data.
   {
     grupper.map((g) => (
       <section aria-labelledby={`niva-${g.niva}`}>
-        <h2 id={`niva-${g.niva}`}>{t(`niva.${g.niva}`)}</h2>
-        <ul class="kortlista">
+        <h2 id={`niva-${g.niva}`} class="nivarubrik">
+          {t(`niva.${g.niva}`)}
+        </h2>
+        <ul class="kortlista rutnat">
           {g.amnen.map((p) => (
             <AmneKort data={p.data} visaNiva={false} />
           ))}
@@ -44,3 +49,20 @@ const grupper = NIVAER.map((n) => ({ niva: n, amnen: amnen.filter((p) => p.data.
     ))
   }
 </Bas>
+
+<style>
+  .kategorihuvud {
+    margin: var(--steg-4) 0 var(--steg-5);
+    max-width: 44rem;
+  }
+  .kategorihuvud .mono {
+    color: var(--text-svag);
+  }
+  .kategorihuvud h1 {
+    margin: var(--steg-2) 0 var(--steg-3);
+  }
+  .nivarubrik {
+    font-size: var(--text-l);
+    margin: var(--steg-6) 0 var(--steg-3);
+  }
+</style>

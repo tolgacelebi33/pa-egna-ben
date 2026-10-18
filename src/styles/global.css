@@ -10,6 +10,11 @@
   box-sizing: border-box;
 }
 
+/* hidden ska alltid dölja, även när en klass sätter display. */
+[hidden] {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }

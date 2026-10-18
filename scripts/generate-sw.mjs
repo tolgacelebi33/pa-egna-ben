@@ -8,7 +8,7 @@ import { kontrolleraOfflineCache } from '../src/lib/regler.js';
 
 const installningar = {
   globDirectory: 'dist',
-  globPatterns: ['**/*.{html,js,css,svg,png,webmanifest,woff2,json}'],
+  globPatterns: ['**/*.{html,js,css,svg,png,jpg,webmanifest,woff2,json}'],
   // Bara latinska och latin-ext-typsnitt behövs för svenska och engelska.
   globIgnores: ['**/*cyrillic*', '**/*greek*', '**/*vietnamese*', 'sw.js', 'workbox-*.js'],
 };

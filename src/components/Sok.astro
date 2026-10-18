@@ -6,12 +6,13 @@ import { url } from '../lib/url.js';
 
 interface Props {
   autofokus?: boolean;
+  stor?: boolean;
 }
-const { autofokus = false } = Astro.props;
+const { autofokus = false, stor = false } = Astro.props;
 ---
 
-<form class="sok" action={url('sok/')} method="get" role="search" data-sok>
-  <label for="sokfalt">{t('start.sok.etikett')}</label>
+<form class:list={['sok', { stor }]} action={url('sok/')} method="get" role="search" data-sok>
+  <label for="sokfalt" class:list={{ 'visuellt-dold': stor }}>{t('start.sok.etikett')}</label>
   <div class="sokrad">
     <input
       id="sokfalt"
@@ -46,6 +47,23 @@ const { autofokus = false } = Astro.props;
   .sokrad input {
     flex: 1;
     min-width: 0;
+  }
+  .stor .sokrad {
+    position: relative;
+  }
+  .stor .sokrad input {
+    min-height: 64px;
+    padding-right: 7rem;
+    font-size: var(--text-l);
+    box-shadow: var(--skugga);
+    border-width: 2px;
+  }
+  .stor .sokrad button {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    bottom: 8px;
+    min-height: 0;
   }
   .sokstatus:empty {
     display: none;

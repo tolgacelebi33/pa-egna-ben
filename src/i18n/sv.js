@@ -29,6 +29,11 @@ export default {
   'sida.rapportera': 'Rapportera fel',
 
   'start.rubrik': 'Vad behöver du hjälp med?',
+  'start.overrubrik': 'Handboken för att bo själv',
+  'start.figurer.ingress': 'Vrid, tryck och öppna. Figurerna visar hur saker fungerar på insidan.',
+  'start.figurer.alla': 'Alla {antal} figurer',
+  'start.kategorier.over': 'Ämnen',
+  'utkast.kort': 'Utkast',
   'start.sok.etikett': 'Sök bland alla ämnen',
   'start.sok.platshallare': 'Till exempel tvätt, hyra eller stopp i vasken',
   'start.sok.knapp': 'Sök',
@@ -57,6 +62,7 @@ export default {
   'kategori.dolda': '{antal} ämnen är dolda utifrån dina val.',
   'kategori.dolda.ett': '1 ämne är dolt utifrån dina val.',
   'kategori.visa.alla': 'Visa alla ämnen',
+  'kategori.over': 'Kategori',
   'kategori.visa.anpassat': 'Visa bara det som passar mig',
 
   'niva.vecka1': 'Behövs vecka 1',
@@ -68,7 +74,8 @@ export default {
   'akut.etikett': 'Akut',
 
   'amne.figur.rubrik': 'Prova figuren',
-  'amne.figur.kommer': 'En interaktiv figur till det här ämnet kommer senare.',
+  'amne.figur.text': 'Vrid, tryck och se hur det fungerar på insidan.',
+  'amne.figur.kommer': 'Figur kommer senare',
   'amne.relaterade': 'Läs också',
   'amne.rapportera': 'Rapportera fel på den här sidan',
   'amne.rapportera.amne': 'Fel i: {titel} ({id})',

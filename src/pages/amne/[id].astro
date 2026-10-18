@@ -42,13 +42,16 @@ const rapport = `mailto:${CONFIG.felrapportEpost}?subject=${encodeURIComponent(
   </nav>
 
   <article>
-    <h1>{d.titel}</h1>
-    {d.sammanfattning && <p class="ingress">{d.sammanfattning}</p>}
-    <ul class="etiketter">
-      {d.akut && <li class="etikett">{t('akut.etikett')}</li>}
-      <li class="etikett">{t(`niva.${d.niva}`)}</li>
-      {utkast && <li class="etikett utkast">{t('utkast.markering')}</li>}
-    </ul>
+    <header class="amneshuvud">
+      <span class="mono">{kat?.titel}</span>
+      <h1>{d.titel}</h1>
+      {d.sammanfattning && <p class="ingress">{d.sammanfattning}</p>}
+      <ul class="etiketter">
+        {d.akut && <li class="etikett akut">{t('akut.etikett')}</li>}
+        <li class="etikett">{t(`niva.${d.niva}`)}</li>
+        {utkast && <li class="etikett utkast">{t('utkast.markering')}</li>}
+      </ul>
+    </header>
 
     {
       utkast && (
@@ -62,29 +65,28 @@ const rapport = `mailto:${CONFIG.felrapportEpost}?subject=${encodeURIComponent(
     {d.akut && <Akut />}
     {d.varierar_per_kommun && <VarierarPerKommun />}
 
-    <div class="brodtext">
-      <Content />
-    </div>
-
     {
-      fig && (
-        <aside class="ruta">
-          <p class="ruta-rubrik">{t('amne.figur.rubrik')}</p>
-          {fig.klar ? (
-            <p>
-              <a class="knapp primar" href={figurUrl(fig.id)}>
-                {fig.titel}
-              </a>
-            </p>
-          ) : (
-            <p>{t('amne.figur.kommer')}</p>
-          )}
-        </aside>
+      fig?.klar && (
+        <a class="figurlank ark" href={figurUrl(fig.id)}>
+          <img src={url(`figurer/${fig.id}.jpg`)} alt="" width="600" height="420" />
+          <span>
+            <span class="mono">{t('amne.figur.rubrik')}</span>
+            <span class="figurlank-titel">{fig.titel}</span>
+            <span class="figurlank-text">{t('amne.figur.text')}</span>
+          </span>
+        </a>
       )
     }
 
-    <Kallor kallor={d.kallor} kalltyper={d.kalltyper} visaKalltyper={VISA_UTKAST} />
-    <Granskning granskning={d.granskning} risk={d.risk} />
+    <div class="brodtext ark">
+      <Content />
+      {fig && !fig.klar && <p class="mono kommer">{t('amne.figur.kommer')}</p>}
+    </div>
+
+    <div class="fakta">
+      <Kallor kallor={d.kallor} kalltyper={d.kalltyper} visaKalltyper={VISA_UTKAST} />
+      <Granskning granskning={d.granskning} risk={d.risk} />
+    </div>
 
     {
       relaterade.length > 0 && (
@@ -104,6 +106,75 @@ const rapport = `mailto:${CONFIG.felrapportEpost}?subject=${encodeURIComponent(
 </Bas>
 
 <style>
+  .amneshuvud {
+    margin: var(--steg-4) 0 var(--steg-5);
+  }
+  .amneshuvud .mono {
+    color: var(--text-svag);
+  }
+  .amneshuvud h1 {
+    margin: var(--steg-2) 0 var(--steg-3);
+  }
+  .brodtext {
+    margin: var(--steg-5) 0;
+  }
+  .brodtext :global(h2) {
+    font-size: var(--text-l);
+    margin: var(--steg-5) 0 var(--steg-2);
+  }
+  .brodtext :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .kommer {
+    color: var(--text-svag);
+    margin-bottom: 0;
+  }
+  .figurlank {
+    display: grid;
+    grid-template-columns: minmax(0, 11rem) 1fr;
+    align-items: center;
+    gap: var(--steg-4);
+    padding: var(--steg-3);
+    margin: var(--steg-5) 0;
+    color: var(--black);
+    text-decoration: none;
+    border: 1.5px solid transparent;
+  }
+  .figurlank:hover {
+    border-color: var(--black);
+  }
+  .figurlank img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radie);
+    background: var(--figurpapper);
+  }
+  .figurlank > span {
+    display: grid;
+    gap: var(--steg-1);
+  }
+  .figurlank .mono {
+    color: var(--text-svag);
+  }
+  .figurlank-titel {
+    font-family: var(--typsnitt-rubrik);
+    font-weight: 700;
+    font-size: var(--text-l);
+  }
+  .figurlank-text {
+    color: var(--text-svag);
+    font-size: var(--text-s);
+  }
+  .fakta {
+    display: grid;
+    gap: 0 var(--steg-4);
+  }
+  @media (min-width: 720px) {
+    .fakta {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
   .brodtext :global(li) {
     margin-bottom: var(--steg-1);
   }
