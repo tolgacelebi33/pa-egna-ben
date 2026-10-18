@@ -1,16 +1,20 @@
-// Texter för bildfiguren. Inga faktauppgifter; detaljer står i textversionen.
+// Texter för figuren cykel. Råden är källbelagda i Textversion.astro.
 export default {
-  "aria": "Bilder i steg",
-  "lage.grund.steg": "Cykeln",
-  "lage.grund.status": "En stadscykel.",
+  "aria": "Cykel i steg",
+  "lage.grund.steg": "Lagkrav",
+  "lage.grund.status": "Ringklocka och bromsar ska alltid finnas. Lampor och reflexer krävs när du cyklar i mörker.",
   "lage.grund.alt": "Blå stadscykel",
+  "lage.grund.punkter": ["Fram: vit eller gul lampa som syns på 300 meter.", "Bak: röd lampa som syns på 300 meter. Blinkande är okej.", "Reflexer: röd bak, vit fram och vita eller orangegula åt sidorna."],
   "lage.punktering.steg": "Punktering",
-  "lage.punktering.status": "Framdäcket är platt och luft pyser ut.",
+  "lage.punktering.status": "Däcket är platt. Pumpa och lyssna efter var luften pyser ut.",
   "lage.punktering.alt": "Platt framdäck",
+  "lage.punktering.punkter": ["Hittar du inte hålet: ta ut slangen och doppa den i vatten. Där det bubblar är hålet.", "Laga med en lapp, eller byt slang."],
   "lage.pump.steg": "Pumpa",
-  "lage.pump.status": "Pumpen kopplas till ventilen på däcket.",
+  "lage.pump.status": "Koppla pumpen till ventilen och pumpa till rätt tryck.",
   "lage.pump.alt": "Cykel med golvpump kopplad till framdäcket",
+  "lage.pump.punkter": ["Rätt tryck står på däckets sida.", "För lite luft ger lättare punktering och tyngre trampande."],
   "lage.kedja.steg": "Smörj kedjan",
-  "lage.kedja.status": "Droppa olja på kedjan medan du vevar, torka bort det som är över.",
+  "lage.kedja.status": "En torr kedja gnisslar och slits fortare.",
   "lage.kedja.alt": "Oljeflaska droppar olja på kedjan",
+  "lage.kedja.punkter": ["Droppa kedjeolja medan du vevar bakåt.", "Torka bort det som är över, annars samlar kedjan smuts."],
 };

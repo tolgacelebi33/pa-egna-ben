@@ -1,13 +1,12 @@
-// Texter för bildfiguren. Inga faktauppgifter; detaljer står i textversionen.
+// Texter för figuren spis. Råden är källbelagda i Textversion.astro.
 export default {
-  "aria": "Bilder i steg",
-  "lage.grund.steg": "Spisen",
-  "lage.grund.status": "Induktionshäll upptill, ugn under.",
-  "lage.grund.alt": "Spis med svart induktionshäll och ugn",
-  "lage.kastrull.steg": "Kastrull på plattan",
-  "lage.kastrull.status": "Kastrullen står på en kokzon som är på.",
+  "aria": "Spis och ugn i steg",
+  "lage.kastrull.steg": "Rätt kastrull på induktion",
+  "lage.kastrull.status": "En induktionshäll fungerar bara med kastruller som har en magnetisk botten.",
   "lage.kastrull.alt": "Kastrull på en tänd kokzon",
-  "lage.ugn-oppen.steg": "Öppna ugnen",
-  "lage.ugn-oppen.status": "Inne i ugnen: galler, plåt, element och fläkt.",
+  "lage.kastrull.punkter": ["Testa med en kylskåpsmagnet: fastnar den på kastrullens botten fungerar kastrullen.", "Fungerar: gjutjärn, stål, emaljerat stål och rostfritt stål med magnetisk botten.", "Fungerar inte: aluminium, koppar, mässing, glas, keramik och porslin, om botten inte är magnetisk.", "Botten ska vara platt och ungefär lika stor som kokzonen. Mät botten, inte kanten."],
+  "lage.ugn-oppen.steg": "Ugnen",
+  "lage.ugn-oppen.status": "Inne i ugnen sitter galler, plåt, värmeelement och ofta en fläkt på bakväggen.",
   "lage.ugn-oppen.alt": "Ugn med öppen lucka",
+  "lage.ugn-oppen.punkter": ["Sätt på ugnen i förväg så att den hinner bli varm.", "Använd grytlappar. Gallret och luckans insida blir mycket varma.", "Vilka funktioner ugnen har står i bruksanvisningen."],
 };

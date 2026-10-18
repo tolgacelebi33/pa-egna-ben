@@ -1,16 +1,14 @@
-// Texter för bildfiguren. Inga faktauppgifter; detaljer står i textversionen.
+// Texter för figuren cistern. Råden är källbelagda i Textversion.astro.
 export default {
-  "aria": "Bilder i steg",
-  "lage.grund.steg": "Full cistern",
-  "lage.grund.status": "Cisternen är full. Flottören flyter högt och har stängt påfyllningsventilen.",
+  "aria": "Toalettens cistern i steg",
+  "lage.grund.steg": "Delarna",
+  "lage.grund.status": "Flottören flyter på vattnet och stänger påfyllningsventilen när cisternen är full. Tätningen i botten håller vattnet kvar tills du spolar.",
   "lage.grund.alt": "Toalett med genomskuren cistern, full med vatten",
-  "lage.spolar.steg": "Spola",
-  "lage.spolar.status": "Tätningen lyfts och vattnet forsar ned i toaletten.",
+  "lage.spolar.steg": "När du spolar",
+  "lage.spolar.status": "Tätningen lyfts och vattnet forsar ned. Flottören sjunker och öppnar ventilen, så att cisternen fylls igen.",
   "lage.spolar.alt": "Vattnet forsar ur cisternen ned i skålen",
-  "lage.fylls.steg": "Cisternen fylls",
-  "lage.fylls.status": "Tätningen har stängt. Flottören har sjunkit och ventilen släpper in vatten.",
-  "lage.fylls.alt": "Påfyllningsventilen sprutar in vatten i cisternen",
   "lage.lacker.steg": "Toaletten rinner",
-  "lage.lacker.status": "Tätningen läcker. Vatten rinner hela tiden ned i skålen. Felanmäl till hyresvärden.",
+  "lage.lacker.status": "Rinner det hela tiden läcker tätningen i botten eller påfyllningsventilen. Det kostar vatten.",
   "lage.lacker.alt": "En tunn stråle rinner hela tiden från cisternen ned i skålen",
+  "lage.lacker.punkter": ["Hör du ett svagt sus eller ser vatten rinna i skålen hela tiden: felanmäl till hyresvärden.", "Stäng avstängningsventilen på röret till toaletten om det rinner mycket i väntan på hjälp.", "Byt inte delar själv i en hyresrätt utan att fråga hyresvärden."],
 };

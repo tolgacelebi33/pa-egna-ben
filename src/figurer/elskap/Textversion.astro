@@ -1,27 +1,36 @@
 ---
-// Textversion av elskåpsfiguren. Platshållare tills innehållet är skrivet, källbelagt och fackgranskat.
+// Textversion av elskåpsfiguren. Källbelagd (Elsäkerhetsverket), men inte fackgranskad än.
 import AnlitaProffs from '../../components/AnlitaProffs.astro';
 ---
 
-<h3>Vad som finns i elskåpet</h3>
-<p>Elskåpet delar upp strömmen i lägenheten. Varje säkring skyddar en grupp, till exempel ett rum eller en del av köket. Jordfelsbrytaren skyddar flera grupper och bryter strömmen om ström läcker där den inte ska.</p>
-<p><span class="todo">TODO-KONTROLL: beskrivningen av säkringar och jordfelsbrytare, med källa och fackgranskning.</span></p>
+<h3>Säkringar och jordfelsbrytare</h3>
+<ul>
+  <li>Varje säkring skyddar en grupp, till exempel ett rum. Är för mycket inkopplat på samma grupp löser säkringen ut.</li>
+  <li>Dra ur det som drar mest innan du slår på säkringen igen. Annars löser den ut igen.</li>
+  <li>Jordfelsbrytaren bryter strömmen om ström läcker där den inte ska. Den skyddar mot elolyckor.</li>
+</ul>
 
-<h3>1. För många apparater på samma säkring</h3>
-<p>Om för mycket är inkopplat på samma grupp blir ledningen överbelastad och säkringen löser ut. Då blir det strömlöst i den gruppen.</p>
-<p><span class="todo">TODO-KONTROLL: vad som räknas som för mycket. Gränsen i figuren är en platshållare.</span></p>
+<h3>Testa jordfelsbrytaren</h3>
+<ul>
+  <li>Testa minst två gånger om året, eller så ofta som tillverkaren anger om det är oftare.</li>
+  <li>Tryck på testknappen. Strömmen ska brytas. Slå sedan på den igen.</li>
+  <li>Bryts inte strömmen fungerar den inte. Kontakta hyresvärden eller ett registrerat elinstallationsföretag.</li>
+</ul>
 
-<h3>2. Dra ur en apparat</h3>
-<p>Dra ur det som drar mest innan du slår på säkringen igen. Annars löser den ut igen.</p>
-
-<h3>3. Slå på säkringen igen</h3>
-<p>I figuren har säkringarna en spak som fälls upp. Äldre elskåp kan ha skruvsäkringar (proppar) i stället.</p>
-<p><span class="todo">TODO-KONTROLL: exakt vad en lekman får göra själv, till exempel slå på en automatsäkring eller byta propp. Fastställs med källa och fackgranskas.</span></p>
-
-<h3>4. Testa jordfelsbrytaren</h3>
-<p>Jordfelsbrytaren har en testknapp. När du trycker på den ska jordfelsbrytaren lösa ut, och då blir alla grupper den skyddar strömlösa. Slå sedan på den igen.</p>
-<p><span class="todo">TODO-KONTROLL: hur ofta jordfelsbrytaren bör testas och vem som ansvarar för det i en hyresrätt.</span></p>
+<h3>Vad du får göra själv</h3>
+<ul>
+  <li>Du får inte installera en jordfelsbrytare själv. Det gör ett registrerat elinstallationsföretag.</li>
+  <li>En del enkla jobb, till exempel att byta en stickpropp, får du göra om du har tillräcklig kunskap. Bryt alltid strömmen först.</li>
+  <li>Elsäkerhetsverkets tjänst Koppla säkert visar vad du får göra själv.</li>
+</ul>
 
 <AnlitaProffs>
   <p>Om säkringen eller jordfelsbrytaren löser ut igen utan att du vet varför. Öppna aldrig elcentralen.</p>
 </AnlitaProffs>
+
+<h3>Källor</h3>
+<ul>
+  <li><a href="https://www.elsakerhetsverket.se/privatpersoner/saker-el-hemma/om-du-agar-din-bostad/jordfelsbrytaren-din-sakerhet/fragor-och-svar-om-jordfelsbrytare" rel="noopener">Elsäkerhetsverket: Frågor och svar om jordfelsbrytare</a>, hämtad 2026-10-18</li>
+  <li><a href="https://www.elsakerhetsverket.se/fragor-och-svar/arkiv-fragor/far-jag-installera-en-jordfelsbrytare-sjalv/" rel="noopener">Elsäkerhetsverket: Får jag installera en jordfelsbrytare själv?</a>, hämtad 2026-10-18</li>
+</ul>
+<p><span class="todo">TODO-KONTROLL: fackgranskning av behörig elinstallatör innan publicering (hög risk).</span></p>
