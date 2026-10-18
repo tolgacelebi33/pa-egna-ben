@@ -1,0 +1,35 @@
+---
+// Visar rätt figur och textversion för ett figur-id. Nya figurer läggs till här.
+import Tvattmaskin from '../figurer/tvattmaskin/Tvattmaskin.jsx';
+import TvattmaskinText from '../figurer/tvattmaskin/Textversion.astro';
+import Brandvarnare from '../figurer/brandvarnare/Brandvarnare.jsx';
+import BrandvarnareText from '../figurer/brandvarnare/Textversion.astro';
+import Elskap from '../figurer/elskap/Elskap.jsx';
+import ElskapText from '../figurer/elskap/Textversion.astro';
+import Kyl from '../figurer/kyl/Kyl.jsx';
+import KylText from '../figurer/kyl/Textversion.astro';
+
+interface Props {
+  id: string;
+  del: 'figur' | 'text';
+}
+const { id, del } = Astro.props;
+---
+
+{
+  del === 'figur' ? (
+    <>
+      {id === 'tvattmaskin' && <Tvattmaskin client:visible />}
+      {id === 'brandvarnare' && <Brandvarnare client:visible />}
+      {id === 'elskap' && <Elskap client:visible />}
+      {id === 'kyl' && <Kyl client:visible />}
+    </>
+  ) : (
+    <>
+      {id === 'tvattmaskin' && <TvattmaskinText />}
+      {id === 'brandvarnare' && <BrandvarnareText />}
+      {id === 'elskap' && <ElskapText />}
+      {id === 'kyl' && <KylText />}
+    </>
+  )
+}

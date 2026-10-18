@@ -1,0 +1,25 @@
+/* Kylfiguren. Det gemensamma ligger i ../delat/figur.css. */
+.figur-kyl .glashylla polygon { fill-opacity: 0.85; stroke-width: 2; }
+.figur-kyl .vara { cursor: grab; }
+.figur-kyl .vara.dras { cursor: grabbing; }
+.figur-kyl .vara.vald polygon { stroke: #c8664a; stroke-width: 3.4; }
+.figur-kyl .zon-namn { fill: #3b5d7d; paint-order: stroke; stroke: #f6f1e7; stroke-width: 4px; }
+.figur-kyl .is { transition: opacity 2.4s ease; }
+.figur-kyl .is.smalt { opacity: 0; }
+.figur-kyl .smaltvatten { fill: #9cc0e2; opacity: 0.7; }
+
+.kyl-val {
+  margin: 0;
+  display: grid;
+  gap: var(--steg-2);
+}
+.kyl-val legend {
+  font-size: var(--text-xs);
+  color: var(--text-svag);
+  margin-bottom: var(--steg-2);
+}
+.kyl-varor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--steg-1) var(--steg-2);
+}

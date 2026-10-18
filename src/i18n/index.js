@@ -1,19 +1,12 @@
 import svBas from './sv.js';
 import en from './en.js';
-import tvattmaskinSv from '../figurer/tvattmaskin/sv.js';
-import brandvarnareSv from '../figurer/brandvarnare/sv.js';
-import elskapSv from '../figurer/elskap/sv.js';
+import { FIGURORDLISTOR } from '../figurer/ordlistor.js';
 
 // Figurernas texter ligger bredvid figuren och läggs in här med figurens id som prefix.
 const medPrefix = (prefix, ordlista) =>
   Object.fromEntries(Object.entries(ordlista).map(([k, v]) => [`${prefix}.${k}`, v]));
 
-const sv = {
-  ...svBas,
-  ...medPrefix('tvattmaskin', tvattmaskinSv),
-  ...medPrefix('brandvarnare', brandvarnareSv),
-  ...medPrefix('elskap', elskapSv),
-};
+const sv = { ...svBas, ...Object.assign({}, ...Object.entries(FIGURORDLISTOR).map(([id, o]) => medPrefix(id, o))) };
 const ordlistor = { sv, en };
 let sprak = 'sv';
 
