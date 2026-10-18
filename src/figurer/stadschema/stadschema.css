@@ -38,3 +38,4 @@
   font-size: var(--text-s);
   color: var(--text-svag);
 }
+.figur-stadschema .lagenhetsbild { display: block; width: 100%; height: auto; border-radius: var(--radie); }

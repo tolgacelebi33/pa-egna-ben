@@ -32,4 +32,7 @@ export default {
   'status.bockad': 'Bra. Golvet blir renare för varje uppgift.',
   'status.rum.klart': '{rum} är klart för den här perioden.',
   'status.ny.period': 'Ny period. Alla uppgifter är urbockade.',
+  "lage.lagenhet.steg": "Lägenheten",
+  "lage.lagenhet.status": "Kök, badrum, vardagsrum och sovrum. Bocka av uppgifterna rum för rum nedanför.",
+  "lage.lagenhet.alt": "Lägenhet uppifrån med fyra rum",
 };

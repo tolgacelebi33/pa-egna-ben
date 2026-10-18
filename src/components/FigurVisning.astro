@@ -6,27 +6,17 @@ import Brandvarnare from '../figurer/brandvarnare/Brandvarnare.jsx';
 import BrandvarnareText from '../figurer/brandvarnare/Textversion.astro';
 import Elskap from '../figurer/elskap/Elskap.jsx';
 import ElskapText from '../figurer/elskap/Textversion.astro';
-import Kyl from '../figurer/kyl/Kyl.jsx';
 import KylText from '../figurer/kyl/Textversion.astro';
-import Vattenlas from '../figurer/vattenlas/Vattenlas.jsx';
 import VattenlasText from '../figurer/vattenlas/Textversion.astro';
-import Cistern from '../figurer/cistern/Cistern.jsx';
 import CisternText from '../figurer/cistern/Textversion.astro';
 import Huvudkran from '../figurer/huvudkran/Huvudkran.jsx';
 import HuvudkranText from '../figurer/huvudkran/Textversion.astro';
-import Diskmaskin from '../figurer/diskmaskin/Diskmaskin.jsx';
 import DiskmaskinText from '../figurer/diskmaskin/Textversion.astro';
-import Spis from '../figurer/spis/Spis.jsx';
 import SpisText from '../figurer/spis/Textversion.astro';
-import Dammsugare from '../figurer/dammsugare/Dammsugare.jsx';
 import DammsugareText from '../figurer/dammsugare/Textversion.astro';
-import Tavla from '../figurer/tavla/Tavla.jsx';
 import TavlaText from '../figurer/tavla/Textversion.astro';
-import Paslakan from '../figurer/paslakan/Paslakan.jsx';
 import PaslakanText from '../figurer/paslakan/Textversion.astro';
-import Cykel from '../figurer/cykel/Cykel.jsx';
 import CykelText from '../figurer/cykel/Textversion.astro';
-import Faktura from '../figurer/faktura/Faktura.jsx';
 import FakturaText from '../figurer/faktura/Textversion.astro';
 import Budget from '../figurer/budget/Budget.jsx';
 import BudgetText from '../figurer/budget/Textversion.astro';
@@ -41,12 +31,15 @@ import BeslutstradText from '../figurer/beslutstrad/Textversion.astro';
 import { hamtaAmnen } from '../lib/innehall.js';
 import { amnenI } from '../figurer/beslutstrad/trad.js';
 import { nodnummer } from '../lib/kontakter.js';
+import BildFigur from '../figurer/delat/BildFigur.jsx';
 
 interface Props {
   id: string;
   del: 'figur' | 'text';
 }
 const { id, del } = Astro.props;
+// Figurer som består av AI-bilder, ett läge per steg (filer i public/figurer/bilder/<id>/).
+const BILDLAGEN: Record<string, string[]> = {"kyl": ["stangd", "oppen", "oppen-mat", "frys-ute"], "cistern": ["grund", "spolar", "fylls", "lacker"], "diskmaskin": ["stangd", "oppen", "korg-ute", "filter"], "dammsugare": ["grund", "oppen", "munstycken", "filter"], "paslakan": ["steg1", "steg2", "steg3", "klar"], "cykel": ["grund", "punktering", "pump", "kedja"], "vattenlas": ["grund", "torr", "loss"], "spis": ["grund", "kastrull", "ugn-oppen"], "tavla": ["gips", "betong", "tra"], "faktura": ["grund"]};
 const alla = id === 'beslutstrad' ? await hamtaAmnen() : [];
 const titlar = Object.fromEntries(amnenI().map((a) => [a, alla.find((p) => p.data.id === a)?.data.titel ?? a]));
 ---
@@ -54,20 +47,11 @@ const titlar = Object.fromEntries(amnenI().map((a) => [a, alla.find((p) => p.dat
 {
   del === 'figur' ? (
     <>
+      {BILDLAGEN[id] && <BildFigur client:visible id={id} lagen={BILDLAGEN[id]} />}
       {id === 'tvattmaskin' && <Tvattmaskin client:visible />}
       {id === 'brandvarnare' && <Brandvarnare client:visible />}
       {id === 'elskap' && <Elskap client:visible />}
-      {id === 'kyl' && <Kyl client:visible />}
-      {id === 'vattenlas' && <Vattenlas client:visible />}
-      {id === 'cistern' && <Cistern client:visible />}
       {id === 'huvudkran' && <Huvudkran client:visible />}
-      {id === 'diskmaskin' && <Diskmaskin client:visible />}
-      {id === 'spis' && <Spis client:visible />}
-      {id === 'dammsugare' && <Dammsugare client:visible />}
-      {id === 'tavla' && <Tavla client:visible />}
-      {id === 'paslakan' && <Paslakan client:visible />}
-      {id === 'cykel' && <Cykel client:visible />}
-      {id === 'faktura' && <Faktura client:visible />}
       {id === 'budget' && <Budget client:visible />}
       {id === 'stadschema' && <Stadschema client:visible />}
       {id === 'tvattsymboler-quiz' && <TvattsymbolerQuiz client:visible />}

@@ -1,0 +1,20 @@
+/* Bildfigurer: lägena ligger ovanpå varandra och tonar över när steget byts. */
+.figur-bild .scen {
+  padding: var(--steg-2) var(--steg-2) var(--steg-2);
+}
+.bildstack {
+  display: grid;
+}
+.bildstack img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: auto;
+  max-height: 72vh;
+  object-fit: contain;
+  border-radius: var(--radie);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.bildstack img.synlig {
+  opacity: 1;
+}

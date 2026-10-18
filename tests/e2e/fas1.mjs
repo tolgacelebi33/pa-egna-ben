@@ -306,7 +306,7 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   for (const fig of figurer) {
     fel.length = 0;
     await page.goto(`${BAS}/figur/${fig.id}/`, { waitUntil: 'networkidle' });
-    const yta = page.locator('.figur .scen svg, .beslutstrad').first();
+    const yta = page.locator('.figur .scen svg, .figur .scen img, .beslutstrad').first();
     await yta.waitFor({ timeout: 10000 }).catch(() => {});
     const forsta = page.locator('.figur3d-steg .chip, .figur3d-val .chip, .beslutstrad .svar').first();
     if (await forsta.count()) await forsta.click();
