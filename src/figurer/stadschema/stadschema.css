@@ -1,0 +1,40 @@
+/* Städschemats figur. */
+.figur-stadschema .golvyta { fill: #e9dcc4; }
+.figur-stadschema .rum { cursor: pointer; outline: none; }
+.figur-stadschema .rum.valt .golvyta { fill: #f3e6cd; stroke: #c8664a; stroke-width: 4; }
+.figur-stadschema .damm { fill: #8d7b62; transition: opacity 0.6s ease; }
+.figur-stadschema .glans { fill: none; stroke: #d9a441; stroke-width: 3; }
+.figur-stadschema .vagg { fill: none; stroke-width: 7; }
+.figur-stadschema .vagg.tunn { stroke-width: 4; }
+
+.schema ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--steg-2);
+}
+.schema li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--steg-2);
+}
+.schema li .val {
+  flex: 1 1 14rem;
+  margin: 0;
+}
+.schema select {
+  width: auto;
+  min-height: 44px;
+  font-size: var(--text-s);
+  padding: 0 var(--steg-4);
+}
+.schema h3 {
+  margin-top: 0;
+}
+.schema-not {
+  font-size: var(--text-s);
+  color: var(--text-svag);
+}
