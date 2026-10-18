@@ -263,18 +263,18 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   const ctx = await browser.newContext({ ...DATOR, reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   await page.goto(BAS + '/figur/brandvarnare/', { waitUntil: 'networkidle' });
-  await page.waitForSelector('.figur-brandvarnare .testknapp');
-  await page.locator('.figur-brandvarnare .testknapp').focus();
+  await page.waitForSelector('.figur-brandvarnare .figur3d-steg button');
+  await page.getByRole('button', { name: /Tryck på testknappen/ }).focus();
   await page.keyboard.press('Enter');
-  const bvStatus = (await page.locator('.figur-brandvarnare .status').textContent()) ?? '';
+  const bvStatus = (await page.locator('.figur-brandvarnare .figur3d-status').textContent()) ?? '';
   kontroll('brandvarnare: testknappen fungerar med Enter', bvStatus.includes('larmar'), bvStatus);
   kontroll('brandvarnare: status stämmer vid reducerad rörelse', bvStatus.includes('Animationen är avstängd'));
-  await page.getByRole('button', { name: 'Byt batteriet' }).click();
-  kontroll('brandvarnare: batteribyte kräver öppen brandvarnare', ((await page.locator('.figur-brandvarnare .status').textContent()) ?? '').includes('Öppna'));
-  await page.getByRole('button', { name: 'Öppna brandvarnaren' }).click();
-  await page.getByRole('button', { name: 'Byt batteriet' }).click();
-  kontroll('brandvarnare: batteriet byts när den är öppen', ((await page.locator('.figur-brandvarnare .status').textContent()) ?? '').includes('bytt'));
-  kontroll('brandvarnare: ljudet är avstängt från början', !(await page.getByLabel('Spela upp ljud').isChecked()));
+  await page.getByRole('button', { name: /Byt batteriet/ }).click();
+  kontroll('brandvarnare: batteribyte kräver öppen brandvarnare', ((await page.locator('.figur-brandvarnare .figur3d-status').textContent()) ?? '').includes('Öppna'));
+  await page.getByRole('button', { name: /Öppna brandvarnaren/ }).click();
+  await page.getByRole('button', { name: /Byt batteriet/ }).click();
+  kontroll('brandvarnare: batteriet byts när den är öppen', ((await page.locator('.figur-brandvarnare .figur3d-status').textContent()) ?? '').includes('bytt'));
+  kontroll('brandvarnare: ljudet är avstängt från början', (await page.getByRole('button', { name: 'Spela upp ljud' }).getAttribute('aria-pressed')) === 'false');
 
   await page.goto(BAS + '/figur/elskap/', { waitUntil: 'networkidle' });
   await page.waitForSelector('.figur-elskap .spak');

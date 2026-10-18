@@ -4,7 +4,7 @@ import AmneKort from '../../components/AmneKort.astro';
 import Figurlista from '../../components/Figurlista.astro';
 import Tvattmaskin3D from '../../figurer/tvattmaskin/Tvattmaskin3D.jsx';
 import TvattmaskinText from '../../figurer/tvattmaskin/Textversion.astro';
-import Brandvarnare from '../../figurer/brandvarnare/Brandvarnare.jsx';
+import Brandvarnare3D from '../../figurer/brandvarnare/Brandvarnare3D.jsx';
 import BrandvarnareText from '../../figurer/brandvarnare/Textversion.astro';
 import Elskap from '../../figurer/elskap/Elskap.jsx';
 import ElskapText from '../../figurer/elskap/Textversion.astro';
@@ -33,7 +33,7 @@ const nummer = String(nr).padStart(2, '0');
 
       {!fig.klar && <p class="ingress">{t('figurer.inte.klar')}</p>}
       {fig.id === 'tvattmaskin' && <Tvattmaskin3D client:visible />}
-      {fig.id === 'brandvarnare' && <Brandvarnare client:visible />}
+      {fig.id === 'brandvarnare' && <Brandvarnare3D client:visible />}
       {fig.id === 'elskap' && <Elskap client:visible />}
 
       {

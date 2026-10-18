@@ -278,6 +278,7 @@ button:disabled {
 
 /* Chip: liten knapp i handboksstil, används i figurerna */
 .chip {
+  white-space: nowrap;
   min-height: 40px;
   padding: 0.3rem 0.9rem 0.3rem 0.4rem;
   font-family: var(--typsnitt-mono);

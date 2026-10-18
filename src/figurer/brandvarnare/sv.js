@@ -2,6 +2,9 @@
 // Inga faktauppgifter: hur ofta man testar, batterityp och pipmönster är TODO-KONTROLL i textversionen.
 export default {
   aria: 'Interaktiv figur: brandvarnare med testknapp, lock och batteri',
+  aria3d: 'Brandvarnare i 3D, nedtagen från taket. Dra för att vrida, nyp eller skrolla för att zooma. Använd knapparna för stegen.',
+  'steg.rubrik': 'Steg',
+  'status.start3d': 'Brandvarnaren är nedtagen från taket. Vrid den med fingret och tryck på den röda testknappen.',
   'steg.testa': 'Tryck på testknappen',
   'steg.oppna': 'Öppna brandvarnaren',
   'steg.stang': 'Stäng brandvarnaren',
