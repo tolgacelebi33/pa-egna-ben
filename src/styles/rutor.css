@@ -1,0 +1,74 @@
+/* Säkerhetsrutor. Används både av Astro-komponenterna och av Markdown-direktiven :::varning och :::anlita-proffs. */
+.ruta {
+  margin: var(--steg-4) 0;
+  padding: var(--steg-3) var(--steg-4);
+  border-radius: var(--radie);
+  border: 2px solid var(--kant);
+  background: var(--yta);
+}
+
+.ruta > :last-child {
+  margin-bottom: 0;
+}
+
+.ruta-rubrik {
+  margin: 0 0 var(--steg-2);
+  font-family: var(--typsnitt-rubrik);
+  font-weight: 700;
+  font-size: var(--text-l);
+}
+
+.ruta-akut {
+  border: 3px solid var(--tegel);
+  background: var(--tegel-yta);
+}
+
+.ruta-akut .nodnummer {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  margin: 0;
+}
+
+.ruta-akut .nodnummer a {
+  color: var(--black);
+}
+
+.ruta-varning {
+  border-color: var(--tegel);
+  border-left-width: 8px;
+}
+
+.ruta-anlita-proffs {
+  border-color: var(--skiffer);
+  border-left-width: 8px;
+  background: var(--skiffer-yta);
+}
+
+.ruta-kommun {
+  border-style: dashed;
+  border-color: var(--black);
+}
+
+.ruta-utkast {
+  background: var(--ockra-yta);
+  border-color: var(--ockra);
+}
+
+.ruta-kallor ul,
+.ruta-granskning dl {
+  margin: 0;
+}
+
+.ruta-granskning dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--steg-1) var(--steg-4);
+}
+
+.ruta-granskning dt {
+  color: var(--text-svag);
+}
+
+.ruta-granskning dd {
+  margin: 0;
+}

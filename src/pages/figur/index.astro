@@ -1,0 +1,23 @@
+---
+import Bas from '../../layouts/Bas.astro';
+import { t } from '../../i18n/index.js';
+import { FIGURER } from '../../data/figurer.js';
+import { figurUrl } from '../../lib/innehall.js';
+---
+
+<Bas titel={t('figurer.rubrik')}>
+  <h1>{t('figurer.rubrik')}</h1>
+  <p class="ingress">{t('figurer.ingress')}</p>
+  <ul class="kortlista rutnat">
+    {
+      FIGURER.map((f) => (
+        <li>
+          <a class="kort" href={figurUrl(f.id)}>
+            <span class="kort-titel">{f.titel}</span>
+            {!f.klar && <span class="kort-text">{t('figurer.kommer')}</span>}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Bas>

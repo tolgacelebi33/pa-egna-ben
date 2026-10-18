@@ -1,0 +1,121 @@
+---
+// Sökning helt på klienten mot /sokindex.json, som förcachas så att sökningen fungerar offline.
+// Utan JavaScript skickar formuläret till /sok/ som visar en länk till alla kategorier.
+import { t } from '../i18n/index.js';
+
+interface Props {
+  autofokus?: boolean;
+}
+const { autofokus = false } = Astro.props;
+---
+
+<form class="sok" action="/sok/" method="get" role="search" data-sok>
+  <label for="sokfalt">{t('start.sok.etikett')}</label>
+  <div class="sokrad">
+    <input
+      id="sokfalt"
+      name="q"
+      type="search"
+      autocomplete="off"
+      placeholder={t('start.sok.platshallare')}
+      autofocus={autofokus}
+      data-sokfalt
+    />
+    <button type="submit" class="primar">{t('start.sok.knapp')}</button>
+  </div>
+  <p class="sokstatus" role="status" aria-live="polite" data-sokstatus
+    data-traffar={t('sok.traffar', { antal: '%N%', fraga: '%Q%' })}
+    data-traff={t('sok.traff', { fraga: '%Q%' })}
+    data-inga={t('sok.inga', { fraga: '%Q%' })}
+    data-fel={t('sok.fel')}
+  ></p>
+  <ul class="kortlista sokresultat" data-sokresultat></ul>
+</form>
+
+<style>
+  .sok label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: var(--steg-2);
+  }
+  .sokrad {
+    display: flex;
+    gap: var(--steg-2);
+  }
+  .sokrad input {
+    flex: 1;
+    min-width: 0;
+  }
+  .sokstatus:empty {
+    display: none;
+  }
+  .sokstatus {
+    margin: var(--steg-3) 0 var(--steg-2);
+  }
+</style>
+
+<script>
+  import { sok, type SokPost } from '../lib/sok.js';
+
+  const form = document.querySelector<HTMLFormElement>('[data-sok]');
+  const falt = document.querySelector<HTMLInputElement>('[data-sokfalt]');
+  const status = document.querySelector<HTMLElement>('[data-sokstatus]');
+  const lista = document.querySelector<HTMLElement>('[data-sokresultat]');
+  let index: SokPost[] | null = null;
+
+  async function laddaIndex() {
+    if (index) return index;
+    const svar = await fetch('/sokindex.json');
+    index = (await svar.json()) as SokPost[];
+    return index;
+  }
+
+  function rita(fraga: string, traffar: SokPost[]) {
+    if (!status || !lista) return;
+    lista.replaceChildren();
+    if (!fraga.trim()) {
+      status.textContent = '';
+      return;
+    }
+    const mall =
+      traffar.length === 0 ? status.dataset.inga : traffar.length === 1 ? status.dataset.traff : status.dataset.traffar;
+    status.textContent = (mall ?? '').replace('%N%', String(traffar.length)).replace('%Q%', fraga.trim());
+    for (const p of traffar.slice(0, 20)) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.className = p.akut ? 'kort akut' : 'kort';
+      a.href = p.url;
+      const titel = document.createElement('span');
+      titel.className = 'kort-titel';
+      titel.textContent = p.titel;
+      const text = document.createElement('span');
+      text.className = 'kort-text';
+      text.textContent = p.kategoriTitel + (p.sammanfattning ? `: ${p.sammanfattning}` : '');
+      a.append(titel, text);
+      li.append(a);
+      lista.append(li);
+    }
+  }
+
+  async function uppdatera() {
+    const fraga = falt?.value ?? '';
+    try {
+      rita(fraga, sok(await laddaIndex(), fraga));
+    } catch {
+      if (status) status.textContent = status.dataset.fel ?? '';
+    }
+  }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    uppdatera();
+  });
+  falt?.addEventListener('input', () => uppdatera());
+
+  // Sökningen kan komma från adressen, till exempel /sok/?q=tvatt
+  const fran = new URLSearchParams(location.search).get('q');
+  if (fran && falt) {
+    falt.value = fran;
+    uppdatera();
+  }
+</script>

@@ -1,0 +1,45 @@
+---
+import Bas from '../../layouts/Bas.astro';
+import AmneKort from '../../components/AmneKort.astro';
+import Filtrering from '../../components/Filtrering.astro';
+import { t } from '../../i18n/index.js';
+import { KATEGORIER } from '../../data/kategorier.js';
+import { amnenIKategori } from '../../lib/innehall.js';
+import { NIVAER } from '../../lib/schema.js';
+
+export function getStaticPaths() {
+  return KATEGORIER.map((k) => ({ params: { id: k.id }, props: { kat: k } }));
+}
+
+const { kat } = Astro.props;
+const amnen = await amnenIKategori(kat.id);
+const grupper = NIVAER.map((n) => ({ niva: n, amnen: amnen.filter((p) => p.data.niva === n) })).filter(
+  (g) => g.amnen.length > 0,
+);
+---
+
+<Bas titel={kat.titel}>
+  <nav class="bradsmulor" aria-label="Brödsmulor">
+    <ol>
+      <li><a href="/">{t('meny.start')}</a></li>
+    </ol>
+  </nav>
+  <h1>{kat.titel}</h1>
+  {kat.regel && <p class="ingress">{kat.regel}</p>}
+
+  <Filtrering />
+
+  {amnen.length === 0 && <p>{t('inga.amnen')}</p>}
+  {
+    grupper.map((g) => (
+      <section aria-labelledby={`niva-${g.niva}`}>
+        <h2 id={`niva-${g.niva}`}>{t(`niva.${g.niva}`)}</h2>
+        <ul class="kortlista">
+          {g.amnen.map((p) => (
+            <AmneKort data={p.data} visaNiva={false} />
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</Bas>

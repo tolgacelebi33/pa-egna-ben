@@ -1,0 +1,41 @@
+{
+  "_om": "Enda platsen för telefonnummer och tjänstenamn. Används av komponenterna, skrivs aldrig in i löptext. Varje post kräver källa och kontrolldatum innan ett publicerat akutämne får byggas.",
+  "kontakter": [
+    {
+      "id": "nodnummer",
+      "namn": "Nödnummer",
+      "nummer": "112",
+      "anvands_till": "När någon är i fara.",
+      "kalla": { "namn": "", "url": "", "hamtad": null },
+      "senast_kontrollerad": null,
+      "todo": "TODO-KONTROLL: källa för nödnumret och kontrolldatum."
+    },
+    {
+      "id": "sjukvardsradgivning",
+      "namn": "",
+      "nummer": "",
+      "anvands_till": "Råd om vård när det inte är akut.",
+      "kalla": { "namn": "", "url": "", "hamtad": null },
+      "senast_kontrollerad": null,
+      "todo": "TODO-KONTROLL: tjänstens namn, nummer och källa."
+    },
+    {
+      "id": "polis-icke-akut",
+      "namn": "",
+      "nummer": "",
+      "anvands_till": "Polisärenden som inte är akuta.",
+      "kalla": { "namn": "", "url": "", "hamtad": null },
+      "senast_kontrollerad": null,
+      "todo": "TODO-KONTROLL: nummer och källa."
+    },
+    {
+      "id": "giftinformation",
+      "namn": "",
+      "nummer": "",
+      "anvands_till": "Råd när någon har fått i sig något farligt.",
+      "kalla": { "namn": "", "url": "", "hamtad": null },
+      "senast_kontrollerad": null,
+      "todo": "TODO-KONTROLL: tjänstens namn, nummer, när det ska användas och källa."
+    }
+  ]
+}

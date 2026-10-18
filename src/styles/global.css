@@ -1,0 +1,400 @@
+@import '@fontsource/atkinson-hyperlegible-next/400.css';
+@import '@fontsource/atkinson-hyperlegible-next/400-italic.css';
+@import '@fontsource/atkinson-hyperlegible-next/700.css';
+@import '@fontsource-variable/bricolage-grotesque/index.css';
+@import './tokens.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--typsnitt-text);
+  font-size: var(--text-m);
+  line-height: 1.55;
+  color: var(--black);
+  background-color: var(--papper);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--typsnitt-rubrik);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: var(--text-xxl);
+  margin: var(--steg-5) 0 var(--steg-3);
+}
+
+h2 {
+  font-size: var(--text-xl);
+  margin: var(--steg-6) 0 var(--steg-3);
+}
+
+h3 {
+  font-size: var(--text-l);
+  margin: var(--steg-5) 0 var(--steg-2);
+}
+
+a {
+  color: var(--skiffer);
+  text-underline-offset: 0.18em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--black);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.visuellt-dold {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.hoppa {
+  position: absolute;
+  left: var(--steg-4);
+  top: -100px;
+  background: var(--yta);
+  padding: var(--steg-2) var(--steg-3);
+  border: var(--kantlinje);
+  z-index: 10;
+}
+
+.hoppa:focus {
+  top: var(--steg-2);
+}
+
+.sida {
+  max-width: var(--max-bredd);
+  margin: 0 auto;
+  padding: 0 var(--steg-4) var(--steg-7);
+}
+
+.sida.bred {
+  max-width: var(--max-bredd-bred);
+}
+
+/* Sidhuvud och sidfot */
+.sidhuvud {
+  border-bottom: 2px solid var(--kant);
+  background: var(--papper);
+}
+
+.sidhuvud-inre {
+  max-width: var(--max-bredd-bred);
+  margin: 0 auto;
+  padding: var(--steg-3) var(--steg-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--steg-3);
+  flex-wrap: wrap;
+}
+
+.logga {
+  font-family: var(--typsnitt-rubrik);
+  font-weight: 800;
+  font-size: var(--text-l);
+  color: var(--black);
+  text-decoration: none;
+}
+
+.huvudmeny ul {
+  display: flex;
+  gap: var(--steg-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.huvudmeny a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--steg-3);
+  color: var(--black);
+  text-decoration: none;
+  border-radius: var(--radie-s);
+}
+
+.huvudmeny a[aria-current='page'] {
+  background: var(--yta-2);
+  font-weight: 700;
+}
+
+.sidfot {
+  border-top: 2px solid var(--kant);
+  padding: var(--steg-5) var(--steg-4) var(--steg-7);
+  font-size: var(--text-s);
+  color: var(--text-svag);
+}
+
+.sidfot-inre {
+  max-width: var(--max-bredd-bred);
+  margin: 0 auto;
+}
+
+.sidfot ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--steg-2) var(--steg-4);
+  list-style: none;
+  padding: 0;
+}
+
+.sidfot a {
+  color: inherit;
+}
+
+.utkastband {
+  margin: 0;
+  padding: var(--steg-2) var(--steg-4);
+  background: var(--ockra);
+  color: #2a2522;
+  font-weight: 700;
+  font-size: var(--text-s);
+  text-align: center;
+}
+
+/* Knappar och formulär */
+.knapp,
+button {
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--steg-2);
+  min-height: var(--tryckyta);
+  padding: var(--steg-2) var(--steg-4);
+  border: var(--kantlinje);
+  border-radius: var(--radie);
+  background: var(--yta);
+  color: var(--black);
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+.knapp.primar,
+button.primar {
+  background: var(--black);
+  color: var(--papper);
+}
+
+.knapp.fara,
+button.fara {
+  border-color: var(--tegel);
+  color: var(--tegel);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  border-style: dashed;
+  color: var(--text-svag);
+  background: var(--yta-2);
+}
+
+input[type='text'],
+input[type='search'],
+select {
+  font: inherit;
+  min-height: var(--tryckyta);
+  padding: var(--steg-2) var(--steg-3);
+  border: var(--kantlinje);
+  border-radius: var(--radie);
+  background: var(--yta);
+  color: var(--black);
+  width: 100%;
+}
+
+fieldset {
+  border: 2px solid var(--kant);
+  border-radius: var(--radie);
+  padding: var(--steg-3) var(--steg-4) var(--steg-4);
+  margin: 0 0 var(--steg-4);
+}
+
+legend {
+  font-weight: 700;
+  padding: 0 var(--steg-1);
+}
+
+.val {
+  display: flex;
+  align-items: center;
+  gap: var(--steg-3);
+  min-height: 44px;
+}
+
+.val input {
+  width: 1.3rem;
+  height: 1.3rem;
+  accent-color: var(--black);
+  flex: none;
+}
+
+/* Kort och listor */
+.kortlista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--steg-3);
+}
+
+@media (min-width: 640px) {
+  .kortlista.rutnat {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .kortlista.rutnat {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.kort {
+  display: block;
+  height: 100%;
+  padding: var(--steg-3) var(--steg-4);
+  background: var(--yta);
+  border: 2px solid var(--kant);
+  border-radius: var(--radie);
+  color: var(--black);
+  text-decoration: none;
+}
+
+a.kort:hover {
+  border-color: var(--black);
+}
+
+.kort-titel {
+  display: block;
+  font-weight: 700;
+  font-size: var(--text-m);
+}
+
+.kort-text {
+  display: block;
+  color: var(--text-svag);
+  font-size: var(--text-s);
+  margin-top: var(--steg-1);
+}
+
+.kort.akut {
+  border-color: var(--tegel);
+  border-left-width: 6px;
+}
+
+.etiketter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--steg-1);
+  margin-top: var(--steg-2);
+  padding: 0;
+  list-style: none;
+}
+
+.etikett {
+  font-size: 0.8rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--yta-2);
+  color: var(--black);
+}
+
+.etikett.utkast {
+  background: var(--ockra-yta);
+}
+
+.todo {
+  font-family: var(--typsnitt-mono);
+  font-size: 0.85em;
+  background: var(--ockra-yta);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+}
+
+.ingress {
+  font-size: var(--text-l);
+  color: var(--text-svag);
+  margin-top: 0;
+}
+
+.bradsmulor {
+  font-size: var(--text-s);
+  margin-top: var(--steg-4);
+}
+
+.bradsmulor ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--steg-2);
+}
+
+.bradsmulor li + li::before {
+  content: '/';
+  margin-right: var(--steg-2);
+  color: var(--text-svag);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--text-s);
+}
+
+th,
+td {
+  text-align: left;
+  padding: var(--steg-2);
+  border-bottom: 1px solid var(--kant);
+  vertical-align: top;
+}
+
+.tabellrulle {
+  overflow-x: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .sidhuvud,
+  .sidfot,
+  .utkastband,
+  .inte-utskrift {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+}

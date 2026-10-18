@@ -1,0 +1,24 @@
+---
+// Kort för ett ämne i listor. data-filter används av filtreringen på klienten.
+import { t } from '../i18n/index.js';
+import { amneUrl, arUtkast } from '../lib/innehall.js';
+
+interface Props {
+  data: any;
+  visaNiva?: boolean;
+}
+const { data, visaNiva = true } = Astro.props;
+const utkast = arUtkast(data);
+---
+
+<li data-amne={data.id} data-filter={JSON.stringify(data.filter)}>
+  <a class:list={['kort', { akut: data.akut }]} href={amneUrl(data.id)}>
+    <span class="kort-titel">{data.titel}</span>
+    {data.sammanfattning && <span class="kort-text">{data.sammanfattning}</span>}
+    <ul class="etiketter">
+      {data.akut && <li class="etikett">{t('akut.etikett')}</li>}
+      {visaNiva && <li class="etikett">{t(`niva.${data.niva}`)}</li>}
+      {utkast && <li class="etikett utkast">{t('utkast.markering')}</li>}
+    </ul>
+  </a>
+</li>

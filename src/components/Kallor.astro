@@ -1,0 +1,40 @@
+---
+import { t } from '../i18n/index.js';
+import { datumText } from '../lib/regler.js';
+
+interface Props {
+  kallor: { namn: string; url: string; hamtad: Date }[];
+  kalltyper?: string[];
+  visaKalltyper?: boolean;
+}
+const { kallor, kalltyper = [], visaKalltyper = false } = Astro.props;
+---
+
+<section class="ruta ruta-kallor" aria-labelledby="kallor-rubrik">
+  <h2 class="ruta-rubrik" id="kallor-rubrik">{t('ruta.kallor.rubrik')}</h2>
+  {
+    kallor.length > 0 ? (
+      <ul>
+        {kallor.map((k) => (
+          <li>
+            <a href={k.url} rel="noopener">{k.namn}</a>, {t('ruta.kallor.hamtad', { datum: datumText(k.hamtad) })}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>{t('ruta.kallor.inga')}</p>
+    )
+  }
+  {
+    visaKalltyper && kalltyper.length > 0 && (
+      <>
+        <p>{t('ruta.kalltyper')}</p>
+        <ul>
+          {kalltyper.map((k) => (
+            <li>{k}</li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+</section>

@@ -1,0 +1,12 @@
+---
+// Visas överst på varje ämne med akut: true. Numret hämtas från den centrala kontaktfilen.
+import { t } from '../i18n/index.js';
+import { nodnummer } from '../lib/kontakter.js';
+const nummer = nodnummer();
+---
+
+<aside class="ruta ruta-akut" aria-labelledby="akut-rubrik">
+  <p class="ruta-rubrik" id="akut-rubrik">{t('ruta.akut.rubrik')}</p>
+  <p class="nodnummer"><a href={`tel:${nummer}`}>{t('ruta.akut.ring', { nodnummer: nummer })}</a></p>
+  <p>{t('ruta.akut.text', { nodnummer: nummer })}</p>
+</aside>

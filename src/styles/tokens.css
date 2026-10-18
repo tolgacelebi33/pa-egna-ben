@@ -1,0 +1,99 @@
+/*
+  Designsystem. Sex namngivna färger:
+  papper  bakgrund, varm och dämpad så att figurerna ser ritade på papper ut
+  black   text och konturer, nästan svart men varm
+  tegel   akut och varning, en dov röd som inte skriker
+  salvia  klart och lugnt, för avbockat och positiva besked
+  ockra   markering, utkast och fokus i figurer (inte för text)
+  skiffer länkar och vatten, en grå blå som skiljer sig från tegel även vid färgblindhet
+  Kontrasten testas i tests/kontrast.test.mjs.
+*/
+
+/* ljust */
+:root {
+  --papper: #f4eee3;
+  --yta: #fbf8f2;
+  --yta-2: #ebe3d5;
+  --black: #2a2522;
+  --text-svag: #5a524b;
+  --tegel: #a34a32;
+  --tegel-yta: #f6e1d8;
+  --salvia: #5f7a59;
+  --salvia-yta: #e2ebdf;
+  --ockra: #d9a441;
+  --ockra-yta: #f6e7c4;
+  --skiffer: #3b5d7d;
+  --skiffer-yta: #dfe8f0;
+  --kant: #d3c8b6;
+  color-scheme: light;
+}
+/* slut ljust */
+
+/* morkt */
+:root[data-tema='morkt'] {
+  --papper: #1e1b19;
+  --yta: #2a2623;
+  --yta-2: #36312d;
+  --black: #efe8dc;
+  --text-svag: #bfb5a8;
+  --tegel: #ec9479;
+  --tegel-yta: #45291f;
+  --salvia: #a3c29b;
+  --salvia-yta: #2a3527;
+  --ockra: #e2b65a;
+  --ockra-yta: #3e3320;
+  --skiffer: #9cc0e2;
+  --skiffer-yta: #22303d;
+  --kant: #4a433d;
+  color-scheme: dark;
+}
+/* slut morkt */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema='ljust']) {
+    --papper: #1e1b19;
+    --yta: #2a2623;
+    --yta-2: #36312d;
+    --black: #efe8dc;
+    --text-svag: #bfb5a8;
+    --tegel: #ec9479;
+    --tegel-yta: #45291f;
+    --salvia: #a3c29b;
+    --salvia-yta: #2a3527;
+    --ockra: #e2b65a;
+    --ockra-yta: #3e3320;
+    --skiffer: #9cc0e2;
+    --skiffer-yta: #22303d;
+    --kant: #4a433d;
+    color-scheme: dark;
+  }
+}
+
+:root {
+  /* Typsnitt: Atkinson Hyperlegible Next för brödtext (byggt för läsbarhet, tydliga skillnader mellan lika bokstäver),
+     Bricolage Grotesque för rubriker (egen karaktär med lite ojämn, handgjord känsla). Båda OFL-1.1, lokalt hostade. */
+  --typsnitt-text: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  --typsnitt-rubrik: 'Bricolage Grotesque Variable', 'Atkinson Hyperlegible Next', system-ui, sans-serif;
+  --typsnitt-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --text-s: 0.9rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-xl: 1.6rem;
+  --text-xxl: 2.1rem;
+
+  --steg-1: 0.25rem;
+  --steg-2: 0.5rem;
+  --steg-3: 0.75rem;
+  --steg-4: 1rem;
+  --steg-5: 1.5rem;
+  --steg-6: 2rem;
+  --steg-7: 3rem;
+
+  --radie: 10px;
+  --radie-s: 6px;
+  --kantlinje: 2px solid var(--black);
+  --max-bredd: 46rem;
+  --max-bredd-bred: 72rem;
+  --tryckyta: 48px;
+}

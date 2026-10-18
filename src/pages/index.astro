@@ -1,0 +1,108 @@
+---
+import Bas from '../layouts/Bas.astro';
+import Sok from '../components/Sok.astro';
+import AmneKort from '../components/AmneKort.astro';
+import Filtrering from '../components/Filtrering.astro';
+import { t } from '../i18n/index.js';
+import { amnenIKategori, kategorierMedAntal, kategoriUrl, figurUrl } from '../lib/innehall.js';
+import { FIGURER } from '../data/figurer.js';
+
+const nar = await amnenIKategori('nar');
+const kategorier = (await kategorierMedAntal()).filter((k) => k.id !== 'nar');
+const klaraFigurer = FIGURER.filter((f) => f.klar);
+const antalText = (n: number) => (n === 1 ? t('antal.amne') : t('antal.amnen', { antal: n }));
+---
+
+<Bas titel={t('app.namn')} bred>
+  <h1 class="visuellt-dold">{t('app.namn')}</h1>
+
+  <section class="startsok" aria-labelledby="sok-rubrik">
+    <h2 id="sok-rubrik">{t('start.rubrik')}</h2>
+    <Sok />
+  </section>
+
+  <aside class="ruta anpassa inte-utskrift" data-anpassa hidden>
+    <p class="ruta-rubrik">{t('start.anpassa.rubrik')}</p>
+    <p>{t('start.anpassa.text')}</p>
+    <p class="knapprad">
+      <a class="knapp primar" href="/kom-igang/">{t('start.anpassa.knapp')}</a>
+      <button type="button" data-hoppa-over>{t('start.anpassa.hoppa')}</button>
+    </p>
+  </aside>
+  <p class="anpassad inte-utskrift" data-anpassad hidden>
+    {t('start.anpassad')} <a href="/kom-igang/">{t('start.anpassad.andra')}</a>
+  </p>
+
+  <section aria-labelledby="nar-rubrik">
+    <h2 id="nar-rubrik">{t('start.nar.rubrik')}</h2>
+    <p>{t('start.nar.ingress')}</p>
+    {nar.length === 0 && <p>{t('inga.amnen')}</p>}
+    <ul class="kortlista rutnat">
+      {nar.map((p) => <AmneKort data={p.data} visaNiva={false} />)}
+    </ul>
+  </section>
+
+  <section aria-labelledby="kategori-rubrik">
+    <h2 id="kategori-rubrik">{t('start.kategorier.rubrik')}</h2>
+    <ul class="kortlista rutnat">
+      {
+        kategorier.map((k) => (
+          <li>
+            <a class="kort" href={kategoriUrl(k.id)}>
+              <span class="kort-titel">{k.titel}</span>
+              <span class="kort-text">{antalText(k.antal)}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {
+    klaraFigurer.length > 0 && (
+      <section aria-labelledby="figur-rubrik">
+        <h2 id="figur-rubrik">{t('start.figurer.rubrik')}</h2>
+        <ul class="kortlista rutnat">
+          {klaraFigurer.map((f) => (
+            <li>
+              <a class="kort" href={figurUrl(f.id)}>
+                <span class="kort-titel">{f.titel}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <Filtrering />
+</Bas>
+
+<style>
+  .startsok h2 {
+    margin-top: var(--steg-5);
+  }
+  .knapprad {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--steg-2);
+  }
+  .anpassad {
+    font-size: var(--text-s);
+    margin-top: var(--steg-4);
+  }
+</style>
+
+<script>
+  import { las, spara, NYCKLAR } from '../lib/lagring.js';
+  const anpassa = document.querySelector<HTMLElement>('[data-anpassa]');
+  const anpassad = document.querySelector<HTMLElement>('[data-anpassad]');
+  const harProfil = las(NYCKLAR.profil) !== null;
+  const klar = las(NYCKLAR.onboardingKlar, false) === true;
+  if (anpassa) anpassa.hidden = harProfil || klar;
+  if (anpassad) anpassad.hidden = !harProfil;
+  document.querySelector('[data-hoppa-over]')?.addEventListener('click', () => {
+    spara(NYCKLAR.onboardingKlar, true);
+    if (anpassa) anpassa.hidden = true;
+  });
+</script>

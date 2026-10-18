@@ -1,0 +1,11 @@
+---
+import Bas from '../../layouts/Bas.astro';
+import Sok from '../../components/Sok.astro';
+import { t } from '../../i18n/index.js';
+---
+
+<Bas titel={t('sok.rubrik')}>
+  <h1>{t('sok.rubrik')}</h1>
+  <Sok autofokus />
+  <noscript><p><a href="/">{t('start.kategorier.rubrik')}</a></p></noscript>
+</Bas>

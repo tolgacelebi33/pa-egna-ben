@@ -1,0 +1,90 @@
+---
+import '../styles/global.css';
+import '../styles/rutor.css';
+import { t } from '../i18n/index.js';
+import { nodnummer } from '../lib/kontakter.js';
+import { VISA_UTKAST } from '../lib/innehall.js';
+
+interface Props {
+  titel: string;
+  beskrivning?: string;
+  bred?: boolean;
+}
+
+const { titel, beskrivning = t('app.beskrivning'), bred = false } = Astro.props;
+const sokvag = Astro.url.pathname;
+const meny = [
+  { href: '/', text: t('meny.start') },
+  { href: '/figur/', text: t('meny.figurer') },
+  { href: '/foraldralage/', text: t('meny.foraldralage') },
+  { href: '/installningar/', text: t('meny.installningar') },
+];
+const aktiv = (href: string) => (href === '/' ? sokvag === '/' : sokvag.startsWith(href));
+const sidtitel = sokvag === '/' ? t('app.namn') : `${titel} | ${t('app.namn')}`;
+---
+
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={beskrivning} />
+    <meta name="theme-color" content="#f4eee3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1e1b19" media="(prefers-color-scheme: dark)" />
+    {VISA_UTKAST && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/ikon-180.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>{sidtitel}</title>
+    <script is:inline>
+      // Sätts före första målningen så att mörkt läge inte blinkar.
+      try {
+        const tema = JSON.parse(localStorage.getItem('peb:tema') ?? 'null');
+        if (tema === 'ljust' || tema === 'morkt') document.documentElement.dataset.tema = tema;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="hoppa" href="#innehall">{t('hoppa.till.innehall')}</a>
+    {VISA_UTKAST && <p class="utkastband">{t('utkastlage.band')}</p>}
+    <header class="sidhuvud">
+      <div class="sidhuvud-inre">
+        <a class="logga" href="/">{t('app.namn')}</a>
+        <nav class="huvudmeny" aria-label={t('meny.rubrik')}>
+          <ul>
+            {
+              meny.map((m) => (
+                <li>
+                  <a href={m.href} aria-current={aktiv(m.href) ? 'page' : undefined}>
+                    {m.text}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="innehall" class:list={['sida', { bred }]} tabindex="-1">
+      <slot />
+    </main>
+    <footer class="sidfot">
+      <div class="sidfot-inre">
+        <p>{t('sidfot.kortform', { nodnummer: nodnummer() })}</p>
+        <nav aria-label={t('sidfot.lankar')}>
+          <ul>
+            <li><a href="/om/">{t('sida.om')}</a></li>
+            <li><a href="/ansvarsfriskrivning/">{t('sida.ansvar')}</a></li>
+            <li><a href="/integritet/">{t('sida.integritet')}</a></li>
+            <li><a href="/kallor-och-granskning/">{t('sida.kallor')}</a></li>
+            <li><a href="/rapportera-fel/">{t('sida.rapportera')}</a></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+    <script>
+      if ('serviceWorker' in navigator && import.meta.env.PROD) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+      }
+    </script>
+  </body>
+</html>

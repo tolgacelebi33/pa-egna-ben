@@ -1,0 +1,137 @@
+---
+import Bas from '../../layouts/Bas.astro';
+import AmneKort from '../../components/AmneKort.astro';
+import Tvattmaskin from '../../figurer/tvattmaskin/Tvattmaskin.jsx';
+import TvattmaskinText from '../../figurer/tvattmaskin/Textversion.astro';
+import { t } from '../../i18n/index.js';
+import { FIGURER } from '../../data/figurer.js';
+import { hamtaAmnen, figurUrl } from '../../lib/innehall.js';
+
+export function getStaticPaths() {
+  return FIGURER.map((f) => ({ params: { id: f.id }, props: { fig: f } }));
+}
+
+const { fig } = Astro.props;
+const amnen = (await hamtaAmnen()).filter((p) => p.data.figur === fig.id);
+---
+
+<Bas titel={fig.titel} bred>
+  <div class="figurvy">
+    <nav class="figurlista" aria-label={t('figurer.lista')}>
+      <ul>
+        {
+          FIGURER.map((f) => (
+            <li>
+              {f.klar ? (
+                <a href={figurUrl(f.id)} aria-current={f.id === fig.id ? 'page' : undefined}>
+                  {f.titel}
+                </a>
+              ) : (
+                <a href={figurUrl(f.id)} class="kommer" aria-current={f.id === fig.id ? 'page' : undefined}>
+                  {f.titel}
+                  <small>{t('figurer.kommer')}</small>
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="figurscen">
+      <h1>{fig.titel}</h1>
+      {!fig.klar && <p>{t('figurer.inte.klar')}</p>}
+      {fig.id === 'tvattmaskin' && <Tvattmaskin client:visible />}
+
+      {
+        fig.klar && (
+          <section class="textversion" aria-labelledby="textversion-rubrik">
+            <h2 id="textversion-rubrik">{t('figurer.text.rubrik')}</h2>
+            {fig.id === 'tvattmaskin' && <TvattmaskinText />}
+          </section>
+        )
+      }
+
+      {
+        amnen.length > 0 && (
+          <section aria-labelledby="figur-amnen">
+            <h2 id="figur-amnen">{t('figurer.amnen')}</h2>
+            <ul class="kortlista">
+              {amnen.map((p) => (
+                <AmneKort data={p.data} />
+              ))}
+            </ul>
+          </section>
+        )
+      }
+    </div>
+  </div>
+</Bas>
+
+<style>
+  .figurvy {
+    display: grid;
+    gap: var(--steg-4);
+    margin-top: var(--steg-4);
+  }
+  /* Grid-barn får annars minst sin innehållsbredd och trycker ut sidan på mobil (fel som hittades i fas 0). */
+  .figurvy > * {
+    min-width: 0;
+  }
+  .figurlista ul {
+    display: flex;
+    gap: var(--steg-2);
+    overflow-x: auto;
+    list-style: none;
+    padding: 0 0 var(--steg-2);
+    margin: 0;
+  }
+  .figurlista a {
+    display: block;
+    white-space: nowrap;
+    padding: var(--steg-2) var(--steg-3);
+    border: var(--kantlinje);
+    border-radius: var(--radie);
+    color: var(--black);
+    text-decoration: none;
+    background: var(--yta);
+  }
+  .figurlista a.kommer {
+    border-style: dashed;
+    color: var(--text-svag);
+  }
+  .figurlista a[aria-current='page'] {
+    background: var(--black);
+    color: var(--papper);
+  }
+  .figurlista small {
+    display: block;
+    font-size: 0.75rem;
+  }
+  .figurscen h1 {
+    margin-top: 0;
+  }
+  .textversion {
+    margin-top: var(--steg-6);
+    padding: var(--steg-3) var(--steg-4);
+    background: var(--yta);
+    border: 2px solid var(--kant);
+    border-radius: var(--radie);
+  }
+  .textversion h2 {
+    margin-top: var(--steg-2);
+  }
+  @media (min-width: 960px) {
+    .figurvy {
+      grid-template-columns: 220px 1fr;
+      align-items: start;
+    }
+    .figurlista ul {
+      flex-direction: column;
+      overflow: visible;
+    }
+    .figurlista a {
+      white-space: normal;
+    }
+  }
+</style>

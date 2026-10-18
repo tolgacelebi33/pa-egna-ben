@@ -1,0 +1,10 @@
+---
+// Samma utseende som Markdown-direktivet :::anlita-proffs.
+import { t } from '../i18n/index.js';
+---
+
+<aside class="ruta ruta-anlita-proffs">
+  <p class="ruta-rubrik">{t('ruta.proffs.rubrik')}</p>
+  <p>{t('ruta.proffs.text')}</p>
+  <slot />
+</aside>

@@ -1,0 +1,112 @@
+---
+import { render } from 'astro:content';
+import Bas from '../../layouts/Bas.astro';
+import Akut from '../../components/Akut.astro';
+import VarierarPerKommun from '../../components/VarierarPerKommun.astro';
+import Kallor from '../../components/Kallor.astro';
+import Granskning from '../../components/Granskning.astro';
+import AmneKort from '../../components/AmneKort.astro';
+import { t } from '../../i18n/index.js';
+import { hamtaAmnen, arUtkast, kategoriUrl, figurUrl, VISA_UTKAST } from '../../lib/innehall.js';
+import { kategori } from '../../data/kategorier.js';
+import { figur } from '../../data/figurer.js';
+import { CONFIG } from '../../config.js';
+
+export async function getStaticPaths() {
+  const amnen = await hamtaAmnen();
+  return amnen.map((post) => ({ params: { id: post.data.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+const kat = kategori(d.kategori);
+const fig = d.figur ? figur(d.figur) : null;
+const alla = await hamtaAmnen();
+const relaterade = d.relaterade.map((id) => alla.find((p) => p.data.id === id)).filter(Boolean);
+const utkast = arUtkast(d);
+
+const sidUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://example.invalid').pathname;
+const rapport = `mailto:${CONFIG.felrapportEpost}?subject=${encodeURIComponent(
+  t('amne.rapportera.amne', { titel: d.titel, id: d.id }),
+)}&body=${encodeURIComponent(t('amne.rapportera.text', { titel: d.titel, id: d.id, url: sidUrl }))}`;
+---
+
+<Bas titel={d.titel} beskrivning={d.sammanfattning || undefined}>
+  <nav class="bradsmulor" aria-label="Brödsmulor">
+    <ol>
+      <li><a href="/">{t('meny.start')}</a></li>
+      <li><a href={kategoriUrl(d.kategori)}>{kat?.titel}</a></li>
+    </ol>
+  </nav>
+
+  <article>
+    <h1>{d.titel}</h1>
+    {d.sammanfattning && <p class="ingress">{d.sammanfattning}</p>}
+    <ul class="etiketter">
+      {d.akut && <li class="etikett">{t('akut.etikett')}</li>}
+      <li class="etikett">{t(`niva.${d.niva}`)}</li>
+      {utkast && <li class="etikett utkast">{t('utkast.markering')}</li>}
+    </ul>
+
+    {
+      utkast && (
+        <aside class="ruta ruta-utkast">
+          <p class="ruta-rubrik">{t('utkast.markering')}</p>
+          <p>{t('utkast.text')}</p>
+        </aside>
+      )
+    }
+
+    {d.akut && <Akut />}
+    {d.varierar_per_kommun && <VarierarPerKommun />}
+
+    <div class="brodtext">
+      <Content />
+    </div>
+
+    {
+      fig && (
+        <aside class="ruta">
+          <p class="ruta-rubrik">{t('amne.figur.rubrik')}</p>
+          {fig.klar ? (
+            <p>
+              <a class="knapp primar" href={figurUrl(fig.id)}>
+                {fig.titel}
+              </a>
+            </p>
+          ) : (
+            <p>{t('amne.figur.kommer')}</p>
+          )}
+        </aside>
+      )
+    }
+
+    <Kallor kallor={d.kallor} kalltyper={d.kalltyper} visaKalltyper={VISA_UTKAST} />
+    <Granskning granskning={d.granskning} risk={d.risk} />
+
+    {
+      relaterade.length > 0 && (
+        <section aria-labelledby="relaterade-rubrik">
+          <h2 id="relaterade-rubrik">{t('amne.relaterade')}</h2>
+          <ul class="kortlista">
+            {relaterade.map((p) => (
+              <AmneKort data={p!.data} />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <p class="inte-utskrift"><a href={rapport}>{t('amne.rapportera')}</a></p>
+  </article>
+</Bas>
+
+<style>
+  .brodtext :global(li) {
+    margin-bottom: var(--steg-1);
+  }
+  .brodtext :global(ol > li::marker) {
+    font-weight: 700;
+  }
+</style>

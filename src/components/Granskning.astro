@@ -1,0 +1,50 @@
+---
+import { t } from '../i18n/index.js';
+import { datumText } from '../lib/regler.js';
+
+interface Props {
+  granskning: {
+    status: string;
+    senast_kontrollerad: Date | null;
+    nasta_kontroll: Date | null;
+    skriven_av: string;
+    faktagranskad_av: string;
+    fackgranskad_av: string;
+    fackgranskare_kompetens: string;
+  };
+  risk: string;
+}
+const { granskning: g, risk } = Astro.props;
+const saknas = t('ruta.granskning.saknas');
+const fack = g.fackgranskad_av ? `${g.fackgranskad_av}${g.fackgranskare_kompetens ? `, ${g.fackgranskare_kompetens}` : ''}` : saknas;
+---
+
+<section class="ruta ruta-granskning" aria-labelledby="granskning-rubrik">
+  <h2 class="ruta-rubrik" id="granskning-rubrik">{t('ruta.granskning.rubrik')}</h2>
+  <dl>
+    <dt>{t('ruta.granskning.status')}</dt>
+    <dd>{t(`status.${g.status}`)}, {t(`risk.${risk}`).toLowerCase()}</dd>
+    <dt>{t('ruta.granskning.senast')}</dt>
+    <dd>{datumText(g.senast_kontrollerad) || saknas}</dd>
+    <dt>{t('ruta.granskning.nasta')}</dt>
+    <dd>{datumText(g.nasta_kontroll) || saknas}</dd>
+    <dt>{t('ruta.granskning.skriven')}</dt>
+    <dd>{g.skriven_av || saknas}</dd>
+    {
+      risk !== 'lag' && (
+        <>
+          <dt>{t('ruta.granskning.fakta')}</dt>
+          <dd>{g.faktagranskad_av || saknas}</dd>
+        </>
+      )
+    }
+    {
+      risk === 'hog' && (
+        <>
+          <dt>{t('ruta.granskning.fack')}</dt>
+          <dd>{fack}</dd>
+        </>
+      )
+    }
+  </dl>
+</section>

@@ -1,0 +1,59 @@
+---
+// Döljer ämnen som inte passar användarens val. Utan JavaScript eller utan val visas allt.
+import { t } from '../i18n/index.js';
+---
+
+<div class="filterrad inte-utskrift" data-filterrad hidden>
+  <p data-filtertext data-mall-flera={t('kategori.dolda', { antal: '%N%' })} data-mall-ett={t('kategori.dolda.ett')}></p>
+  <button type="button" data-filterknapp data-visa-alla={t('kategori.visa.alla')} data-visa-anpassat={t('kategori.visa.anpassat')}></button>
+</div>
+
+<style>
+  .filterrad {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--steg-2) var(--steg-4);
+    margin: var(--steg-3) 0;
+    padding: var(--steg-2) var(--steg-3);
+    background: var(--yta-2);
+    border-radius: var(--radie);
+  }
+  .filterrad[hidden] {
+    display: none;
+  }
+  .filterrad p {
+    margin: 0;
+  }
+</style>
+
+<script>
+  import { las, spara, NYCKLAR } from '../lib/lagring.js';
+  import { profilTillFilter, visas } from '../lib/filter.js';
+
+  const rad = document.querySelector<HTMLElement>('[data-filterrad]');
+  const text = document.querySelector<HTMLElement>('[data-filtertext]');
+  const knapp = document.querySelector<HTMLButtonElement>('[data-filterknapp]');
+  const anvandare = profilTillFilter(las(NYCKLAR.profil));
+
+  function uppdatera() {
+    if (!rad || !text || !knapp) return;
+    const visaAlla = las(NYCKLAR.visaAlla, false) === true;
+    let dolda = 0;
+    for (const li of document.querySelectorAll<HTMLElement>('[data-amne]')) {
+      const passar = visas(JSON.parse(li.dataset.filter ?? '{}'), anvandare);
+      if (!passar) dolda++;
+      li.hidden = !passar && !visaAlla;
+    }
+    rad.hidden = dolda === 0;
+    text.textContent =
+      dolda === 1 ? (text.dataset.mallEtt ?? '') : (text.dataset.mallFlera ?? '').replace('%N%', String(dolda));
+    knapp.textContent = (visaAlla ? knapp.dataset.visaAnpassat : knapp.dataset.visaAlla) ?? '';
+  }
+
+  knapp?.addEventListener('click', () => {
+    spara(NYCKLAR.visaAlla, !(las(NYCKLAR.visaAlla, false) === true));
+    uppdatera();
+  });
+  uppdatera();
+</script>
