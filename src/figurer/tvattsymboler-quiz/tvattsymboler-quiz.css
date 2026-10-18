@@ -1,0 +1,38 @@
+/* Tvättsymbolquizet. */
+.figur-tvattsymboler .troja { fill: #9cc0e2; }
+.figur-tvattsymboler .lapp-liten { fill: #fbfaf7; stroke-width: 2; }
+.figur-tvattsymboler .pekare { stroke-width: 2; stroke-dasharray: 6 5; }
+.figur-tvattsymboler .lapp { fill: #fbfaf7; stroke-width: 3; }
+.figur-tvattsymboler .lapp-text { fill: #5d554d; stroke: none; font-family: var(--typsnitt-mono); font-size: 12px; font-weight: 600; letter-spacing: 0.1em; }
+.figur-tvattsymboler .symbol { fill: none; stroke-width: 5; }
+.figur-tvattsymboler .resultat { fill: #2a2522; stroke: none; font-family: var(--typsnitt-rubrik); font-size: 44px; font-weight: 700; }
+
+.quiz {
+  display: grid;
+  gap: var(--steg-3);
+  justify-items: start;
+}
+.quiz-svar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--steg-2);
+}
+.quiz-svar .chip {
+  padding-left: 0.9rem;
+}
+.quiz .chip.ratt {
+  background: var(--salvia-yta);
+  border-color: var(--salvia);
+}
+.quiz .chip.fel {
+  background: var(--tegel-yta);
+  border-color: var(--tegel);
+}
+.quiz-utkast {
+  margin: 0;
+  font-family: var(--typsnitt-mono);
+  font-size: var(--text-xs);
+  background: var(--ockra-yta);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}

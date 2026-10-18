@@ -16,8 +16,8 @@ export const FIGURER = [
   { id: 'faktura', titel: 'Fakturan', klar: true },
   { id: 'budget', titel: 'Budgetkalkylator', klar: true },
   { id: 'stadschema', titel: 'Städschema', klar: true },
-  { id: 'tvattsymboler-quiz', titel: 'Tvättsymboler som quiz', klar: false },
-  { id: 'kallsortering-quiz', titel: 'Källsortering som quiz', klar: false },
+  { id: 'tvattsymboler-quiz', titel: 'Tvättsymboler som quiz', klar: true },
+  { id: 'kallsortering-quiz', titel: 'Källsortering som quiz', klar: true },
   { id: 'beslutstrad', titel: 'Beslutsträd', klar: false },
 ];
 

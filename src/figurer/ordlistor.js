@@ -15,5 +15,7 @@ import cykel from './cykel/sv.js';
 import faktura from './faktura/sv.js';
 import budget from './budget/sv.js';
 import stadschema from './stadschema/sv.js';
+import tvattsymboler_quiz from './tvattsymboler-quiz/sv.js';
+import kallsortering_quiz from './kallsortering-quiz/sv.js';
 
-export const FIGURORDLISTOR = { tvattmaskin, brandvarnare, elskap, kyl, 'vattenlas': vattenlas, 'cistern': cistern, 'huvudkran': huvudkran, 'diskmaskin': diskmaskin, 'spis': spis, 'dammsugare': dammsugare, 'tavla': tavla, 'paslakan': paslakan, 'cykel': cykel, 'faktura': faktura, 'budget': budget, 'stadschema': stadschema };
+export const FIGURORDLISTOR = { tvattmaskin, brandvarnare, elskap, kyl, 'vattenlas': vattenlas, 'cistern': cistern, 'huvudkran': huvudkran, 'diskmaskin': diskmaskin, 'spis': spis, 'dammsugare': dammsugare, 'tavla': tavla, 'paslakan': paslakan, 'cykel': cykel, 'faktura': faktura, 'budget': budget, 'stadschema': stadschema, 'tvattsymboler-quiz': tvattsymboler_quiz, 'kallsortering-quiz': kallsortering_quiz };

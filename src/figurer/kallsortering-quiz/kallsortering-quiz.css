@@ -1,0 +1,12 @@
+/* Källsorteringsquizet. */
+.figur-kallsortering .golv { fill: #ddd3c3; }
+.figur-kallsortering .karl-namn { font-size: 12px; fill: #fbfaf7; }
+.figur-kallsortering .resultat { fill: #2a2522; stroke: none; font-family: var(--typsnitt-rubrik); font-size: 44px; font-weight: 700; }
+.quiz-kommun {
+  margin: 0;
+  padding: var(--steg-2) var(--steg-3);
+  border-radius: var(--radie-s);
+  box-shadow: inset 4px 0 0 var(--black);
+  background: var(--ark);
+  font-size: var(--text-s);
+}
