@@ -1,0 +1,327 @@
+/* Testpalett för fas 0. Slutlig palett tas fram i fas 1. */
+:root {
+  --papper: #f4eee3;
+  --papper-mork: #e9e1d2;
+  --blacket: #2a2522;
+  --lera: #c8664a;
+  --salvia: #8fa58a;
+  --ockra: #d9a441;
+  --vatten: #5e7fa0;
+  --text-svag: #5a524b;
+  --yta: #fbf8f2;
+  --radie: 10px;
+  --fokus: 3px solid var(--blacket);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--blacket);
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--papper);
+  /* Papperskorn: ett litet brusmönster som ritas en gång och upprepas. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.14 0 0 0 0 0.12 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+:focus-visible {
+  outline: var(--fokus);
+  outline-offset: 3px;
+}
+
+.visuellt-dold {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.utkast {
+  margin: 0;
+  padding: 0.6rem 1rem;
+  background: var(--ockra);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+header,
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin: 1.2rem 0 0.4rem;
+}
+
+/* Layout: figurlista som rad på mobil, sidopanel på bred skärm. */
+.figurvy {
+  display: grid;
+  gap: 1rem;
+}
+
+.figurlista ul {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  list-style: none;
+  padding: 0 0 0.4rem;
+  margin: 0;
+}
+
+.figurlista a,
+.figurlista span {
+  display: block;
+  white-space: nowrap;
+  padding: 0.5rem 0.8rem;
+  border: 2px solid var(--blacket);
+  border-radius: var(--radie);
+  color: inherit;
+  text-decoration: none;
+  background: var(--yta);
+}
+
+.figurlista [aria-current='page'] {
+  background: var(--blacket);
+  color: var(--papper);
+}
+
+.figurlista span {
+  border-style: dashed;
+  color: var(--text-svag);
+}
+
+.figurlista small {
+  display: block;
+  font-size: 0.75rem;
+}
+
+@media (min-width: 900px) {
+  .figurvy {
+    grid-template-columns: 210px 1fr;
+    align-items: start;
+  }
+  .figurlista ul {
+    flex-direction: column;
+    overflow: visible;
+  }
+}
+
+/* Scenen */
+.scen svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: manipulation;
+}
+
+.bleck {
+  stroke: var(--blacket);
+  stroke-width: 3.2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.skugga { fill: var(--blacket); opacity: 0.12; stroke: none; }
+.yta-topp { fill: #f6f2ea; }
+.yta-sida { fill: #cfc6b6; }
+.yta-front { fill: #e7e0d3; }
+.detalj { fill: none; stroke-width: 1.8; opacity: 0.55; }
+.halrum { fill: #4a433d; }
+.balja { fill: #6f675e; }
+.snittkant { fill: none; stroke-width: 3.2; }
+.trumma-bak { fill: #a39b90; stroke: none; }
+.hal { fill: #6f675e; stroke: none; }
+.medbringare { fill: #d4ccbf; stroke-width: 2; }
+.kontur-fri { fill: none; stroke-width: 3; }
+.vatten { fill: var(--vatten); opacity: 0.72; stroke: #3f5a74; stroke-width: 2; }
+.ror { fill: none; stroke: var(--vatten); stroke-width: 6; stroke-dasharray: 8 7; }
+.ror.flodar { animation: flode 0.8s linear infinite; }
+@keyframes flode { to { stroke-dashoffset: -15; } }
+
+.fack { fill: #f3eee5; stroke-width: 2.6; }
+.fack-grepp { fill: var(--blacket); opacity: 0.35; stroke: none; }
+.display { fill: #34443a; stroke-width: 2.6; }
+.display-text { fill: #d6e8c2; stroke: none; font-size: 8.5px; font-family: ui-monospace, monospace; }
+.panelknapp { cursor: pointer; }
+.knapp-temp { fill: var(--ockra); stroke-width: 2.4; }
+.knapp-start { fill: var(--salvia); stroke-width: 2.4; }
+.knapp-start.aktiv { fill: #6f8c69; }
+.knapp-symbol { stroke-width: 2; }
+.knapp-symbol-fylld { fill: var(--blacket); stroke: none; }
+.markering { stroke-width: 2.2; opacity: 0.5; }
+.markering.vald { opacity: 1; stroke: var(--lera); stroke-width: 3; }
+.ratt { cursor: grab; outline: none; }
+.ratt:active { cursor: grabbing; }
+.traffyta { fill: transparent; stroke: none; }
+.ratt-knopp { fill: #f3eee5; stroke-width: 3; }
+.ratt-mitt { fill: #dcd4c6; stroke-width: 1.8; }
+.ratt-visare { stroke: var(--lera); stroke-width: 4; }
+.fokusring { fill: none; stroke: var(--blacket); stroke-width: 2.4; stroke-dasharray: 5 4; }
+
+.lucka-ring { fill: #dcd5c8; }
+.lucka-fals { fill: #bfb6a7; stroke-width: 2; }
+.glas { fill: #a8c0d2; opacity: 0.3; stroke-width: 3.2; }
+.glans { fill: none; stroke: #fff; stroke-width: 5; opacity: 0.6; }
+.handtag { fill: #bfb6a7; stroke-width: 2.4; }
+
+.korg-botten { fill: #5e4a37; }
+.korg-insida { fill: #8a6f52; }
+.korg-insida-v { fill: #765e45; }
+.korg-front { fill: #c79b6b; }
+.korg-sida { fill: #a9805a; }
+.plagg path { stroke-width: 2.2; }
+
+.flyttbar {
+  transition: transform 0.9s cubic-bezier(0.5, 0, 0.3, 1), opacity 0.6s ease 0.5s;
+}
+
+.korg-namn { font-size: 15px; font-weight: 600; fill: var(--blacket); }
+
+.etikett path { fill: none; stroke: var(--blacket); stroke-width: 1.5; }
+.etikett circle { fill: var(--lera); stroke: var(--blacket); stroke-width: 1.5; }
+.etikett text { font-size: 15px; font-weight: 600; fill: var(--blacket); paint-order: stroke; stroke: var(--papper); stroke-width: 4px; }
+
+.etikett-nr circle { fill: var(--lera); stroke: var(--blacket); stroke-width: 2; }
+.etikett-nr path { stroke: var(--blacket); stroke-width: 2; }
+.etikett-nr .prick { fill: var(--blacket); stroke: none; }
+.etikett-nr text { font-size: 15px; font-weight: 700; fill: #fff; }
+
+.etikettlista {
+  columns: 2;
+  margin: 0.2rem 0 0;
+  padding-left: 1.6rem;
+  font-size: 0.95rem;
+}
+
+.status {
+  min-height: 3em;
+  margin: 0.6rem 0;
+  padding: 0.6rem 0.8rem;
+  background: var(--yta);
+  border-left: 4px solid var(--lera);
+  border-radius: 4px;
+}
+
+/* Kontroller */
+.steg {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem;
+  counter-reset: steg;
+}
+
+.steg li { counter-increment: steg; }
+
+button {
+  font: inherit;
+  min-height: 48px;
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid var(--blacket);
+  border-radius: var(--radie);
+  background: var(--yta);
+  color: var(--blacket);
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.steg button::before {
+  content: counter(steg);
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  border: 2px solid var(--blacket);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.steg button.klar::before {
+  background: var(--salvia);
+}
+
+button.primar {
+  background: var(--blacket);
+  color: var(--papper);
+}
+
+button.primar::before {
+  border-color: var(--papper);
+}
+
+button.sekundar {
+  width: auto;
+  border-style: dashed;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reglage {
+  margin: 1rem 0 0;
+  border: 2px solid var(--papper-mork);
+  border-radius: var(--radie);
+  display: grid;
+  gap: 0.8rem;
+}
+
+.vaxel,
+.skjut {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.vaxel input {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.skjut input {
+  flex: 1;
+  min-width: 140px;
+}
+
+/* Textversion */
+.textversion {
+  margin: 2rem 0 3rem;
+  padding: 1rem 1.2rem;
+  background: var(--yta);
+  border-radius: var(--radie);
+  border: 2px solid var(--papper-mork);
+}
+
+.todo {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  background: #f6e3b5;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flyttbar,
+  .ror.flodar {
+    transition: none !important;
+    animation: none !important;
+  }
+}

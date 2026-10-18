@@ -1,0 +1,100 @@
+---
+import Tvattmaskin from '../components/Tvattmaskin.jsx';
+import { t } from '../i18n/index.js';
+import '../styles/spike.css';
+
+const figurer = [
+  { id: 'tvattmaskin', aktiv: true },
+  { id: 'brandvarnare', aktiv: false },
+  { id: 'elskap', aktiv: false },
+  { id: 'kyl', aktiv: false },
+];
+---
+
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4eee3" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>{t('sida.titel')}</title>
+  </head>
+  <body>
+    <p class="utkast">{t('sida.utkast')}</p>
+    <header>
+      <h1>{t('figur.tvattmaskin.titel')}</h1>
+    </header>
+    <main>
+      <div class="figurvy">
+        <nav class="figurlista" aria-label={t('figurlista.rubrik')}>
+          <ul>
+            {figurer.map((f) => (
+              <li>
+                {f.aktiv ? (
+                  <a href="/" aria-current="page">{t(`figur.${f.id}.titel`)}</a>
+                ) : (
+                  <span>
+                    {t(`figur.${f.id}.titel`)}
+                    <small>{t('figurlista.kommer')}</small>
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <section aria-labelledby="figur-rubrik">
+          <h2 id="figur-rubrik" class="visuellt-dold">{t('figur.tvattmaskin.titel')}</h2>
+          <Tvattmaskin client:load />
+        </section>
+      </div>
+
+      <section class="textversion" aria-labelledby="text-rubrik">
+        <h2 id="text-rubrik">Textversion: så tvättar du i maskin</h2>
+        <p>Samma kunskap som figuren visar, i text. Platshållare tills innehållet är skrivet och granskat.</p>
+
+        <h3>1. Sortera tvätten</h3>
+        <p>Dela upp tvätten i högar innan något hamnar i maskinen. I figuren delas den i ljust, mörkt och kulört.</p>
+        <p><span class="todo">TODO-KONTROLL: vilka sorteringsgrunder som ska rekommenderas (färg, material, temperatur) och källa för det.</span></p>
+
+        <h3>2. Vrid ratten till ett program</h3>
+        <p>Ratten väljer program. Programmen ser olika ut på olika maskiner, så titta i bruksanvisningen till just din maskin.</p>
+        <p><span class="todo">TODO-KONTROLL: vanliga programtyper och vad de används till.</span></p>
+
+        <h3>3. Välj temperatur</h3>
+        <p>Titta på tvättrådslappen i plagget innan du väljer. I figuren heter lägena bara låg, mellan och hög.</p>
+        <p><span class="todo">TODO-KONTROLL: vilka temperaturer som passar vilka plagg, med källa.</span></p>
+
+        <h3>4. Starta tvätten</h3>
+        <p>Lägg tvättmedel i tvättmedelsfacket, stäng luckan och tryck på startknappen. Maskinen fyller på vatten, trumman snurrar åt båda hållen och till sist pumpas vattnet ut.</p>
+        <p><span class="todo">TODO-KONTROLL: mängd tvättmedel och vad som styr den.</span></p>
+
+        <h3>Delar i maskinen</h3>
+        <dl>
+          <dt>Tvättmedelsfack</dt>
+          <dd>Lådan högst upp där tvättmedlet hälls i. Vattnet sköljer med sig medlet in i maskinen.</dd>
+          <dt>Programratt</dt>
+          <dd>Väljer vilket program maskinen kör.</dd>
+          <dt>Temperaturknapp och startknapp</dt>
+          <dd>Väljer temperatur och startar eller stoppar programmet.</dd>
+          <dt>Trumma</dt>
+          <dd>Den inre trumman med hål där tvätten ligger. Den snurrar under tvätten.</dd>
+          <dt>Yttre behållare</dt>
+          <dd>Den täta behållaren runt trumman som håller vattnet.</dd>
+          <dt>Lucka med glas</dt>
+          <dd>Stängs innan start.</dd>
+        </dl>
+        <p><span class="todo">TODO-KONTROLL: att beskrivningen av delarna stämmer, granskas mot en källa.</span></p>
+      </section>
+    </main>
+
+    <script>
+      if ('serviceWorker' in navigator && import.meta.env.PROD) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+    </script>
+  </body>
+</html>
