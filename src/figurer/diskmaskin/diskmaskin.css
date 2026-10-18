@@ -1,0 +1,15 @@
+/* Diskmaskinsfiguren. */
+.figur-diskmaskin .golv { fill: #ddd3c3; }
+.figur-diskmaskin .korg-botten { fill: rgb(141 150 157 / 0.18); stroke: #8d969d; stroke-width: 2.4; }
+.figur-diskmaskin .trad { fill: none; stroke: #8d969d; stroke-width: 2; }
+.figur-diskmaskin .trad.tjock { stroke-width: 3.4; }
+.figur-diskmaskin .lucka-insida { fill: #e8ecee; }
+.figur-diskmaskin .fack { fill: #b9c3c9; stroke-width: 2.4; }
+.figur-diskmaskin .lock { fill: #dfe3e5; stroke-width: 2.4; }
+.figur-diskmaskin .fack-lock { transition: transform 0.5s ease; }
+.figur-diskmaskin .tablett { fill: #5e7fa0; stroke-width: 2; }
+.figur-diskmaskin .tallrik { fill: #f7f8f9; stroke-width: 2.6; }
+.figur-diskmaskin .tallrik-inre { fill: none; stroke-width: 1.6; opacity: 0.5; }
+.figur-diskmaskin .glas { opacity: 0.85; }
+.figur-diskmaskin .smuts { fill: none; stroke: #6b5a3a; stroke-width: 5; }
+.figur-diskmaskin .snitt { fill: none; stroke-width: 7; }

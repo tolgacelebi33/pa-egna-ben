@@ -6,5 +6,6 @@ import kyl from './kyl/sv.js';
 import vattenlas from './vattenlas/sv.js';
 import cistern from './cistern/sv.js';
 import huvudkran from './huvudkran/sv.js';
+import diskmaskin from './diskmaskin/sv.js';
 
-export const FIGURORDLISTOR = { tvattmaskin, brandvarnare, elskap, kyl, 'vattenlas': vattenlas, 'cistern': cistern, 'huvudkran': huvudkran };
+export const FIGURORDLISTOR = { tvattmaskin, brandvarnare, elskap, kyl, 'vattenlas': vattenlas, 'cistern': cistern, 'huvudkran': huvudkran, 'diskmaskin': diskmaskin };

@@ -14,6 +14,8 @@ import Cistern from '../figurer/cistern/Cistern.jsx';
 import CisternText from '../figurer/cistern/Textversion.astro';
 import Huvudkran from '../figurer/huvudkran/Huvudkran.jsx';
 import HuvudkranText from '../figurer/huvudkran/Textversion.astro';
+import Diskmaskin from '../figurer/diskmaskin/Diskmaskin.jsx';
+import DiskmaskinText from '../figurer/diskmaskin/Textversion.astro';
 
 interface Props {
   id: string;
@@ -32,6 +34,7 @@ const { id, del } = Astro.props;
       {id === 'vattenlas' && <Vattenlas client:visible />}
       {id === 'cistern' && <Cistern client:visible />}
       {id === 'huvudkran' && <Huvudkran client:visible />}
+      {id === 'diskmaskin' && <Diskmaskin client:visible />}
     </>
   ) : (
     <>
@@ -42,6 +45,7 @@ const { id, del } = Astro.props;
       {id === 'vattenlas' && <VattenlasText />}
       {id === 'cistern' && <CisternText />}
       {id === 'huvudkran' && <HuvudkranText />}
+      {id === 'diskmaskin' && <DiskmaskinText />}
     </>
   )
 }
