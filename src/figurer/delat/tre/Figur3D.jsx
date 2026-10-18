@@ -7,7 +7,7 @@ import { skapaMotor, harWebGL } from './motor.js';
  * @param {{ bygg: (motor: any) => any, onKlar: (api: any, motor: any) => void, aria: string, hojd?: number,
  *           reduceraRorelse: boolean, children?: any }} props
  */
-export default function Figur3D({ bygg, onKlar, aria, hojd = 12, mal, reduceraRorelse }) {
+export default function Figur3D({ bygg, onKlar, aria, hojd = 12, bredd = 0, mal, reduceraRorelse }) {
   const ref = useRef(null);
   const motorRef = useRef(null);
   const [stod, setStod] = useState(true);
@@ -18,7 +18,7 @@ export default function Figur3D({ bygg, onKlar, aria, hojd = 12, mal, reduceraRo
       setStod(false);
       return undefined;
     }
-    const motor = skapaMotor(ref.current, { hojd, mal, reduceraRorelse });
+    const motor = skapaMotor(ref.current, { hojd, bredd, mal, reduceraRorelse });
     motorRef.current = motor;
     motor.sattHandritad(handritad);
     const api = bygg(motor);

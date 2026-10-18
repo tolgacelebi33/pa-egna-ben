@@ -2,6 +2,11 @@
 // Vad en lekman får göra i elskåpet är TODO-KONTROLL och ska fackgranskas.
 export default {
   aria: 'Interaktiv figur: elskåp med jordfelsbrytare och fyra säkringar, kopplade till fyra rum',
+  aria3d: 'Elskåp i 3D med ledningar till fyra rum. Dra för att vrida, nyp eller skrolla för att zooma. Klicka på spakarna eller använd brytarna under figuren.',
+  'steg.rubrik': 'Steg',
+  'brytare.rubrik': 'Brytarna i skåpet',
+  'lampor': '{antal} av 4 rum har ström.',
+  'status.start3d': 'Allt har ström. Vrid skåpet med fingret och klicka på spakarna.',
   'steg.koppla': 'Koppla in fler apparater i köket',
   'steg.dra': 'Dra ur en apparat',
   'steg.sla': 'Slå på säkringen igen',

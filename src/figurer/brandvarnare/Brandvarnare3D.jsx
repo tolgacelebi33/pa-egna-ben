@@ -153,6 +153,7 @@ export default function Brandvarnare3D() {
         aria={tx('aria3d')}
         reduceraRorelse={reduceraRorelse}
         hojd={10}
+        bredd={9}
         mal={[0, 0.2, 0]}
         bygg={(motor) => byggBrandvarnare(motor, { texter, reduceraRorelse, handelser: { onKnapp: testa } })}
         onKlar={(a) => {

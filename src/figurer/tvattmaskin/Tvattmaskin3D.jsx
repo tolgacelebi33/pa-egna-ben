@@ -137,6 +137,7 @@ export default function Tvattmaskin3D() {
         aria={tx('aria3d')}
         reduceraRorelse={reduceraRorelse}
         hojd={15}
+        bredd={13}
         mal={[1.2, -0.6, 0.6]}
         bygg={(motor) =>
           byggTvattmaskin(motor, {

@@ -29,7 +29,7 @@ export function harWebGL() {
  * @param {{ hojd?: number, reduceraRorelse?: boolean, startvinkel?: [number, number, number] }} val
  */
 export function skapaMotor(behallare, val = {}) {
-  const { hojd = 12, reduceraRorelse = false, startvinkel = [1, 0.78, 1.15], mal = [0, 0, 0] } = val;
+  const { hojd = 12, bredd: minBredd = 0, reduceraRorelse = false, startvinkel = [1, 0.78, 1.15], mal = [0, 0, 0] } = val;
 
   const scen = new Scene();
   const renderare = new WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
@@ -75,7 +75,8 @@ export function skapaMotor(behallare, val = {}) {
     bredd = behallare.clientWidth || 1;
     hojdPx = behallare.clientHeight || 1;
     const aspekt = bredd / hojdPx;
-    const h = aspekt < 0.9 ? hojd * (0.9 / aspekt) * 1.02 : hojd; // smal skärm: zooma ut så att figuren och etiketterna får plats
+    // Minst hojd enheter på höjden och minBredd på bredden, så att hela figuren får plats även på smal skärm.
+    const h = Math.max(aspekt < 0.9 ? hojd * (0.9 / aspekt) * 0.85 : hojd, minBredd / aspekt);
     kamera.top = h / 2;
     kamera.bottom = -h / 2;
     kamera.left = (-h * aspekt) / 2;
@@ -106,7 +107,9 @@ export function skapaMotor(behallare, val = {}) {
     linjeLager.setAttribute('viewBox', `0 0 ${bredd} ${hojdPx}`);
     const placerade = [];
     const skala = Math.min(1, bredd / 700); // kortare linjer på smal skärm
-    for (const e of etiketter) {
+    // Etiketter utan linje placeras först, så att de med linje flyttar undan för dem.
+    const ordning = [...etiketter].sort((a, b) => Number(!!(a.ut[0] || a.ut[1])) - Number(!!(b.ut[0] || b.ut[1])));
+    for (const e of ordning) {
       let syns = e.synlig && e.objekt.visible !== false;
       for (let o = e.objekt.parent; syns && o; o = o.parent) if (o.visible === false) syns = false;
       e.el.hidden = !syns;
@@ -129,7 +132,8 @@ export function skapaMotor(behallare, val = {}) {
       else lx = Math.min(Math.max(lx, w / 2 + 6), bredd - w / 2 - 6);
       // Flytta ned etiketten om den krockar med en som redan är placerad.
       const vanster = () => (e.ut[0] < 0 ? lx - w : e.ut[0] > 0 ? lx : lx - w / 2);
-      for (let varv = 0; varv < 8; varv++) {
+      // Etiketter utan linje (namn under föremål) står kvar där de är.
+      for (let varv = 0; harLinje && varv < 8; varv++) {
         const krock = placerade.find((p) => vanster() < p.x2 && vanster() + w > p.x1 && ly - h / 2 < p.y2 && ly + h / 2 > p.y1);
         if (!krock) break;
         ly = krock.y2 + h / 2 + 3;

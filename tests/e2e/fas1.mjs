@@ -277,23 +277,23 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   kontroll('brandvarnare: ljudet är avstängt från början', (await page.getByRole('button', { name: 'Spela upp ljud' }).getAttribute('aria-pressed')) === 'false');
 
   await page.goto(BAS + '/figur/elskap/', { waitUntil: 'networkidle' });
-  await page.waitForSelector('.figur-elskap .spak');
-  await page.getByRole('button', { name: 'Koppla in fler apparater i köket' }).click();
+  await page.waitForSelector('.figur-elskap .brytare button');
+  await page.getByRole('button', { name: /Koppla in fler apparater i köket/ }).click();
   const kok = page.getByRole('switch', { name: 'Säkring 1, Kök' });
   kontroll('elskåp: överlast löser ut köksäkringen direkt vid reducerad rörelse', (await kok.getAttribute('aria-checked')) === 'false');
   await kok.focus();
   await page.keyboard.press('Enter');
   kontroll('elskåp: säkringen löser ut igen med för många apparater', (await kok.getAttribute('aria-checked')) === 'false');
-  await page.getByRole('button', { name: 'Dra ur en apparat' }).click();
+  await page.getByRole('button', { name: /Dra ur en apparat/ }).click();
   await kok.focus();
   await page.keyboard.press(' ');
   kontroll('elskåp: säkringen går att slå på med tangentbord efter att en apparat dragits ur', (await kok.getAttribute('aria-checked')) === 'true');
   await page.getByRole('button', { name: 'Testknapp på jordfelsbrytaren' }).click();
   const jfb = page.getByRole('switch', { name: 'Jordfelsbrytare' });
   kontroll('elskåp: testknappen löser ut jordfelsbrytaren', (await jfb.getAttribute('aria-checked')) === 'false');
-  kontroll('elskåp: alla lampor slocknar', (await page.locator('.figur-elskap .rum.tand').count()) === 0);
-  await page.getByRole('button', { name: 'Slå på jordfelsbrytaren igen' }).click();
-  kontroll('elskåp: jordfelsbrytaren går att slå på igen', (await page.locator('.figur-elskap .rum.tand').count()) === 4);
+  kontroll('elskåp: alla rum blir strömlösa', ((await page.locator('.figur-elskap .brytare [aria-live]').textContent()) ?? '').startsWith('0 av 4'));
+  await page.getByRole('button', { name: /Slå på jordfelsbrytaren igen/ }).click();
+  kontroll('elskåp: jordfelsbrytaren går att slå på igen', ((await page.locator('.figur-elskap .brytare [aria-live]').textContent()) ?? '').startsWith('4 av 4'));
   await ctx.close();
 }
 

@@ -180,3 +180,23 @@
     font-size: 0.6rem;
   }
 }
+
+/* Brytare under figuren (elskåpet): samma läge som spakarna i 3D */
+.brytare {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--steg-2);
+  margin: 0;
+}
+
+.brytare legend {
+  font-family: var(--typsnitt-mono);
+  font-size: var(--text-xs);
+  color: var(--text-svag);
+  margin-bottom: var(--steg-2);
+}
+
+.chip.utlost {
+  border-color: var(--tegel);
+  color: var(--tegel);
+}
