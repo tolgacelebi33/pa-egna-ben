@@ -53,6 +53,7 @@ export default function KallsorteringQuiz() {
   const [val, setVal] = useState(null);
   const [poang, setPoang] = useState(0);
   const [handritad, setHandritad] = useState(2);
+  const [quiz, setQuiz] = useState(false);
   const klar = nr >= SAKER.length;
   const sak = SAKER[nr];
 
@@ -71,7 +72,9 @@ export default function KallsorteringQuiz() {
     setPoang(0);
   };
 
-  const status = klar
+  const status = !quiz
+    ? tx('status.oversikt')
+    : klar
     ? tx('status.klar', { poang, antal: SAKER.length })
     : !val
       ? tx('status.fraga', { sak: tx(`sak.${sak.id}`) })
@@ -95,7 +98,23 @@ export default function KallsorteringQuiz() {
       setHandritad={setHandritad}
       borjaOm={borjaOm}
       steg={[]}
+      val={[{ text: tx(quiz ? 'visa.oversikt' : 'testa.dig'), pa: quiz, gor: () => { setQuiz(!quiz); borjaOm(); } }]}
       extra={
+        !quiz ? (
+          <div className="quiz">
+            <p className="quiz-kommun">{tx('kommun')}</p>
+            <ul className="oversikt">
+              {KARL.map((k) => (
+                <li key={k.id}>
+                  <span className="karl-prick" style={{ background: k.farg }} aria-hidden="true" />
+                  <strong>{tx(`karl.${k.id}`)}</strong>
+                  <span>{tx(`exempel.${k.id}`)}</span>
+                </li>
+              ))}
+              {!KONTROLLERAD && <li className="quiz-utkast">{tx('utkast')}</li>}
+            </ul>
+          </div>
+        ) : (
         <div className="quiz">
           {!KONTROLLERAD && <p className="quiz-utkast">{tx('utkast')}</p>}
           <p className="quiz-kommun">{tx('kommun')}</p>
@@ -119,6 +138,7 @@ export default function KallsorteringQuiz() {
             </button>
           )}
         </div>
+        )
       }
     >
       <svg viewBox={smal ? '-280 -140 560 420' : '-380 -140 760 400'} role="group" aria-label={tx('aria')}>

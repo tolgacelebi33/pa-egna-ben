@@ -6,7 +6,18 @@
  * @param {{ lista: { id: string, text: string, at: [number, number], sida: 'v'|'h', y: number, nr?: [number, number] }[],
  *           smal: boolean, vansterX?: number, hogerX?: number }} props
  */
-export default function Etiketter({ lista, smal, vansterX = -195, hogerX = 205 }) {
+export default function Etiketter({ lista: indata, smal, vansterX = -195, hogerX = 205 }) {
+  // Linjerna får aldrig korsa varandra: på varje sida delas etikettplatserna (y) ut i samma
+  // ordning som punkterna ligger uppifrån och ned, och står minst 26 enheter isär.
+  const lista = indata.map((e) => ({ ...e }));
+  for (const sida of ['v', 'h']) {
+    const pa = lista.filter((e) => e.sida === sida);
+    const platser = pa.map((e) => e.y).sort((a, b) => a - b);
+    for (let i = 1; i < platser.length; i++) platser[i] = Math.max(platser[i], platser[i - 1] + 26);
+    [...pa].sort((a, b) => a.at[1] - b.at[1]).forEach((e, i) => {
+      e.y = platser[i];
+    });
+  }
   return (
     <g className={smal ? 'etiketter-smal' : 'etiketter-bred'}>
       {lista.map((e, i) => {

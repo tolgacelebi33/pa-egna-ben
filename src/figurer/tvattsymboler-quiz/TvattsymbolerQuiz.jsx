@@ -41,6 +41,7 @@ export default function TvattsymbolerQuiz() {
   const [svar, setSvar] = useState(null);
   const [poang, setPoang] = useState(0);
   const [handritad, setHandritad] = useState(2);
+  const [quiz, setQuiz] = useState(false);
   const klar = nr >= FRAGOR.length;
   const ratt = FRAGOR[nr];
 
@@ -59,7 +60,9 @@ export default function TvattsymbolerQuiz() {
     setPoang(0);
   };
 
-  const status = klar
+  const status = !quiz
+    ? tx('status.oversikt')
+    : klar
     ? tx('status.klar', { poang, antal: FRAGOR.length })
     : !svar
       ? tx('status.fraga', { nr: nr + 1, antal: FRAGOR.length })
@@ -78,7 +81,22 @@ export default function TvattsymbolerQuiz() {
       setHandritad={setHandritad}
       borjaOm={borjaOm}
       steg={[]}
+      val={[{ text: tx(quiz ? 'visa.oversikt' : 'testa.dig'), pa: quiz, gor: () => { setQuiz(!quiz); borjaOm(); } }]}
       extra={
+        !quiz ? (
+          <ul className="oversikt">
+            {GRUPPER.map((g) => (
+              <li key={g}>
+                <svg viewBox="-50 -50 100 100" aria-hidden="true" className="oversikt-symbol">
+                  <Symbol typ={g} />
+                </svg>
+                <strong>{tx(`grupp.${g}`)}</strong>
+                <span>{tx(`form.${g}`)}</span>
+              </li>
+            ))}
+            {!KONTROLLERAD && <li className="quiz-utkast">{tx('utkast')}</li>}
+          </ul>
+        ) : (
         <div className="quiz">
           {!KONTROLLERAD && <p className="quiz-utkast">{tx('utkast')}</p>}
           {!klar && (
@@ -102,6 +120,7 @@ export default function TvattsymbolerQuiz() {
             </button>
           )}
         </div>
+        )
       }
     >
       <svg viewBox={smal ? '-260 -230 520 420' : '-430 -230 860 420'} role="img" aria-label={klar ? tx('aria.klar') : tx('aria', { nr: nr + 1 })}>

@@ -10,3 +10,4 @@
   background: var(--ark);
   font-size: var(--text-s);
 }
+.karl-prick { width: 28px; height: 28px; border-radius: 6px; border: 2px solid var(--black); }

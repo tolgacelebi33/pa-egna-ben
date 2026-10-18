@@ -36,3 +36,37 @@
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
 }
+
+.oversikt {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: var(--steg-3);
+}
+.oversikt li {
+  display: grid;
+  justify-items: start;
+  gap: var(--steg-1);
+  padding: var(--steg-3);
+  border-radius: var(--radie);
+  background: var(--ark);
+  box-shadow: var(--skugga);
+}
+.oversikt li.quiz-utkast {
+  grid-column: 1 / -1;
+  box-shadow: none;
+}
+.oversikt-symbol {
+  width: 56px;
+  height: 56px;
+  fill: none;
+  stroke: var(--black);
+  stroke-width: 6;
+  stroke-linejoin: round;
+}
+.oversikt span {
+  color: var(--text-svag);
+  font-size: var(--text-s);
+}
