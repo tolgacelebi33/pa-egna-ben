@@ -10,7 +10,7 @@ import { FIGURER } from '../data/figurer.js';
 const nar = await amnenIKategori('nar');
 const kategorier = (await kategorierMedAntal()).filter((k) => k.id !== 'nar');
 const figurer = FIGURER.map((f, i) => ({ ...f, nr: String(i + 1).padStart(2, '0') }));
-const klara = figurer.filter((f) => f.klar);
+const klara = figurer.filter((f) => f.klar && f.id !== 'beslutstrad').slice(0, 6);
 const antalText = (n: number) => (n === 1 ? t('antal.amne') : t('antal.amnen', { antal: n }));
 ---
 

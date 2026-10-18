@@ -296,6 +296,27 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   await ctx.close();
 }
 
+// 11. Alla figurer: laddas utan fel, ingen vågrät rullning på mobil, och första steget går att trycka på
+{
+  const figurer = (await import('../../src/data/figurer.js')).FIGURER;
+  const ctx = await browser.newContext(MOBIL);
+  const page = await ctx.newPage();
+  const fel = [];
+  page.on('pageerror', (e) => fel.push(String(e)));
+  for (const fig of figurer) {
+    fel.length = 0;
+    await page.goto(`${BAS}/figur/${fig.id}/`, { waitUntil: 'networkidle' });
+    const yta = page.locator('.figur .scen svg, .beslutstrad').first();
+    await yta.waitFor({ timeout: 10000 }).catch(() => {});
+    const forsta = page.locator('.figur3d-steg .chip, .quiz-svar .chip, .beslutstrad .svar').first();
+    if (await forsta.count()) await forsta.click();
+    await page.waitForTimeout(300);
+    const bredd = await page.evaluate(() => document.documentElement.scrollWidth);
+    kontroll(`figur ${fig.id}: visas utan fel och ryms på mobil`, (await yta.count()) === 1 && fel.length === 0 && bredd <= 375, `${fel.join(' | ')} bredd ${bredd}`);
+  }
+  await ctx.close();
+}
+
 await browser.close();
 writeFileSync(`${UT}resultat.json`, JSON.stringify(resultat, null, 2));
 console.log(`\n${resultat.length - fel} av ${resultat.length} kontroller godkända.`);
