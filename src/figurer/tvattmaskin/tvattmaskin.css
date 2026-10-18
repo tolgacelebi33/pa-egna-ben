@@ -1,39 +1,7 @@
-/* Tvättmaskinsfiguren. Scenen är alltid ljust papper, även i mörkt läge, så att illustrationen ser likadan ut. */
-.figur-tvattmaskin {
-  --f-black: #2a2522;
-  --f-papper: #f4eee3;
-  --f-lera: #c8664a;
-  --f-salvia: #8fa58a;
-  --f-ockra: #d9a441;
-  --f-vatten: #5e7fa0;
-}
-
-.figur-tvattmaskin .scen {
-  background-color: var(--f-papper);
-  border-radius: var(--radie);
-  border: 2px solid var(--kant);
-  padding: var(--steg-2);
-}
-
-.figur-tvattmaskin .scen svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  touch-action: manipulation;
-}
-
-.figur-tvattmaskin .bleck {
-  stroke: var(--f-black);
-  stroke-width: 3.2;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-
-.figur-tvattmaskin .skugga { fill: var(--f-black); opacity: 0.12; stroke: none; }
+/* Tvättmaskinsfiguren. Det gemensamma för alla figurer ligger i ../delat/figur.css. */
 .figur-tvattmaskin .yta-topp { fill: #f6f2ea; }
 .figur-tvattmaskin .yta-sida { fill: #cfc6b6; }
 .figur-tvattmaskin .yta-front { fill: #e7e0d3; }
-.figur-tvattmaskin .detalj { fill: none; stroke-width: 1.8; opacity: 0.55; }
 .figur-tvattmaskin .halrum { fill: #4a433d; }
 .figur-tvattmaskin .balja { fill: #6f675e; }
 .figur-tvattmaskin .snittkant { fill: none; stroke-width: 3.2; }
@@ -60,11 +28,9 @@
 .figur-tvattmaskin .markering.vald { opacity: 1; stroke: var(--f-lera); stroke-width: 3; }
 .figur-tvattmaskin .ratt { cursor: grab; outline: none; }
 .figur-tvattmaskin .ratt:active { cursor: grabbing; }
-.figur-tvattmaskin .traffyta { fill: transparent; stroke: none; }
 .figur-tvattmaskin .ratt-knopp { fill: #f3eee5; stroke-width: 3; }
 .figur-tvattmaskin .ratt-mitt { fill: #dcd4c6; stroke-width: 1.8; }
 .figur-tvattmaskin .ratt-visare { stroke: var(--f-lera); stroke-width: 4; }
-.figur-tvattmaskin .fokusring { fill: none; stroke: var(--f-black); stroke-width: 2.4; stroke-dasharray: 5 4; }
 
 .figur-tvattmaskin .lucka-ring { fill: #dcd5c8; }
 .figur-tvattmaskin .lucka-fals { fill: #bfb6a7; stroke-width: 2; }
@@ -83,96 +49,9 @@
   transition: transform 0.9s cubic-bezier(0.5, 0, 0.3, 1), opacity 0.6s ease 0.5s;
 }
 
-/* Etiketterna får inte ta emot klick, då hamnar de över ratten. */
-.figur-tvattmaskin .etikett,
-.figur-tvattmaskin .etikett-nr,
-.figur-tvattmaskin .korg-namn { pointer-events: none; }
-.figur-tvattmaskin .korg-namn { font-size: 15px; font-weight: 700; fill: var(--f-black); font-family: var(--typsnitt-text); }
-.figur-tvattmaskin .etikett path { fill: none; stroke: var(--f-black); stroke-width: 1.5; }
-.figur-tvattmaskin .etikett circle { fill: var(--f-lera); stroke: var(--f-black); stroke-width: 1.5; }
-.figur-tvattmaskin .etikett text {
-  font-family: var(--typsnitt-text);
-  font-size: 15px;
-  font-weight: 700;
-  fill: var(--f-black);
-  paint-order: stroke;
-  stroke: var(--f-papper);
-  stroke-width: 4px;
-}
-.figur-tvattmaskin .etikett-nr circle { fill: var(--f-lera); stroke: var(--f-black); stroke-width: 2; }
-.figur-tvattmaskin .etikett-nr path { stroke: var(--f-black); stroke-width: 2; }
-.figur-tvattmaskin .etikett-nr .prick { fill: var(--f-black); stroke: none; }
-.figur-tvattmaskin .etikett-nr text { font-size: 15px; font-weight: 700; fill: #fff; font-family: var(--typsnitt-text); }
+.figur-tvattmaskin .korg-namn { pointer-events: none; font-size: 15px; font-weight: 700; fill: var(--f-black); font-family: var(--typsnitt-text); }
 
-.figur-tvattmaskin .etikettlista {
-  columns: 2;
-  margin: var(--steg-2) 0 0;
-  padding-left: 1.6rem;
-  font-size: var(--text-s);
-}
-
-.figur-tvattmaskin .status {
-  min-height: 3em;
-  margin: var(--steg-3) 0;
-  padding: var(--steg-2) var(--steg-3);
-  background: var(--yta);
-  border-left: 4px solid var(--tegel);
-  border-radius: 4px;
-}
-
-.figur-tvattmaskin .steg {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 var(--steg-3);
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--steg-2);
-  counter-reset: steg;
-}
-
-.figur-tvattmaskin .steg li { counter-increment: steg; }
-.figur-tvattmaskin .steg button {
-  width: 100%;
-  height: 100%;
-  justify-content: flex-start;
-  text-align: left;
-}
-
-.figur-tvattmaskin .steg button::before {
-  content: counter(steg);
-  flex: none;
-  display: inline-grid;
-  place-items: center;
-  width: 1.7rem;
-  height: 1.7rem;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  font-weight: 700;
-  font-size: 0.9rem;
-}
-
-.figur-tvattmaskin .steg button.klar::before { background: var(--salvia-yta); }
-.figur-tvattmaskin .steg button.primar.klar::before { background: transparent; }
 .figur-tvattmaskin .steg li:last-child button { background: var(--black); color: var(--papper); }
-.figur-tvattmaskin .borja-om { border-style: dashed; }
-
-.figur-tvattmaskin .reglage {
-  margin: var(--steg-4) 0 0;
-  display: grid;
-  gap: var(--steg-3);
-}
-
-.figur-tvattmaskin .vaxel,
-.figur-tvattmaskin .skjut {
-  display: flex;
-  align-items: center;
-  gap: var(--steg-3);
-  flex-wrap: wrap;
-  min-height: 44px;
-}
-
-.figur-tvattmaskin .vaxel input { width: 1.4rem; height: 1.4rem; accent-color: var(--black); }
-.figur-tvattmaskin .skjut input { flex: 1; min-width: 140px; accent-color: var(--black); }
 
 @media (prefers-reduced-motion: reduce) {
   .figur-tvattmaskin .flyttbar,

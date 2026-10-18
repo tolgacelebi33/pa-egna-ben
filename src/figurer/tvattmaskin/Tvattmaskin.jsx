@@ -3,6 +3,8 @@ import { t } from '../../i18n/index.js';
 import { iso, poly, framsidaMatris } from '../delat/iso.js';
 import { useMediaQuery } from '../delat/useMediaQuery.js';
 import HandritadFilter from '../delat/HandritadFilter.jsx';
+import Etiketter, { EtikettLista } from '../delat/Etiketter.jsx';
+import '../delat/figur.css';
 import './tvattmaskin.css';
 
 // Maskinens mått i figurens egna enheter.
@@ -262,7 +264,10 @@ export default function Tvattmaskin() {
     }
   };
 
-  const synligaEtiketter = ETIKETTER.filter((e) => e.snitt === undefined || e.snitt === genomskarning);
+  const synligaEtiketter = ETIKETTER.filter((e) => e.snitt === undefined || e.snitt === genomskarning).map((e) => ({
+    ...e,
+    text: t(`tvattmaskin.etikett.${e.id}`),
+  }));
 
   const displayRad1 = igang ? t('tvattmaskin.display.tvattar') : lage === 'klar' ? t('tvattmaskin.display.klar') : t(`tvattmaskin.program.${program}`);
   const displayRad2 = temp === null ? '' : t(`tvattmaskin.temp.${temp}`);
@@ -537,44 +542,11 @@ export default function Tvattmaskin() {
             );
           })}
 
-          {synligaEtiketter.map((e, i) => {
-            const [ax, ay] = e.at;
-            if (smal) {
-              const [dx, dy] = e.nr ?? [0, 0];
-              const forskjuten = dx !== 0 || dy !== 0;
-              return (
-                <g key={e.id} className="etikett-nr" aria-hidden="true">
-                  {forskjuten && <path d={`M${ax} ${ay} L${ax + dx} ${ay + dy}`} />}
-                  {forskjuten && <circle cx={ax} cy={ay} r="3" className="prick" />}
-                  <circle cx={ax + dx} cy={ay + dy} r="12" />
-                  <text x={ax + dx} y={ay + dy + 0.5} textAnchor="middle" dominantBaseline="middle">
-                    {i + 1}
-                  </text>
-                </g>
-              );
-            }
-            const lx = e.sida === 'v' ? -195 : 205;
-            const ex = e.sida === 'v' ? lx + 6 : lx - 6;
-            return (
-              <g key={e.id} className="etikett">
-                <path d={`M${ax} ${ay} L${ex} ${e.y}`} />
-                <circle cx={ax} cy={ay} r="3.5" />
-                <text x={lx} y={e.y} textAnchor={e.sida === 'v' ? 'end' : 'start'} dominantBaseline="middle">
-                  {t(`tvattmaskin.etikett.${e.id}`)}
-                </text>
-              </g>
-            );
-          })}
+          <Etiketter lista={synligaEtiketter} smal={smal} />
         </svg>
       </div>
 
-      {smal && (
-        <ol className="etikettlista" aria-label={t('tvattmaskin.etiketter.rubrik')}>
-          {synligaEtiketter.map((e) => (
-            <li key={e.id}>{t(`tvattmaskin.etikett.${e.id}`)}</li>
-          ))}
-        </ol>
-      )}
+      {smal && <EtikettLista lista={synligaEtiketter} rubrik={t('tvattmaskin.etiketter.rubrik')} />}
 
       <p className="status" role="status" aria-live="polite">
         {status}

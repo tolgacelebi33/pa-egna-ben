@@ -1,7 +1,7 @@
 // Figurer i byggordning enligt docs/INNEHALL.md. "klar" betyder att figuren är byggd.
 export const FIGURER = [
   { id: 'tvattmaskin', titel: 'Tvättmaskinen', klar: true },
-  { id: 'brandvarnare', titel: 'Brandvarnaren', klar: false },
+  { id: 'brandvarnare', titel: 'Brandvarnaren', klar: true },
   { id: 'elskap', titel: 'Elskåpet', klar: false },
   { id: 'kyl', titel: 'Kyl och frys', klar: false },
   { id: 'vattenlas', titel: 'Vattenlåset', klar: false },

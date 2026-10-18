@@ -3,6 +3,8 @@ import Bas from '../../layouts/Bas.astro';
 import AmneKort from '../../components/AmneKort.astro';
 import Tvattmaskin from '../../figurer/tvattmaskin/Tvattmaskin.jsx';
 import TvattmaskinText from '../../figurer/tvattmaskin/Textversion.astro';
+import Brandvarnare from '../../figurer/brandvarnare/Brandvarnare.jsx';
+import BrandvarnareText from '../../figurer/brandvarnare/Textversion.astro';
 import { t } from '../../i18n/index.js';
 import { FIGURER } from '../../data/figurer.js';
 import { hamtaAmnen, figurUrl } from '../../lib/innehall.js';
@@ -42,12 +44,14 @@ const amnen = (await hamtaAmnen()).filter((p) => p.data.figur === fig.id);
       <h1>{fig.titel}</h1>
       {!fig.klar && <p>{t('figurer.inte.klar')}</p>}
       {fig.id === 'tvattmaskin' && <Tvattmaskin client:visible />}
+      {fig.id === 'brandvarnare' && <Brandvarnare client:visible />}
 
       {
         fig.klar && (
           <section class="textversion" aria-labelledby="textversion-rubrik">
             <h2 id="textversion-rubrik">{t('figurer.text.rubrik')}</h2>
             {fig.id === 'tvattmaskin' && <TvattmaskinText />}
+            {fig.id === 'brandvarnare' && <BrandvarnareText />}
           </section>
         )
       }
