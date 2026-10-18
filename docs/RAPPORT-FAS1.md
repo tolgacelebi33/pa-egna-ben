@@ -99,7 +99,7 @@ Datum: 2026-10-18. Skärmdumpar finns i `rapport/fas1/`, och resultatet av webbl
 - **axe hittar inte allt.** Automatiska verktyg hittar ungefär en tredjedel av alla tillgänglighetsproblem. Ett test med skärmläsare, VoiceOver och TalkBack, återstår.
 - **Kontaktfilen saknar källor.** Nödnumret 112 kommer från era egna texter men saknar källa i kontaktfilen. Övriga nummer och tjänstenamn är tomma. Inget akutämne kan publiceras förrän de är källbelagda, och det är avsiktligt.
 - **Avvikelse från era texter.** I ansvarsfriskrivningen har jag bytt "1177" mot en uppgift från kontaktfilen, eftersom regeln säger att tjänstenamn inte får hårdkodas i löptext. Tills namnet är kontrollerat står det "sjukvårdsrådgivningen".
-- **Hela bygget förcachas (cirka 0,7 MB nu).** Med drygt 300 ämnen blir det troligen 2 till 4 MB. Det är en uppskattning, inte mätt. Om det blir för mycket kan vanliga ämnen cachas vid besök, medan akutämnen och sökindexet alltid förcachas.
+- **Hela bygget förcachas (cirka 0,7 MB nu).** Med de 290 ämnena i katalogen blir det troligen 2 till 4 MB. Det är en uppskattning, inte mätt. Om det blir för mycket kan vanliga ämnen cachas vid besök, medan akutämnen och sökindexet alltid förcachas.
 - **Allt i "Vad gör jag när..." är akut.** Därför ser alla kort där likadana ut, med röd kant.
 - **Föräldralägets delning är bara testad i Chromium.** Den använder delningsmenyn på telefon och urklipp på dator. Delningsmenyn är inte testad.
 - **Sökningen är enkel.** Den hittar inte böjningsformer, till exempel söker "tvättade" inte fram "tvätta". Den räcker troligen för titlar och sammanfattningar.
@@ -117,7 +117,7 @@ Datum: 2026-10-18. Skärmdumpar finns i `rapport/fas1/`, och resultatet av webbl
 
 ## Förslag på nästa steg
 
-- Fas 2: en innehållsfil för vart och ett av ämnena i katalogen, med disposition, `TODO-KONTROLL` och förslag på källtyper, samt en översiktstabell.
+- Fas 2: en innehållsfil för vart och ett av de 290 ämnena i katalogen, med disposition, `TODO-KONTROLL` och förslag på källtyper, samt en översiktstabell.
 - Parallellt med fas 2:
   - lägga upp utkastbygget på en tillfällig https-adress, så att det går att testa på telefon och installera på hemskärmen
   - göra ett test med skärmläsare
