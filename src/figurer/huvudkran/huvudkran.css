@@ -1,0 +1,20 @@
+/* Huvudkransfiguren. */
+.figur-huvudkran .golv { fill: #ddd3c3; }
+.figur-huvudkran .vagg { fill: #ece6da; stroke-width: 2; }
+.figur-huvudkran .ror { fill: none; stroke: #8d969d; stroke-width: 14; stroke-linecap: round; }
+.figur-huvudkran .ror.varm { stroke: #b88a7c; }
+.figur-huvudkran .flode { fill: none; stroke: #9cc0e2; stroke-width: 5; stroke-dasharray: 8 10; animation: hk-flode 0.9s linear infinite; }
+@keyframes hk-flode { to { stroke-dashoffset: -18; } }
+.figur-huvudkran .matare { fill: #f2efe8; stroke-width: 2.6; }
+.figur-huvudkran .matare-glas { fill: #cfe0ea; stroke-width: 2; }
+.figur-huvudkran .ventilhus { fill: #c5ccd1; stroke-width: 2.6; }
+.figur-huvudkran .handtag { fill: #c8664a; stroke-width: 2.6; }
+.figur-huvudkran .vridbar { transition: transform 0.4s ease; }
+.figur-huvudkran .markering { fill: none; stroke: #d9a441; stroke-width: 4; stroke-dasharray: 6 5; animation: hk-puls 1.2s ease-in-out infinite alternate; }
+@keyframes hk-puls { to { opacity: 0.35; } }
+.figur-huvudkran .skarv { fill: #d9a441; stroke-width: 2.4; }
+.figur-huvudkran .droppe { fill: #5e7fa0; stroke: none; animation: hk-droppe 1s ease-in infinite; }
+@keyframes hk-droppe { from { transform: translateY(0); opacity: 1; } to { transform: translateY(230px); opacity: 0; } }
+.figur-huvudkran .pol { opacity: 0.7; stroke-width: 1.6; transition: rx 0.6s, ry 0.6s; }
+.figur-huvudkran .kranvatten { fill: #9cc0e2; }
+.figur-huvudkran .hitta { fill: #c8664a; }

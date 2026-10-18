@@ -12,6 +12,8 @@ import Vattenlas from '../figurer/vattenlas/Vattenlas.jsx';
 import VattenlasText from '../figurer/vattenlas/Textversion.astro';
 import Cistern from '../figurer/cistern/Cistern.jsx';
 import CisternText from '../figurer/cistern/Textversion.astro';
+import Huvudkran from '../figurer/huvudkran/Huvudkran.jsx';
+import HuvudkranText from '../figurer/huvudkran/Textversion.astro';
 
 interface Props {
   id: string;
@@ -29,6 +31,7 @@ const { id, del } = Astro.props;
       {id === 'kyl' && <Kyl client:visible />}
       {id === 'vattenlas' && <Vattenlas client:visible />}
       {id === 'cistern' && <Cistern client:visible />}
+      {id === 'huvudkran' && <Huvudkran client:visible />}
     </>
   ) : (
     <>
@@ -38,6 +41,7 @@ const { id, del } = Astro.props;
       {id === 'kyl' && <KylText />}
       {id === 'vattenlas' && <VattenlasText />}
       {id === 'cistern' && <CisternText />}
+      {id === 'huvudkran' && <HuvudkranText />}
     </>
   )
 }
