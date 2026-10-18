@@ -14,7 +14,7 @@ export const FIGURER = [
   { id: 'paslakan', titel: 'Påslakanet', klar: true },
   { id: 'cykel', titel: 'Cykeln', klar: true },
   { id: 'faktura', titel: 'Fakturan', klar: true },
-  { id: 'budget', titel: 'Budgetkalkylator', klar: false },
+  { id: 'budget', titel: 'Budgetkalkylator', klar: true },
   { id: 'stadschema', titel: 'Städschema', klar: false },
   { id: 'tvattsymboler-quiz', titel: 'Tvättsymboler som quiz', klar: false },
   { id: 'kallsortering-quiz', titel: 'Källsortering som quiz', klar: false },

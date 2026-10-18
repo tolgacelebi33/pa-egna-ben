@@ -46,4 +46,6 @@ export const NYCKLAR = {
   tema: 'tema',
   visaAlla: 'visa-alla',
   foraldralage: 'foraldralage',
+  budget: 'budget',
+  stadschema: 'stadschema',
 };

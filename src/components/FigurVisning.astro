@@ -28,6 +28,8 @@ import Cykel from '../figurer/cykel/Cykel.jsx';
 import CykelText from '../figurer/cykel/Textversion.astro';
 import Faktura from '../figurer/faktura/Faktura.jsx';
 import FakturaText from '../figurer/faktura/Textversion.astro';
+import Budget from '../figurer/budget/Budget.jsx';
+import BudgetText from '../figurer/budget/Textversion.astro';
 
 interface Props {
   id: string;
@@ -53,6 +55,7 @@ const { id, del } = Astro.props;
       {id === 'paslakan' && <Paslakan client:visible />}
       {id === 'cykel' && <Cykel client:visible />}
       {id === 'faktura' && <Faktura client:visible />}
+      {id === 'budget' && <Budget client:visible />}
     </>
   ) : (
     <>
@@ -70,6 +73,7 @@ const { id, del } = Astro.props;
       {id === 'paslakan' && <PaslakanText />}
       {id === 'cykel' && <CykelText />}
       {id === 'faktura' && <FakturaText />}
+      {id === 'budget' && <BudgetText />}
     </>
   )
 }
