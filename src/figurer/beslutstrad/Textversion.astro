@@ -1,0 +1,45 @@
+---
+// Textversion av beslutsträden: alla vägar som en lista.
+import { TRAD } from './trad.js';
+import { t } from '../../i18n/index.js';
+import { hamtaAmnen, amneUrl } from '../../lib/innehall.js';
+import { nodnummer } from '../../lib/kontakter.js';
+
+const titel = Object.fromEntries((await hamtaAmnen()).map((p) => [p.data.id, p.data.titel]));
+const tx = (n: string) => t(`beslutstrad.${n}`, { nodnummer: nodnummer() });
+---
+
+<p>Varje fråga under "Vad gör jag när..." är ett beslutsträd. Här är alla vägar i text.</p>
+{
+  Object.entries(TRAD).map(([id, trad]) => (
+    <details>
+      <summary>{titel[id] ?? id}</summary>
+      <ul>
+        {Object.values(trad as Record<string, any>)
+          .filter((n) => n.fraga)
+          .map((n) => (
+            <li>
+              {tx(n.fraga)}
+              <ul>
+                {n.svar.map((s: any) => {
+                  const mal = (trad as any)[s.till];
+                  return (
+                    <li>
+                      {tx(s.text)}: {mal.fraga ? tx(mal.fraga) : tx(mal.slut)}{' '}
+                      {mal.amne && <a href={amneUrl(mal.amne)}>{titel[mal.amne] ?? mal.amne}</a>}
+                    </li>
+                  );
+                })}
+              </ul>
+            </li>
+          ))}
+        {(trad as any).start.slut && (
+          <li>
+            {tx((trad as any).start.slut)} <a href={amneUrl((trad as any).start.amne)}>{titel[(trad as any).start.amne]}</a>
+          </li>
+        )}
+      </ul>
+    </details>
+  ))
+}
+<p><span class="todo">TODO-KONTROLL: frågorna och vägarna granskas tillsammans med respektive ämne.</span></p>

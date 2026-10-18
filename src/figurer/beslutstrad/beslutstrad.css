@@ -1,0 +1,117 @@
+/* Beslutsträdet: stora, lugna kort som leder ett steg i taget. */
+.beslutstrad {
+  display: grid;
+  gap: var(--steg-4);
+  padding: var(--steg-5);
+  border-radius: var(--radie-stor);
+  background-color: var(--figurpapper);
+  background-image: var(--korn);
+  color: #2a2522;
+}
+.trad-val {
+  display: grid;
+  gap: var(--steg-1);
+}
+.trad-val .mono {
+  color: #5d554d;
+}
+.trad-val select {
+  background: #fbfaf7;
+  color: #2a2522;
+  border-color: #2a2522;
+}
+.stig {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--steg-2);
+  align-items: center;
+}
+.stig li {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1.5px solid #2a2522;
+  font-family: var(--typsnitt-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #fbfaf7;
+}
+.stig li.har {
+  background: #2a2522;
+  color: #f6f1e7;
+}
+.kort-nod {
+  padding: var(--steg-5);
+  border-radius: var(--radie);
+  background: #fbfaf7;
+  border: 2px solid #2a2522;
+  box-shadow: 6px 6px 0 #2a2522;
+  display: grid;
+  gap: var(--steg-4);
+}
+.kort-nod.fara {
+  background: #f5e0d6;
+}
+.nod-text {
+  margin: 0;
+  font-family: var(--typsnitt-rubrik);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.nod-svar {
+  display: grid;
+  gap: var(--steg-2);
+}
+.beslutstrad .svar {
+  justify-content: space-between;
+  width: 100%;
+  min-height: 56px;
+  background: #fbfaf7;
+  color: #2a2522;
+  border-color: #2a2522;
+  font-size: var(--text-m);
+}
+.beslutstrad .svar:hover {
+  background: #f6e7c4;
+}
+.ring {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  min-height: 56px;
+  padding: 0 var(--steg-6);
+  border-radius: var(--radie-pill);
+  background: #a34a32;
+  color: #fbfaf7;
+  font-weight: 700;
+  font-size: var(--text-l);
+  text-decoration: none;
+}
+.till-amne {
+  display: grid;
+  gap: var(--steg-1);
+  padding: var(--steg-3) var(--steg-4);
+  border-radius: var(--radie-s);
+  background: #f6e7c4;
+  color: #2a2522;
+  text-decoration: none;
+  border: 1.5px solid #2a2522;
+}
+.till-amne .mono {
+  color: #5d554d;
+}
+.nod-nav {
+  display: flex;
+  gap: var(--steg-2);
+  flex-wrap: wrap;
+}
+.beslutstrad .chip {
+  background: #fbfaf7;
+  color: #2a2522;
+  border-color: #2a2522;
+}

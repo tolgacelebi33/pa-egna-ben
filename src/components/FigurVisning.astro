@@ -36,12 +36,19 @@ import TvattsymbolerQuiz from '../figurer/tvattsymboler-quiz/TvattsymbolerQuiz.j
 import TvattsymbolerQuizText from '../figurer/tvattsymboler-quiz/Textversion.astro';
 import KallsorteringQuiz from '../figurer/kallsortering-quiz/KallsorteringQuiz.jsx';
 import KallsorteringQuizText from '../figurer/kallsortering-quiz/Textversion.astro';
+import Beslutstrad from '../figurer/beslutstrad/Beslutstrad.jsx';
+import BeslutstradText from '../figurer/beslutstrad/Textversion.astro';
+import { hamtaAmnen } from '../lib/innehall.js';
+import { amnenI } from '../figurer/beslutstrad/trad.js';
+import { nodnummer } from '../lib/kontakter.js';
 
 interface Props {
   id: string;
   del: 'figur' | 'text';
 }
 const { id, del } = Astro.props;
+const alla = id === 'beslutstrad' ? await hamtaAmnen() : [];
+const titlar = Object.fromEntries(amnenI().map((a) => [a, alla.find((p) => p.data.id === a)?.data.titel ?? a]));
 ---
 
 {
@@ -65,6 +72,7 @@ const { id, del } = Astro.props;
       {id === 'stadschema' && <Stadschema client:visible />}
       {id === 'tvattsymboler-quiz' && <TvattsymbolerQuiz client:visible />}
       {id === 'kallsortering-quiz' && <KallsorteringQuiz client:visible />}
+      {id === 'beslutstrad' && <Beslutstrad client:visible valbar nodnummer={nodnummer()} titlar={titlar} />}
     </>
   ) : (
     <>
@@ -86,6 +94,7 @@ const { id, del } = Astro.props;
       {id === 'stadschema' && <StadschemaText />}
       {id === 'tvattsymboler-quiz' && <TvattsymbolerQuizText />}
       {id === 'kallsortering-quiz' && <KallsorteringQuizText />}
+      {id === 'beslutstrad' && <BeslutstradText />}
     </>
   )
 }

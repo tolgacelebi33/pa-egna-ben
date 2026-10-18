@@ -18,7 +18,7 @@ export const FIGURER = [
   { id: 'stadschema', titel: 'Städschema', klar: true },
   { id: 'tvattsymboler-quiz', titel: 'Tvättsymboler som quiz', klar: true },
   { id: 'kallsortering-quiz', titel: 'Källsortering som quiz', klar: true },
-  { id: 'beslutstrad', titel: 'Beslutsträd', klar: false },
+  { id: 'beslutstrad', titel: 'Beslutsträd', klar: true },
 ];
 
 export const FIGUR_IDN = FIGURER.map((f) => f.id);

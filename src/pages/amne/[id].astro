@@ -8,6 +8,9 @@ import Granskning from '../../components/Granskning.astro';
 import AmneKort from '../../components/AmneKort.astro';
 import { t } from '../../i18n/index.js';
 import { url } from '../../lib/url.js';
+import Beslutstrad from '../../figurer/beslutstrad/Beslutstrad.jsx';
+import { TRAD, amnenI } from '../../figurer/beslutstrad/trad.js';
+import { nodnummer } from '../../lib/kontakter.js';
 import { hamtaAmnen, arUtkast, kategoriUrl, figurUrl, VISA_UTKAST } from '../../lib/innehall.js';
 import { kategori } from '../../data/kategorier.js';
 import { figur } from '../../data/figurer.js';
@@ -26,6 +29,8 @@ const fig = d.figur ? figur(d.figur) : null;
 const alla = await hamtaAmnen();
 const relaterade = d.relaterade.map((id) => alla.find((p) => p.data.id === id)).filter(Boolean);
 const utkast = arUtkast(d);
+const harTrad = d.figur === 'beslutstrad' && TRAD[d.id];
+const titlar = harTrad ? Object.fromEntries(amnenI(d.id).map((id) => [id, alla.find((p) => p.data.id === id)?.data.titel ?? id])) : {};
 
 const sidUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://example.invalid').pathname;
 const rapport = `mailto:${CONFIG.felrapportEpost}?subject=${encodeURIComponent(
@@ -65,8 +70,10 @@ const rapport = `mailto:${CONFIG.felrapportEpost}?subject=${encodeURIComponent(
     {d.akut && <Akut />}
     {d.varierar_per_kommun && <VarierarPerKommun />}
 
+    {harTrad && <Beslutstrad client:load id={d.id} nodnummer={nodnummer()} titlar={titlar} />}
+
     {
-      fig?.klar && (
+      fig?.klar && !harTrad && (
         <a class="figurlank ark" href={figurUrl(fig.id)}>
           <img src={url(`figurer/${fig.id}.jpg`)} alt="" width="600" height="420" />
           <span>
