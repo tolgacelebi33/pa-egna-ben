@@ -112,7 +112,7 @@ export default function Cykel() {
     { id: 'handtag', at: P([226, 38, 200]), sida: 'h', y: -250, nr: [22, -12] },
     { id: 'broms', at: P([FRAM[0] - 4, 12, FRAM[2] + FALG]), sida: 'h', y: -190, nr: [22, -8] },
     { id: 'ventil', at: P(ventil), sida: 'h', y: -130, nr: [22, -6] },
-    { id: 'dack', at: P(pa(FRAM, R, DACK_BREDD, -20)), sida: 'h', y: -60, nr: [22, 4] },
+    { id: 'dack', at: P(pa(FRAM, R, DACK_BREDD, 20)), sida: 'h', y: -60, nr: [22, 4] },
     ...(hittad && !lagad ? [{ id: 'hal', at: P(hal), sida: 'h', y: 10, nr: [22, 10] }] : []),
     { id: 'kedja', at: P([50, 12, 72]), sida: 'v', y: 40, nr: [-22, 8] },
     ...(lagad ? [{ id: 'pump', at: P([330, -60, 80]), sida: 'h', y: 60, nr: [22, 4] }] : []),

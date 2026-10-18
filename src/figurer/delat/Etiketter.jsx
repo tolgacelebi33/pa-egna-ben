@@ -7,15 +7,18 @@
  *           smal: boolean, vansterX?: number, hogerX?: number }} props
  */
 export default function Etiketter({ lista: indata, smal, vansterX = -195, hogerX = 205 }) {
-  // Linjerna får aldrig korsa varandra: på varje sida delas etikettplatserna (y) ut i samma
-  // ordning som punkterna ligger uppifrån och ned, och står minst 26 enheter isär.
+  // Linjerna får aldrig korsa varandra. På varje sida prövas alla sätt att fördela etikettplatserna (y)
+  // och den fördelning väljs som ger minst antal korsningar, och därefter kortast linjer.
   const lista = indata.map((e) => ({ ...e }));
   for (const sida of ['v', 'h']) {
     const pa = lista.filter((e) => e.sida === sida);
+    if (pa.length < 2) continue;
+    const lx = sida === 'v' ? vansterX : hogerX;
     const platser = pa.map((e) => e.y).sort((a, b) => a - b);
     for (let i = 1; i < platser.length; i++) platser[i] = Math.max(platser[i], platser[i - 1] + 26);
-    [...pa].sort((a, b) => a.at[1] - b.at[1]).forEach((e, i) => {
-      e.y = platser[i];
+    const basta = bastaFordelning(pa, platser, lx);
+    pa.forEach((e, i) => {
+      e.y = platser[basta[i]];
     });
   }
   return (
@@ -60,4 +63,48 @@ export function EtikettLista({ lista, rubrik }) {
       ))}
     </ol>
   );
+}
+
+// Korsar sträckan a1-a2 sträckan b1-b2?
+function korsar([ax, ay], [bx, by], [cx, cy], [dx, dy]) {
+  const d = (bx - ax) * (dy - cy) - (by - ay) * (dx - cx);
+  if (d === 0) return false;
+  const t = ((cx - ax) * (dy - cy) - (cy - ay) * (dx - cx)) / d;
+  const u = ((cx - ax) * (by - ay) - (cy - ay) * (bx - ax)) / d;
+  return t > 0 && t < 1 && u > 0 && u < 1;
+}
+
+function bastaFordelning(etiketter, platser, lx) {
+  const n = etiketter.length;
+  let basta = null;
+  let bastaPoang = Infinity;
+  const perm = [...Array(n).keys()];
+  const prova = (k) => {
+    if (k === n) {
+      let kors = 0;
+      let langd = 0;
+      for (let i = 0; i < n; i++) {
+        const a = etiketter[i].at;
+        langd += Math.hypot(lx - a[0], platser[perm[i]] - a[1]);
+        for (let j = i + 1; j < n; j++) {
+          if (korsar(a, [lx, platser[perm[i]]], etiketter[j].at, [lx, platser[perm[j]]])) kors++;
+        }
+      }
+      const poang = kors * 100000 + langd;
+      if (poang < bastaPoang) {
+        bastaPoang = poang;
+        basta = [...perm];
+      }
+      return;
+    }
+    for (let i = k; i < n; i++) {
+      [perm[k], perm[i]] = [perm[i], perm[k]];
+      prova(k + 1);
+      [perm[k], perm[i]] = [perm[i], perm[k]];
+    }
+  };
+  // Fler än sju etiketter på en sida blir för många kombinationer; då räcker sortering efter höjd.
+  if (n > 7) return [...etiketter.keys()].sort((a, b) => etiketter[a].at[1] - etiketter[b].at[1]).reduce((r, e, i) => ((r[e] = i), r), []);
+  prova(0);
+  return basta;
 }
