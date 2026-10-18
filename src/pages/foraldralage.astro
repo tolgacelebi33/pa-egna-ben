@@ -1,0 +1,167 @@
+---
+// Föräldraläge: checklista byggd av flytt-, bostad- och pengar-ämnen med nivå vecka 1.
+// Delas via länk där adressen bara innehåller ämnenas id. Inga personuppgifter.
+import Bas from '../layouts/Bas.astro';
+import { t } from '../i18n/index.js';
+import { hamtaAmnen, amneUrl, arUtkast } from '../lib/innehall.js';
+
+const GRUPPER = [
+  { prefix: 'flytt-', nyckel: 'foralder.grupp.flytt' },
+  { prefix: 'bostad-', nyckel: 'foralder.grupp.bostad' },
+  { prefix: 'pengar-', nyckel: 'foralder.grupp.pengar' },
+];
+const amnen = (await hamtaAmnen()).filter((p) => p.data.niva === 'vecka1');
+const grupper = GRUPPER.map((g) => ({
+  ...g,
+  amnen: amnen.filter((p) => p.data.id.startsWith(g.prefix)),
+})).filter((g) => g.amnen.length > 0);
+const alla = grupper.reduce((n, g) => n + g.amnen.length, 0);
+---
+
+<Bas titel={t('foralder.rubrik')}>
+  <h1>{t('foralder.rubrik')}</h1>
+  <p class="ingress">{t('foralder.ingress')}</p>
+
+  {alla === 0 && <p>{t('foralder.tom')}</p>}
+
+  <p class="ruta ruta-kommun" role="status" data-fran-lank hidden>{t('foralder.fran.lank')}</p>
+
+  <p class="framsteg" aria-live="polite" data-framsteg data-mall={t('foralder.klara', { klara: '%K%', alla: '%A%' })}></p>
+
+  <form data-checklista>
+    {
+      grupper.map((g) => (
+        <fieldset>
+          <legend>{t(g.nyckel)}</legend>
+          {g.amnen.map((p) => (
+            <div class="punkt">
+              <label class="val">
+                <input type="checkbox" name="klar" value={p.data.id} />
+                <span>{p.data.titel}</span>
+              </label>
+              <a href={amneUrl(p.data.id)} class="las">
+                {t('foralder.las')}<span class="visuellt-dold">: {p.data.titel}</span>
+              </a>
+              {arUtkast(p.data) && <span class="etikett utkast">{t('utkast.markering')}</span>}
+            </div>
+          ))}
+        </fieldset>
+      ))
+    }
+  </form>
+
+  {
+    alla > 0 && (
+      <p class="knapprad inte-utskrift">
+        <button type="button" class="primar" data-dela>
+          {t('foralder.dela')}
+        </button>
+        <button type="button" data-skriv>
+          {t('foralder.skriv')}
+        </button>
+        <button type="button" data-nollstall>
+          {t('foralder.nollstall')}
+        </button>
+      </p>
+    )
+  }
+  <p role="status" aria-live="polite" data-dela-status data-klart={t('foralder.delad')}></p>
+</Bas>
+
+<style>
+  .punkt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 var(--steg-3);
+    border-bottom: 1px solid var(--kant);
+    padding: var(--steg-1) 0;
+  }
+  .punkt:last-child {
+    border-bottom: 0;
+  }
+  .punkt .val {
+    flex: 1 1 14rem;
+  }
+  .las {
+    font-size: var(--text-s);
+  }
+  .knapprad {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--steg-2);
+  }
+  .framsteg {
+    font-weight: 700;
+  }
+  .framsteg:empty {
+    display: none;
+  }
+  @media print {
+    .las {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { las, spara, NYCKLAR } from '../lib/lagring.js';
+
+  const form = document.querySelector<HTMLFormElement>('[data-checklista]');
+  const rutor = [...document.querySelectorAll<HTMLInputElement>('input[name="klar"]')];
+  const framsteg = document.querySelector<HTMLElement>('[data-framsteg]');
+  const giltiga = new Set(rutor.map((r) => r.value));
+
+  const klara = new Set<string>((las(NYCKLAR.foraldralage, []) as string[]).filter((id) => giltiga.has(id)));
+
+  // En delad länk ser ut så här: /foraldralage/#klara=id1,id2
+  const fran = new URLSearchParams(location.hash.slice(1)).get('klara');
+  if (fran) {
+    for (const id of fran.split(',')) if (giltiga.has(id)) klara.add(id);
+    spara(NYCKLAR.foraldralage, [...klara]);
+    const ruta = document.querySelector<HTMLElement>('[data-fran-lank]');
+    if (ruta) ruta.hidden = false;
+    history.replaceState(null, '', location.pathname);
+  }
+
+  function rita() {
+    for (const r of rutor) r.checked = klara.has(r.value);
+    if (framsteg && rutor.length) {
+      framsteg.textContent = (framsteg.dataset.mall ?? '')
+        .replace('%K%', String(klara.size))
+        .replace('%A%', String(rutor.length));
+    }
+  }
+
+  form?.addEventListener('change', (e) => {
+    const r = e.target as HTMLInputElement;
+    if (r.checked) klara.add(r.value);
+    else klara.delete(r.value);
+    spara(NYCKLAR.foraldralage, [...klara]);
+    rita();
+  });
+
+  document.querySelector('[data-dela]')?.addEventListener('click', async () => {
+    const url = `${location.origin}${location.pathname}#klara=${[...klara].join(',')}`;
+    const status = document.querySelector<HTMLElement>('[data-dela-status]');
+    try {
+      if (navigator.share) {
+        await navigator.share({ url, title: document.title });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      if (status) status.textContent = status.dataset.klart ?? '';
+    } catch {
+      if (status) status.textContent = url;
+    }
+  });
+
+  document.querySelector('[data-skriv]')?.addEventListener('click', () => window.print());
+  document.querySelector('[data-nollstall]')?.addEventListener('click', () => {
+    klara.clear();
+    spara(NYCKLAR.foraldralage, []);
+    rita();
+  });
+
+  rita();
+</script>

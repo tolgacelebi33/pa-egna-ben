@@ -1,0 +1,9 @@
+---
+import Bas from '../layouts/Bas.astro';
+import { t } from '../i18n/index.js';
+---
+
+<Bas titel={t('404.rubrik')}>
+  <h1>{t('404.rubrik')}</h1>
+  <p>{t('404.text')} <a href="/">{t('404.start')}</a></p>
+</Bas>

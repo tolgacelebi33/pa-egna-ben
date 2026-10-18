@@ -1,0 +1,12 @@
+---
+// TODO-KONTROLL: juristgranskning av texten, inklusive vilken ansvarsbegränsning som är giltig enligt svensk rätt.
+import Sidtext from '../components/Sidtext.astro';
+import { t } from '../i18n/index.js';
+import { nodnummer, vardradgivning } from '../lib/kontakter.js';
+---
+
+<Sidtext
+  rubrik={t('ansvar.rubrik')}
+  stycken={t('ansvar.text', { nodnummer: nodnummer(), vardradgivning: vardradgivning() })}
+  kraverJurist
+/>

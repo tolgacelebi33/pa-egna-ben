@@ -33,7 +33,7 @@ const rapport = `mailto:${CONFIG.felrapportEpost}?subject=${encodeURIComponent(
 ---
 
 <Bas titel={d.titel} beskrivning={d.sammanfattning || undefined}>
-  <nav class="bradsmulor" aria-label="Brödsmulor">
+  <nav class="bradsmulor" aria-label={t('brodsmulor')}>
     <ol>
       <li><a href="/">{t('meny.start')}</a></li>
       <li><a href={kategoriUrl(d.kategori)}>{kat?.titel}</a></li>

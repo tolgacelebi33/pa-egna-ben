@@ -1,0 +1,12 @@
+---
+// TODO-KONTROLL (docs/RISK-OCH-GRANSKNING.md, avsnitt 8):
+// - om lokal lagring av användarens egna val kräver samtycke eller räknas som nödvändig för tjänsten
+// - hostingleverantörens loggning av IP-adresser och vad det innebär för texten
+// - personuppgiftsansvarig och kontaktuppgifter
+import Sidtext from '../components/Sidtext.astro';
+import { t } from '../i18n/index.js';
+---
+
+<Sidtext rubrik={t('integritet.rubrik')} stycken={t('integritet.text')} kraverJurist>
+  <p><a href="/installningar/">{t('inst.radera.rubrik')}</a></p>
+</Sidtext>

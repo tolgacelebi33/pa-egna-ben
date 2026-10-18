@@ -1,0 +1,35 @@
+---
+import Sidtext from '../components/Sidtext.astro';
+import { t } from '../i18n/index.js';
+import { hamtaAmnen, amneUrl } from '../lib/innehall.js';
+import { datumText } from '../lib/regler.js';
+const amnen = await hamtaAmnen();
+---
+
+<Sidtext rubrik={t('kallor.rubrik')} stycken={t('kallor.text')}>
+  <h2>{t('kallor.tabell.rubrik')}</h2>
+  <div class="tabellrulle">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">{t('kallor.tabell.amne')}</th>
+          <th scope="col">{t('kallor.tabell.risk')}</th>
+          <th scope="col">{t('kallor.tabell.status')}</th>
+          <th scope="col">{t('kallor.tabell.kontrollerad')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          amnen.map(({ data: d }) => (
+            <tr>
+              <td><a href={amneUrl(d.id)}>{d.titel}</a></td>
+              <td>{t(`risk.${d.risk}`)}</td>
+              <td>{t(`status.${d.granskning.status}`)}</td>
+              <td>{datumText(d.granskning.senast_kontrollerad) || t('ruta.granskning.saknas')}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</Sidtext>

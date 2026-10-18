@@ -125,7 +125,6 @@ export default {
   'onb.sprak.en': 'English (kommer senare)',
   'onb.spara': 'Spara och visa mina ämnen',
   'onb.hoppa': 'Hoppa över och visa allt',
-  'onb.sparat': 'Dina val är sparade på den här enheten.',
 
   'inst.rubrik': 'Inställningar',
   'inst.val.rubrik': 'Dina val',
@@ -154,6 +153,7 @@ export default {
   'foralder.grupp.bostad': 'Bostaden',
   'foralder.grupp.pengar': 'Pengar',
   'foralder.nollstall': 'Bocka ur allt',
+  'foralder.las': 'Läs',
 
   'rapport.rubrik': 'Rapportera fel',
   'rapport.ingress': 'Har du hittat något som är fel eller gammalt? Berätta, så rättar vi det.',
@@ -202,4 +202,8 @@ export default {
   'kallor.tabell.kontrollerad': 'Senast kontrollerad',
 
   'kommer.senare': 'kommer senare',
+  'brodsmulor': 'Du är här',
+  '404.rubrik': 'Sidan finns inte',
+  '404.text': 'Sidan kan ha flyttats eller tagits bort.',
+  '404.start': 'Gå till startsidan',
 };

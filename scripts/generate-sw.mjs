@@ -1,0 +1,41 @@
+// Skapar service workern efter bygget och kontrollerar byggregel 7:
+// varje akutämne i bygget måste finnas i offline-cachen, annars stoppas bygget.
+// Hela bygget förcachas. Det är litet nu; när innehållet växer kan vanliga ämnen flyttas till cache vid besök,
+// men akutämnen och sökindexet ska alltid förcachas.
+import { generateSW, getManifest } from 'workbox-build';
+import { readFileSync } from 'node:fs';
+import { kontrolleraOfflineCache } from '../src/lib/regler.js';
+
+const installningar = {
+  globDirectory: 'dist',
+  globPatterns: ['**/*.{html,js,css,svg,png,webmanifest,woff2,json}'],
+  // Bara latinska och latin-ext-typsnitt behövs för svenska och engelska.
+  globIgnores: ['**/*cyrillic*', '**/*greek*', '**/*vietnamese*', 'sw.js', 'workbox-*.js'],
+};
+
+const { manifestEntries } = await getManifest(installningar);
+const cachade = manifestEntries.map((e) => e.url);
+
+const index = JSON.parse(readFileSync('dist/sokindex.json', 'utf8'));
+const akut = index.filter((p) => p.akut).map((p) => `${p.url.replace(/^\//, '')}index.html`);
+const fel = kontrolleraOfflineCache(akut, cachade);
+if (!cachade.includes('sokindex.json')) fel.push('[regel 7] sökindexet saknas i offline-cachen');
+
+if (fel.length) {
+  for (const f of fel) console.error(`FEL ${f}`);
+  console.error('Bygget stoppas eftersom akutinnehåll inte fungerar offline.');
+  process.exit(1);
+}
+
+const { count, size, warnings } = await generateSW({
+  ...installningar,
+  swDest: 'dist/sw.js',
+  cleanupOutdatedCaches: true,
+  clientsClaim: true,
+  skipWaiting: true,
+  navigateFallback: '/404.html',
+  navigateFallbackDenylist: [/^\/sokindex\.json$/],
+});
+
+for (const w of warnings) console.warn(w);
+console.log(`Service worker: ${count} filer förcachade, ${(size / 1024).toFixed(1)} kB. ${akut.length} akutämnen kontrollerade.`);

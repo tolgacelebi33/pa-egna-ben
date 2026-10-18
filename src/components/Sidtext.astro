@@ -1,0 +1,26 @@
+---
+// Sida med en rubrik och stycken från översättningslagret.
+import Bas from '../layouts/Bas.astro';
+import { t } from '../i18n/index.js';
+import { CONFIG } from '../config.js';
+
+interface Props {
+  rubrik: string;
+  stycken: string[];
+  kraverJurist?: boolean;
+}
+const { rubrik, stycken, kraverJurist = false } = Astro.props;
+---
+
+<Bas titel={rubrik}>
+  <h1>{rubrik}</h1>
+  {
+    kraverJurist && !CONFIG.sidtexterJuristgranskade && (
+      <aside class="ruta ruta-utkast">
+        <p>{t('sidtext.ej.granskad')}</p>
+      </aside>
+    )
+  }
+  {stycken.map((s) => <p>{s}</p>)}
+  <slot />
+</Bas>

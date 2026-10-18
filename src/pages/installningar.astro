@@ -1,0 +1,68 @@
+---
+import Bas from '../layouts/Bas.astro';
+import { t } from '../i18n/index.js';
+---
+
+<Bas titel={t('inst.rubrik')}>
+  <h1>{t('inst.rubrik')}</h1>
+
+  <section aria-labelledby="val-rubrik">
+    <h2 id="val-rubrik">{t('inst.val.rubrik')}</h2>
+    <p data-val-text data-har={t('inst.val.text')} data-inga={t('inst.val.inga')}>{t('inst.val.inga')}</p>
+    <p><a class="knapp" href="/kom-igang/">{t('inst.val.andra')}</a></p>
+  </section>
+
+  <section aria-labelledby="tema-rubrik">
+    <h2 id="tema-rubrik">{t('inst.tema.rubrik')}</h2>
+    <fieldset data-tema-val>
+      <legend class="visuellt-dold">{t('inst.tema.rubrik')}</legend>
+      <label class="val"><input type="radio" name="tema" value="system" checked />{t('inst.tema.system')}</label>
+      <label class="val"><input type="radio" name="tema" value="ljust" />{t('inst.tema.ljust')}</label>
+      <label class="val"><input type="radio" name="tema" value="morkt" />{t('inst.tema.morkt')}</label>
+    </fieldset>
+  </section>
+
+  <section aria-labelledby="radera-rubrik">
+    <h2 id="radera-rubrik">{t('inst.radera.rubrik')}</h2>
+    <p>{t('inst.radera.text')}</p>
+    <p><button type="button" class="fara" data-radera data-fraga={t('inst.radera.fraga')}>{t('inst.radera.knapp')}</button></p>
+    <p role="status" aria-live="polite" data-radera-status data-klart={t('inst.radera.klart')}></p>
+  </section>
+</Bas>
+
+<script>
+  import { las, spara, raderaAllt, taBort, NYCKLAR } from '../lib/lagring.js';
+
+  const valText = document.querySelector<HTMLElement>('[data-val-text]');
+  function visaVal() {
+    if (valText) valText.textContent = (las(NYCKLAR.profil) ? valText.dataset.har : valText.dataset.inga) ?? '';
+  }
+  visaVal();
+
+  const temaVal = document.querySelector<HTMLFieldSetElement>('[data-tema-val]');
+  const sattTema = (tema: string) => {
+    if (tema === 'ljust' || tema === 'morkt') document.documentElement.dataset.tema = tema;
+    else delete document.documentElement.dataset.tema;
+  };
+  const nuvarande = las(NYCKLAR.tema, 'system');
+  const radio = temaVal?.querySelector<HTMLInputElement>(`input[value="${nuvarande}"]`);
+  if (radio) radio.checked = true;
+  temaVal?.addEventListener('change', (e) => {
+    const v = (e.target as HTMLInputElement).value;
+    if (v === 'system') taBort(NYCKLAR.tema);
+    else spara(NYCKLAR.tema, v);
+    sattTema(v);
+  });
+
+  const knapp = document.querySelector<HTMLButtonElement>('[data-radera]');
+  const status = document.querySelector<HTMLElement>('[data-radera-status]');
+  knapp?.addEventListener('click', () => {
+    if (!confirm(knapp.dataset.fraga ?? '')) return;
+    raderaAllt();
+    sattTema('system');
+    const system = temaVal?.querySelector<HTMLInputElement>('input[value="system"]');
+    if (system) system.checked = true;
+    visaVal();
+    if (status) status.textContent = status.dataset.klart ?? '';
+  });
+</script>

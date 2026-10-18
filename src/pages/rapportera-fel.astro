@@ -1,0 +1,14 @@
+---
+import Bas from '../layouts/Bas.astro';
+import { t } from '../i18n/index.js';
+import { CONFIG } from '../config.js';
+const lank = `mailto:${CONFIG.felrapportEpost}?subject=${encodeURIComponent(t('rapport.allmant.amne'))}`;
+---
+
+<Bas titel={t('rapport.rubrik')}>
+  <h1>{t('rapport.rubrik')}</h1>
+  <p class="ingress">{t('rapport.ingress')}</p>
+  <p>{t('rapport.hur')}</p>
+  <p><a class="knapp" href={lank}>{t('rapport.allmant')}</a></p>
+  {CONFIG.felrapportEpost.endsWith('.invalid') && <p class="todo">{t('rapport.platshallare')}</p>}
+</Bas>

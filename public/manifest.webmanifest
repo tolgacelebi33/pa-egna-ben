@@ -1,0 +1,17 @@
+{
+  "name": "På egna ben",
+  "short_name": "På egna ben",
+  "description": "Praktisk kunskap om att bo själv, samlad på ett ställe.",
+  "lang": "sv",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4eee3",
+  "theme_color": "#f4eee3",
+  "icons": [
+    { "src": "/ikon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/ikon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/ikon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

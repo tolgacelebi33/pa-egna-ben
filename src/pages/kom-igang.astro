@@ -1,0 +1,108 @@
+---
+// Onboarding: fem frågor som filtrerar innehållet. Alla går att hoppa över. Sparas bara lokalt.
+import Bas from '../layouts/Bas.astro';
+import { t } from '../i18n/index.js';
+import { BOENDEFORMER } from '../lib/schema.js';
+---
+
+<Bas titel={t('onb.rubrik')}>
+  <h1>{t('onb.rubrik')}</h1>
+  <p class="ingress">{t('onb.ingress')}</p>
+
+  <form data-onboarding>
+    <fieldset>
+      <legend>{t('onb.boende')}</legend>
+      {
+        BOENDEFORMER.map((b) => (
+          <label class="val">
+            <input type="radio" name="boendeform" value={b} />
+            {t(`onb.boende.${b}`)}
+          </label>
+        ))
+      }
+      <label class="val"><input type="radio" name="boendeform" value="vet_inte" />{t('onb.vet.inte')}</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>{t('onb.tvatt')}</legend>
+      <label class="val"><input type="radio" name="tvatt" value="egen" />{t('onb.tvatt.egen')}</label>
+      <label class="val"><input type="radio" name="tvatt" value="stuga" />{t('onb.tvatt.stuga')}</label>
+      <label class="val"><input type="radio" name="tvatt" value="vet_inte" />{t('onb.vet.inte')}</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>{t('onb.disk')}</legend>
+      <label class="val"><input type="radio" name="diskmaskin" value="ja" />{t('onb.ja')}</label>
+      <label class="val"><input type="radio" name="diskmaskin" value="nej" />{t('onb.nej')}</label>
+      <label class="val"><input type="radio" name="diskmaskin" value="vet_inte" />{t('onb.vet.inte')}</label>
+    </fieldset>
+
+    <fieldset>
+      <legend><label for="kommun">{t('onb.kommun')}</label></legend>
+      <p class="hjalp" id="kommun-hjalp">{t('onb.kommun.hjalp')}</p>
+      <input type="text" id="kommun" name="kommun" autocomplete="address-level2" aria-describedby="kommun-hjalp" />
+    </fieldset>
+
+    <fieldset>
+      <legend>{t('onb.sprak')}</legend>
+      <label class="val"><input type="radio" name="sprak" value="sv" checked />{t('onb.sprak.sv')}</label>
+      <label class="val"><input type="radio" name="sprak" value="en" disabled />{t('onb.sprak.en')}</label>
+    </fieldset>
+
+    <p class="knapprad">
+      <button type="submit" class="primar">{t('onb.spara')}</button>
+      <button type="button" data-hoppa>{t('onb.hoppa')}</button>
+    </p>
+  </form>
+</Bas>
+
+<style>
+  .hjalp {
+    margin: 0 0 var(--steg-2);
+    font-size: var(--text-s);
+    color: var(--text-svag);
+  }
+  .knapprad {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--steg-2);
+  }
+  label.val:has(input:disabled) {
+    color: var(--text-svag);
+  }
+</style>
+
+<script>
+  import { las, spara, taBort, NYCKLAR } from '../lib/lagring.js';
+
+  const form = document.querySelector<HTMLFormElement>('[data-onboarding]');
+
+  // Fyll i tidigare svar så att de går att ändra.
+  const profil = las(NYCKLAR.profil);
+  if (form && profil) {
+    for (const [namn, varde] of Object.entries(profil)) {
+      const falt = form.elements.namedItem(namn);
+      if (falt instanceof RadioNodeList) falt.value = String(varde);
+      else if (falt instanceof HTMLInputElement) falt.value = String(varde);
+    }
+  }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const ny: Record<string, string> = {};
+    for (const nyckel of ['boendeform', 'tvatt', 'diskmaskin', 'kommun', 'sprak']) {
+      const v = String(fd.get(nyckel) ?? '').trim();
+      if (v) ny[nyckel] = v;
+    }
+    spara(NYCKLAR.profil, ny);
+    spara(NYCKLAR.onboardingKlar, true);
+    taBort(NYCKLAR.visaAlla);
+    location.href = '/';
+  });
+
+  document.querySelector('[data-hoppa]')?.addEventListener('click', () => {
+    spara(NYCKLAR.onboardingKlar, true);
+    location.href = '/';
+  });
+</script>
