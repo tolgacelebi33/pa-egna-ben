@@ -126,8 +126,15 @@ export default function Tvattmaskin() {
   const [handritad, setHandritad] = useState(3);
   const [status, setStatus] = useState(t('status.start'));
   const [rattFokus, setRattFokus] = useState(false);
+  // Mätläge: ?filter=hela lägger filtret över hela figuren, för jämförelse med standardläget
+  // där bara stillastående delar filtreras och trumma, vatten och rör ritas utan filter.
+  const [helaFiltrerad, setHelaFiltrerad] = useState(false);
+  useEffect(() => {
+    setHelaFiltrerad(new URLSearchParams(window.location.search).get('filter') === 'hela');
+  }, []);
 
-  const smal = useMediaQuery('(max-width: 640px)');
+  // Mobil först: serverrenderingen antar smal skärm, så att mobilen inte får ett layouthopp.
+  const smal = useMediaQuery('(max-width: 640px)', true);
   const reduceraRorelse = useMediaQuery('(prefers-reduced-motion: reduce)');
 
   const svgRef = useRef(null);
@@ -335,6 +342,9 @@ export default function Tvattmaskin() {
   );
 
   const rattVinkel = vinkelFor(program);
+  const filter = handritad > 0 ? 'url(#handritad)' : undefined;
+  const fYttre = helaFiltrerad ? filter : undefined;
+  const f = helaFiltrerad ? undefined : filter;
 
   return (
     <div className="figur">
@@ -362,7 +372,8 @@ export default function Tvattmaskin() {
             </clipPath>
           </defs>
 
-          <g filter={handritad > 0 ? 'url(#handritad)' : undefined} className="bleck">
+          <g filter={fYttre} className="bleck">
+            <g filter={f}>
             {/* Skugga på golvet */}
             <polygon className="skugga" points={poly([-8, -8, 0], [W + 34, -8, 0], [W + 34, D + 10, 0], [-8, D + 10, 0])} />
 
@@ -371,16 +382,20 @@ export default function Tvattmaskin() {
             <polyline className="detalj" points={poly([0, D - 16, H], [W, D - 16, H])} />
             <polygon className="yta-sida" points={poly([W, 0, 0], [W, D, 0], [W, D, H], [W, 0, H])} />
             <polyline className="detalj" points={poly([W, 30, 40], [W, 30, H - 40])} />
+            </g>
 
             <g ref={frontRef} transform={M_FRONT}>
               {genomskarning && (
                 <>
-                  <path d={SNITT} className="halrum" />
-                  <circle cx={LUCKA.cx} cy={LUCKA.cy} r={BALJA_R} className="balja" />
+                  <g filter={f}>
+                    <path d={SNITT} className="halrum" />
+                    <circle cx={LUCKA.cx} cy={LUCKA.cy} r={BALJA_R} className="balja" />
+                  </g>
                   {insida('url(#klipp-snitt)')}
                 </>
               )}
 
+              <g filter={f}>
               {genomskarning ? (
                 <path
                   className="yta-front"
@@ -391,13 +406,6 @@ export default function Tvattmaskin() {
                 <rect className="yta-front" x="0" y="0" width={W} height={H} />
               )}
               {genomskarning && <path d={SNITT} className="snittkant" />}
-              {genomskarning && (
-                <path
-                  clipPath="url(#klipp-snitt)"
-                  className={`ror ${igang ? 'flodar' : ''}`}
-                  d="M44 60 C44 92 80 70 104 82"
-                />
-              )}
 
               <line className="detalj" x1="0" y1="60" x2={W} y2="60" />
               <line className="detalj" x1="0" y1="256" x2={W} y2="256" />
@@ -472,13 +480,31 @@ export default function Tvattmaskin() {
                 <>
                   <circle cx={LUCKA.cx} cy={LUCKA.cy} r={RING_R} className="lucka-ring" />
                   <circle cx={LUCKA.cx} cy={LUCKA.cy} r={GLAS_R + 7} className="lucka-fals" />
+                </>
+              )}
+              </g>
+
+              {genomskarning && (
+                <path
+                  clipPath="url(#klipp-snitt)"
+                  className={`ror ${igang ? 'flodar' : ''}`}
+                  d="M44 60 C44 92 80 70 104 82"
+                />
+              )}
+
+              {!genomskarning && (
+                <>
                   {insida('url(#klipp-glas)')}
-                  <circle cx={LUCKA.cx} cy={LUCKA.cy} r={GLAS_R} className="glas" />
-                  <path className="glans" d={`M${LUCKA.cx - 40} ${LUCKA.cy - 18} A44 44 0 0 1 ${LUCKA.cx + 8} ${LUCKA.cy - 44}`} />
-                  <rect className="handtag" x="183" y="150" width="11" height="30" rx="4" />
+                  <g filter={f}>
+                    <circle cx={LUCKA.cx} cy={LUCKA.cy} r={GLAS_R} className="glas" />
+                    <path className="glans" d={`M${LUCKA.cx - 40} ${LUCKA.cy - 18} A44 44 0 0 1 ${LUCKA.cx + 8} ${LUCKA.cy - 44}`} />
+                    <rect className="handtag" x="183" y="150" width="11" height="30" rx="4" />
+                  </g>
                 </>
               )}
             </g>
+
+            <g filter={f}>
 
             {/* Tvättkorgar */}
             {KORGAR.map((k) => (
@@ -523,6 +549,7 @@ export default function Tvattmaskin() {
                 <polyline className="detalj" points={poly([k.x0 + 6, KORG_Y1, KORG_H - 12], [k.x1 - 6, KORG_Y1, KORG_H - 12])} />
               </g>
             ))}
+            </g>
           </g>
 
           {/* Korgarnas namn och etiketter ritas utan filter så att de är lätta att läsa */}

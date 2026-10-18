@@ -3,7 +3,7 @@
 import { chromium, webkit } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
 
-const URL = process.env.SPIKE_URL ?? 'http://localhost:4322/';
+const ADRESS = process.env.SPIKE_URL ?? 'http://localhost:4322/';
 const UT = new URL('../rapport/', import.meta.url).pathname;
 mkdirSync(UT, { recursive: true });
 const resultat = {};
@@ -55,7 +55,7 @@ const browser = await chromium.launch();
 for (const [namn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   const ctx = await browser.newContext(profil);
   const page = await ctx.newPage();
-  await page.goto(URL, { waitUntil: 'networkidle' });
+  await page.goto(ADRESS, { waitUntil: 'networkidle' });
   await page.screenshot({ path: `${UT}${namn}-1-start.png`, fullPage: false });
   await korSteg(page);
   await page.getByRole('button', { name: 'Starta tvätten' }).click();
@@ -87,7 +87,7 @@ for (const [namn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
     uploadThroughput: (750 * 1024) / 8,
   });
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
-  await page.goto(URL, { waitUntil: 'load' });
+  await page.goto(ADRESS, { waitUntil: 'load' });
   // Väntar tills React-ön har hydrerat (knapparna reagerar).
   await page.waitForFunction(() => document.querySelector('astro-island:not([ssr])') !== null, null, { timeout: 30000 });
   const tid = await page.evaluate(() => {
@@ -126,7 +126,7 @@ for (const [namn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
 {
   const ctx = await browser.newContext(MOBIL);
   const page = await ctx.newPage();
-  await page.goto(URL, { waitUntil: 'networkidle' });
+  await page.goto(ADRESS, { waitUntil: 'networkidle' });
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null || true);
   const cache = await page.evaluate(async () => {
@@ -163,7 +163,7 @@ for (const [namn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
 {
   const ctx = await browser.newContext({ ...DATOR, reducedMotion: 'reduce' });
   const page = await ctx.newPage();
-  await page.goto(URL, { waitUntil: 'networkidle' });
+  await page.goto(ADRESS, { waitUntil: 'networkidle' });
   const fokusordning = [];
   for (let i = 0; i < 14; i++) {
     await page.keyboard.press('Tab');
@@ -206,7 +206,7 @@ for (const [namn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
 {
   const ctx = await browser.newContext(DATOR);
   const page = await ctx.newPage();
-  await page.goto(URL, { waitUntil: 'networkidle' });
+  await page.goto(ADRESS, { waitUntil: 'networkidle' });
   const box = await page.locator('.ratt .ratt-knopp').boundingBox();
   const cx = box.x + box.width / 2;
   const cy = box.y + box.height / 2;
@@ -227,22 +227,28 @@ for (const [namn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
 await browser.close();
 
 // 6. WebKit (närmast Safari på iPhone som går att köra här)
-{
+for (const lage of ['standard', 'hela']) {
   const wk = await webkit.launch();
   const ctx = await wk.newContext(MOBIL);
   const page = await ctx.newPage();
-  await page.goto(URL, { waitUntil: 'networkidle' });
+  await page.goto(lage === 'hela' ? `${ADRESS}?filter=hela` : ADRESS, { waitUntil: 'networkidle' });
   await korSteg(page);
   await page.getByRole('button', { name: 'Starta tvätten' }).click();
   await page.waitForTimeout(3000);
-  await page.locator('.scen').screenshot({ path: `${UT}webkit-mobil-tvattar.png` });
-  logg('webkit_bildrutor_handritad3', await matBildrutor(page, 3));
+  await page.locator('.scen').screenshot({ path: `${UT}webkit-mobil-tvattar-${lage}.png` });
+  logg(`webkit_${lage}_handritad3`, await matBildrutor(page, 3));
+  await page.locator('input[type=range]').fill('0');
+  await page.waitForTimeout(300);
+  logg(`webkit_${lage}_handritad0`, await matBildrutor(page, 3));
+  await page.locator('input[type=range]').fill('10');
+  await page.waitForTimeout(300);
+  logg(`webkit_${lage}_handritad10`, await matBildrutor(page, 3));
   const sw = await page.evaluate(async () => {
     if (!('serviceWorker' in navigator)) return 'saknas';
     const reg = await Promise.race([navigator.serviceWorker.ready, new Promise((r) => setTimeout(() => r(null), 5000))]);
     return reg ? 'registrerad' : 'inte klar inom 5 s';
   });
-  logg('webkit_service_worker', sw);
+  logg(`webkit_${lage}_service_worker`, sw);
   await wk.close();
 }
 

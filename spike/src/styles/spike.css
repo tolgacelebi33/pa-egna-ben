@@ -67,6 +67,11 @@ h1 {
   gap: 1rem;
 }
 
+/* Grid-barn får annars minst sin innehållsbredd, och den vågräta figurlistan trycker ut sidan. */
+.figurvy > * {
+  min-width: 0;
+}
+
 .figurlista ul {
   display: flex;
   gap: 0.5rem;
@@ -185,6 +190,10 @@ h1 {
 
 .korg-namn { font-size: 15px; font-weight: 600; fill: var(--blacket); }
 
+/* Etiketterna får inte ta emot klick, då hamnar de över ratten. */
+.etikett,
+.etikett-nr,
+.korg-namn { pointer-events: none; }
 .etikett path { fill: none; stroke: var(--blacket); stroke-width: 1.5; }
 .etikett circle { fill: var(--lera); stroke: var(--blacket); stroke-width: 1.5; }
 .etikett text { font-size: 15px; font-weight: 600; fill: var(--blacket); paint-order: stroke; stroke: var(--papper); stroke-width: 4px; }

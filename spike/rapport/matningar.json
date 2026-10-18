@@ -1,0 +1,124 @@
+{
+  "laddning_slow4g_cpu4x": {
+    "fcp_ms": 376,
+    "dom_klar_ms": 401,
+    "load_ms": 402,
+    "hydrerad_ms": 923,
+    "overfort_kB": 80.9
+  },
+  "bildrutor_cpu4x_handritad3_snitt": {
+    "bildrutor": 240,
+    "median_ms": 16.7,
+    "p95_ms": 16.8,
+    "over_25ms_andel": 0
+  },
+  "bildrutor_cpu4x_handritad3_lucka": {
+    "bildrutor": 240,
+    "median_ms": 16.7,
+    "p95_ms": 16.7,
+    "over_25ms_andel": 0
+  },
+  "bildrutor_cpu4x_handritad0_snitt": {
+    "bildrutor": 240,
+    "median_ms": 16.7,
+    "p95_ms": 16.8,
+    "over_25ms_andel": 0
+  },
+  "bildrutor_cpu4x_handritad0_lucka": {
+    "bildrutor": 240,
+    "median_ms": 16.7,
+    "p95_ms": 16.7,
+    "over_25ms_andel": 0
+  },
+  "bildrutor_cpu4x_handritad10_snitt": {
+    "bildrutor": 240,
+    "median_ms": 16.7,
+    "p95_ms": 16.7,
+    "over_25ms_andel": 0
+  },
+  "bildrutor_cpu4x_handritad10_lucka": {
+    "bildrutor": 240,
+    "median_ms": 16.7,
+    "p95_ms": 16.7,
+    "over_25ms_andel": 0
+  },
+  "offline_cache": {
+    "cacher": [
+      "workbox-precache-v2-http://localhost:4322/"
+    ],
+    "poster": 8
+  },
+  "offline_omladdning": {
+    "http": 200,
+    "fran_sw": true,
+    "rubrik": "Tvättmaskinen",
+    "status": "Tvätten ligger osorterad bredvid maskinen.",
+    "fran_service_worker": true
+  },
+  "tabbordning": [
+    "Tvättmaskinen",
+    "Programratt",
+    "Sortera tvätten",
+    "Vrid ratten",
+    "Välj temperatur",
+    "Starta tvätten",
+    "Börja om",
+    "INPUT",
+    "INPUT",
+    "Fas 0, testsida. Utkast, ej gr",
+    "Tvättmaskinen",
+    "Programratt",
+    "Sortera tvätten",
+    "Vrid ratten"
+  ],
+  "ratt_tangentbord": {
+    "tva_hoger": "Program 2",
+    "end": "Program 5",
+    "vanster": "Program 4"
+  },
+  "reducerad_rorelse": {
+    "trumma_fore": "rotate(0.00 110 165)",
+    "trumma_efter": "rotate(0.00 110 165)",
+    "snurrar_inte": true,
+    "status": "Maskinen fyller på vatten och trumman snurrar."
+  },
+  "ratt_dra": "0,0,0,1,1,2,2,3,3,3,4,4,4",
+  "webkit_standard_handritad3": {
+    "bildrutor": 180,
+    "median_ms": 17,
+    "p95_ms": 19,
+    "over_25ms_andel": 0
+  },
+  "webkit_standard_handritad0": {
+    "bildrutor": 180,
+    "median_ms": 17,
+    "p95_ms": 19,
+    "over_25ms_andel": 0
+  },
+  "webkit_standard_handritad10": {
+    "bildrutor": 180,
+    "median_ms": 17,
+    "p95_ms": 19,
+    "over_25ms_andel": 0
+  },
+  "webkit_standard_service_worker": "registrerad",
+  "webkit_hela_handritad3": {
+    "bildrutor": 128,
+    "median_ms": 23,
+    "p95_ms": 24,
+    "over_25ms_andel": 0.008
+  },
+  "webkit_hela_handritad0": {
+    "bildrutor": 180,
+    "median_ms": 17,
+    "p95_ms": 19,
+    "over_25ms_andel": 0
+  },
+  "webkit_hela_handritad10": {
+    "bildrutor": 142,
+    "median_ms": 23,
+    "p95_ms": 24,
+    "over_25ms_andel": 0.007
+  },
+  "webkit_hela_service_worker": "registrerad"
+}
