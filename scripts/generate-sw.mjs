@@ -33,8 +33,17 @@ const { count, size, warnings } = await generateSW({
   cleanupOutdatedCaches: true,
   clientsClaim: true,
   skipWaiting: true,
-  navigateFallback: '/404.html',
-  navigateFallbackDenylist: [/^\/sokindex\.json$/],
+  // ?q= används av söksidan. Utan detta matchar /sok/?q=... inte den förcachade sidan.
+  ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^q$/],
+  // Sidor som inte finns i förcachen hämtas från nätet. Bara utan nät visas 404-sidan.
+  // (navigateFallback skickade alla sådana sidor till 404 även med nät, se rapporten för fas 1.)
+  runtimeCaching: [
+    {
+      urlPattern: ({ request }) => request.mode === 'navigate',
+      handler: 'NetworkOnly',
+      options: { precacheFallback: { fallbackURL: '/404.html' } },
+    },
+  ],
 });
 
 for (const w of warnings) console.warn(w);

@@ -1,0 +1,382 @@
+[
+  {
+    "namn": "axe mobil light /",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /kategori/tvatt/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /amne/akut-brand/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /amne/fixa-el-granser/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /amne/tvatt-tvattstugan/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /figur/tvattmaskin/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /kom-igang/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /installningar/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /foraldralage/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /ansvarsfriskrivning/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /kallor-och-granskning/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /sok/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "mobil light inga konsolfel",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /kategori/tvatt/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /amne/akut-brand/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /amne/fixa-el-granser/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /amne/tvatt-tvattstugan/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /figur/tvattmaskin/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /kom-igang/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /installningar/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /foraldralage/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /ansvarsfriskrivning/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /kallor-och-granskning/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /sok/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "mobil dark inga konsolfel",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /kategori/tvatt/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /amne/akut-brand/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /amne/fixa-el-granser/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /amne/tvatt-tvattstugan/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /figur/tvattmaskin/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /kom-igang/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /installningar/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /foraldralage/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /ansvarsfriskrivning/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /kallor-och-granskning/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /sok/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "dator light inga konsolfel",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "dator dark inga konsolfel",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "startsidan visar Anpassa appen första gången",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "efter onboarding döljs Anpassa-rutan",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "egen tvättmaskin döljer tvättstugan och visar tvättmaskinen",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "raden om dolda ämnen visas",
+    "ok": true,
+    "detalj": "1 ämne är dolt utifrån dina val."
+  },
+  {
+    "namn": "Visa alla ämnen visar det dolda",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "hyresrätt döljer andrahandsämnet",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "ingen diskmaskin döljer diskmaskinsämnet",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "kommunrutan nämner angiven kommun",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "tidigare svar är ifyllda",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "mörkt läge sätts",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "mörkt läge finns kvar efter omladdning",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "Radera mina uppgifter tar bort allt",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "temat återställs vid radering",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "efter radering visas allt igen",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "Hoppa över döljer rutan även efter omladdning",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "sökning på \"tvatt\" ger träffar",
+    "ok": true,
+    "detalj": "2 träffar"
+  },
+  {
+    "namn": "sökstatus läses upp",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "/sok/?q= söker direkt",
+    "ok": true,
+    "detalj": "1 träffar"
+  },
+  {
+    "namn": "offline /amne/akut-brand/",
+    "ok": true,
+    "detalj": "200 \"Det brinner: vad man gör\" från service worker: true"
+  },
+  {
+    "namn": "offline /amne/nar-det-brinner/",
+    "ok": true,
+    "detalj": "200 \"Det brinner eller ryker\" från service worker: true"
+  },
+  {
+    "namn": "offline /kategori/nar/",
+    "ok": true,
+    "detalj": "200 \"Vad gör jag när...\" från service worker: true"
+  },
+  {
+    "namn": "offline /amne/pengar-budget/",
+    "ok": true,
+    "detalj": "200 \"Göra en budget och följa upp den\" från service worker: true"
+  },
+  {
+    "namn": "sökningen fungerar offline",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "okänd sida offline visar 404-sidan",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "föräldraläget räknar avbockade",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "delad länk innehåller bara ämnes-id",
+    "ok": true,
+    "detalj": "http://localhost:4323/foraldralage/#klara=flytt-checklista-fore,pengar-budget"
+  },
+  {
+    "namn": "länken öppnar listan med samma avbockningar",
+    "ok": true,
+    "detalj": "2 ikryssade"
+  },
+  {
+    "namn": "rutan om delad länk visas",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "akutrutan kommer före brödtexten",
+    "ok": true,
+    "detalj": "ruta ruta-utkast, ruta ruta-akut, ruta ruta-varning"
+  },
+  {
+    "namn": "akutrutan har ringlänk från kontaktfilen",
+    "ok": true,
+    "detalj": "tel:112"
+  },
+  {
+    "namn": "Rapportera fel har ämnets id",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "utkastmarkering syns",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "senast kontrollerad visas",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "första tabbstoppet är Hoppa till innehållet",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "Hoppa till innehållet flyttar fokus",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "figurens status stämmer vid reducerad rörelse",
+    "ok": true,
+    "detalj": "Maskinen tvättar. Animationen är avstängd eftersom din enhet är inställd på minskad rörelse."
+  }
+]
