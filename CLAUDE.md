@@ -37,6 +37,8 @@ Ingenting nedan är verifierat. Fas 0 finns för att testa det.
 - Tillgänglighet: målet är WCAG 2.1 AA. Tangentbordsnavigering, synligt fokus, tillräcklig kontrast, `prefers-reduced-motion` respekteras, alla figurer har en textversion av samma kunskap.
 - Ingen spårning, inga tredjepartsskript för analys eller annonser, inga externa typsnitt som laddas från tredje part i produktion (lägg typsnitt lokalt).
 
+> Beslut efter fas 3 (se `docs/BESLUT.md`): figurerna är riktig 3D med three.js, inte SVG.
+
 **Kandidat att testa i fas 0 (inte vald):**
 - Astro med React-komponenter för de interaktiva figurerna, Astros content collections för innehåll och schemavalidering, och en PWA-plugin för offline.
 - Figurer som SVG-komponenter där varje rörlig del är ett eget element. Handritad känsla och papperskorn via SVG-filter (till exempel turbulens och förskjutning) är en hypotes som ska testas.
