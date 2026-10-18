@@ -9,7 +9,7 @@ export const FIGURER = [
   { id: 'huvudkran', titel: 'Huvudkranen', klar: true },
   { id: 'diskmaskin', titel: 'Diskmaskinen', klar: true },
   { id: 'spis', titel: 'Spis, ugn och induktion', klar: true },
-  { id: 'dammsugare', titel: 'Dammsugaren', klar: false },
+  { id: 'dammsugare', titel: 'Dammsugaren', klar: true },
   { id: 'tavla', titel: 'Väggen i genomskärning', klar: false },
   { id: 'paslakan', titel: 'Påslakanet', klar: false },
   { id: 'cykel', titel: 'Cykeln', klar: false },

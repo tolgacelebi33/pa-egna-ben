@@ -18,6 +18,8 @@ import Diskmaskin from '../figurer/diskmaskin/Diskmaskin.jsx';
 import DiskmaskinText from '../figurer/diskmaskin/Textversion.astro';
 import Spis from '../figurer/spis/Spis.jsx';
 import SpisText from '../figurer/spis/Textversion.astro';
+import Dammsugare from '../figurer/dammsugare/Dammsugare.jsx';
+import DammsugareText from '../figurer/dammsugare/Textversion.astro';
 
 interface Props {
   id: string;
@@ -38,6 +40,7 @@ const { id, del } = Astro.props;
       {id === 'huvudkran' && <Huvudkran client:visible />}
       {id === 'diskmaskin' && <Diskmaskin client:visible />}
       {id === 'spis' && <Spis client:visible />}
+      {id === 'dammsugare' && <Dammsugare client:visible />}
     </>
   ) : (
     <>
@@ -50,6 +53,7 @@ const { id, del } = Astro.props;
       {id === 'huvudkran' && <HuvudkranText />}
       {id === 'diskmaskin' && <DiskmaskinText />}
       {id === 'spis' && <SpisText />}
+      {id === 'dammsugare' && <DammsugareText />}
     </>
   )
 }
