@@ -5,6 +5,8 @@ import Tvattmaskin from '../../figurer/tvattmaskin/Tvattmaskin.jsx';
 import TvattmaskinText from '../../figurer/tvattmaskin/Textversion.astro';
 import Brandvarnare from '../../figurer/brandvarnare/Brandvarnare.jsx';
 import BrandvarnareText from '../../figurer/brandvarnare/Textversion.astro';
+import Elskap from '../../figurer/elskap/Elskap.jsx';
+import ElskapText from '../../figurer/elskap/Textversion.astro';
 import { t } from '../../i18n/index.js';
 import { FIGURER } from '../../data/figurer.js';
 import { hamtaAmnen, figurUrl } from '../../lib/innehall.js';
@@ -45,6 +47,7 @@ const amnen = (await hamtaAmnen()).filter((p) => p.data.figur === fig.id);
       {!fig.klar && <p>{t('figurer.inte.klar')}</p>}
       {fig.id === 'tvattmaskin' && <Tvattmaskin client:visible />}
       {fig.id === 'brandvarnare' && <Brandvarnare client:visible />}
+      {fig.id === 'elskap' && <Elskap client:visible />}
 
       {
         fig.klar && (
@@ -52,6 +55,7 @@ const amnen = (await hamtaAmnen()).filter((p) => p.data.figur === fig.id);
             <h2 id="textversion-rubrik">{t('figurer.text.rubrik')}</h2>
             {fig.id === 'tvattmaskin' && <TvattmaskinText />}
             {fig.id === 'brandvarnare' && <BrandvarnareText />}
+            {fig.id === 'elskap' && <ElskapText />}
           </section>
         )
       }

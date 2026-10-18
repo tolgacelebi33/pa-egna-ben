@@ -2,6 +2,7 @@ import svBas from './sv.js';
 import en from './en.js';
 import tvattmaskinSv from '../figurer/tvattmaskin/sv.js';
 import brandvarnareSv from '../figurer/brandvarnare/sv.js';
+import elskapSv from '../figurer/elskap/sv.js';
 
 // Figurernas texter ligger bredvid figuren och läggs in här med figurens id som prefix.
 const medPrefix = (prefix, ordlista) =>
@@ -11,6 +12,7 @@ const sv = {
   ...svBas,
   ...medPrefix('tvattmaskin', tvattmaskinSv),
   ...medPrefix('brandvarnare', brandvarnareSv),
+  ...medPrefix('elskap', elskapSv),
 };
 const ordlistor = { sv, en };
 let sprak = 'sv';

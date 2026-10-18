@@ -30,6 +30,16 @@
     "detalj": ""
   },
   {
+    "namn": "axe mobil light /figur/brandvarnare/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil light /figur/elskap/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
     "namn": "axe mobil light /kom-igang/",
     "ok": true,
     "detalj": ""
@@ -95,6 +105,16 @@
     "detalj": ""
   },
   {
+    "namn": "axe mobil dark /figur/brandvarnare/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe mobil dark /figur/elskap/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
     "namn": "axe mobil dark /kom-igang/",
     "ok": true,
     "detalj": ""
@@ -156,6 +176,16 @@
   },
   {
     "namn": "axe dator light /figur/tvattmaskin/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /figur/brandvarnare/",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "axe dator light /figur/elskap/",
     "ok": true,
     "detalj": ""
   },
@@ -378,5 +408,60 @@
     "namn": "figurens status stämmer vid reducerad rörelse",
     "ok": true,
     "detalj": "Maskinen tvättar. Animationen är avstängd eftersom din enhet är inställd på minskad rörelse."
+  },
+  {
+    "namn": "brandvarnare: testknappen fungerar med Enter",
+    "ok": true,
+    "detalj": "Brandvarnaren larmar. Animationen är avstängd eftersom din enhet är inställd på minskad rörelse."
+  },
+  {
+    "namn": "brandvarnare: status stämmer vid reducerad rörelse",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "brandvarnare: batteribyte kräver öppen brandvarnare",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "brandvarnare: batteriet byts när den är öppen",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "brandvarnare: ljudet är avstängt från början",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "elskåp: överlast löser ut köksäkringen direkt vid reducerad rörelse",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "elskåp: säkringen löser ut igen med för många apparater",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "elskåp: säkringen går att slå på med tangentbord efter att en apparat dragits ur",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "elskåp: testknappen löser ut jordfelsbrytaren",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "elskåp: alla lampor slocknar",
+    "ok": true,
+    "detalj": ""
+  },
+  {
+    "namn": "elskåp: jordfelsbrytaren går att slå på igen",
+    "ok": true,
+    "detalj": ""
   }
 ]

@@ -18,6 +18,8 @@ const SIDOR = [
   '/amne/fixa-el-granser/',
   '/amne/tvatt-tvattstugan/',
   '/figur/tvattmaskin/',
+  '/figur/brandvarnare/',
+  '/figur/elskap/',
   '/kom-igang/',
   '/installningar/',
   '/foraldralage/',
@@ -245,6 +247,45 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   const status = (await page.locator('.figur-tvattmaskin .status').textContent()) ?? '';
   kontroll('figurens status stämmer vid reducerad rörelse', status.includes('Animationen är avstängd'), status);
   await page.locator('.figur-tvattmaskin .scen').screenshot({ path: `${UT}figur-i-appen.png` });
+  await ctx.close();
+}
+
+// 10. Fas 3: brandvarnaren och elskåpet med tangentbord och reducerad rörelse
+{
+  const ctx = await browser.newContext({ ...DATOR, reducedMotion: 'reduce' });
+  const page = await ctx.newPage();
+  await page.goto(BAS + '/figur/brandvarnare/', { waitUntil: 'networkidle' });
+  await page.waitForSelector('.figur-brandvarnare .testknapp');
+  await page.locator('.figur-brandvarnare .testknapp').focus();
+  await page.keyboard.press('Enter');
+  const bvStatus = (await page.locator('.figur-brandvarnare .status').textContent()) ?? '';
+  kontroll('brandvarnare: testknappen fungerar med Enter', bvStatus.includes('larmar'), bvStatus);
+  kontroll('brandvarnare: status stämmer vid reducerad rörelse', bvStatus.includes('Animationen är avstängd'));
+  await page.getByRole('button', { name: 'Byt batteriet' }).click();
+  kontroll('brandvarnare: batteribyte kräver öppen brandvarnare', ((await page.locator('.figur-brandvarnare .status').textContent()) ?? '').includes('Öppna'));
+  await page.getByRole('button', { name: 'Öppna brandvarnaren' }).click();
+  await page.getByRole('button', { name: 'Byt batteriet' }).click();
+  kontroll('brandvarnare: batteriet byts när den är öppen', ((await page.locator('.figur-brandvarnare .status').textContent()) ?? '').includes('bytt'));
+  kontroll('brandvarnare: ljudet är avstängt från början', !(await page.getByLabel('Spela upp ljud').isChecked()));
+
+  await page.goto(BAS + '/figur/elskap/', { waitUntil: 'networkidle' });
+  await page.waitForSelector('.figur-elskap .spak');
+  await page.getByRole('button', { name: 'Koppla in fler apparater i köket' }).click();
+  const kok = page.getByRole('switch', { name: 'Säkring 1, Kök' });
+  kontroll('elskåp: överlast löser ut köksäkringen direkt vid reducerad rörelse', (await kok.getAttribute('aria-checked')) === 'false');
+  await kok.focus();
+  await page.keyboard.press('Enter');
+  kontroll('elskåp: säkringen löser ut igen med för många apparater', (await kok.getAttribute('aria-checked')) === 'false');
+  await page.getByRole('button', { name: 'Dra ur en apparat' }).click();
+  await kok.focus();
+  await page.keyboard.press(' ');
+  kontroll('elskåp: säkringen går att slå på med tangentbord efter att en apparat dragits ur', (await kok.getAttribute('aria-checked')) === 'true');
+  await page.getByRole('button', { name: 'Testknapp på jordfelsbrytaren' }).click();
+  const jfb = page.getByRole('switch', { name: 'Jordfelsbrytare' });
+  kontroll('elskåp: testknappen löser ut jordfelsbrytaren', (await jfb.getAttribute('aria-checked')) === 'false');
+  kontroll('elskåp: alla lampor slocknar', (await page.locator('.figur-elskap .rum.tand').count()) === 0);
+  await page.getByRole('button', { name: 'Slå på jordfelsbrytaren igen' }).click();
+  kontroll('elskåp: jordfelsbrytaren går att slå på igen', (await page.locator('.figur-elskap .rum.tand').count()) === 4);
   await ctx.close();
 }
 
