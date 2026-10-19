@@ -3,6 +3,7 @@ import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as k from "../../vendor/anatomy/kit/iso-kit.mjs";
+import * as G from "../../vendor/anatomy/kit/lathe.mjs";
 import { kitScript } from "../../vendor/anatomy/scripts/inline-kit.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -20,7 +21,7 @@ const TOP = 256;
 const SHELVES = [138, 192];
 const DOOR_T = 6;
 const DOOR_W = W;
-const CRISP_OUT = 40;
+const CRISP_OUT = 50;
 const FRZ_OUT = 64;
 const OPEN = { x0: 6, x1: W - 6, z0: 58, z1: 96 };
 
@@ -36,6 +37,14 @@ const S = (paths, style) => k.solidSvg(paths, style);
 const L = (d, style) => k.lineSvg(d, style);
 const box = (x, y, w, d, z, h, style = {}, r = 1, bevel = 0) => S(k.slabOf({ x, y, w, d, r }, z, h, P, 3, bevel), { tone: "mid", ...style });
 const can = (x, y, r, z, h, style = {}) => S(k.cylinder(x, y, r, z, h, P, 28, 0.4), { tone: "mid", ...style });
+const ball = (x, y, z, r) => S(G.sphereOf([x, y, z + r], r, P), { tone: "mid" });
+const stem = (x, y, z) => L(k.segment([x, y, z], [x + 0.6, y, z + 2.6], P), { tone: "mid", free: "both" });
+const lying = (x, y, z, length, r) =>
+  S(G.solidOf([[0, r * 0.5], [r * 0.6, r], [length - r * 0.6, r], [length, r * 0.5]], G.frameAlong([x, y, z + r], [1, 0, 0]), P), { tone: "mid" });
+const bottle = (x, y, z, r, h) =>
+  S(G.solidOf([[0, r], [h * 0.6, r], [h * 0.8, r * 0.45], [h, r * 0.45]], G.frameAlong([x, y, z], [0, 0, 1]), P), { tone: "mid" }) + can(x, y, r * 0.55, z + h, 2.4, { tone: "lo" });
+// Ritar delar bakifrån och fram.
+const inDepth = (items) => items.sort((a, b) => k.depthOf(a[0], P) - k.depthOf(b[0], P)).map(([, svg]) => svg).join("");
 const quad = (points) => k.pathOf(points.map(at), true);
 const frontText = (x, y, z, text, size = 4, tone = "mid") => k.faceTextSvg(k.sideMatrix([x, y], z, P, "left"), text, { size, tone, anchor: "middle" });
 const topText = (x, y, z, text, size = 3, tone = "mid") => k.faceTextSvg(k.topMatrix([x, y], z, P, "x"), text, { size, tone, anchor: "middle" });
@@ -90,12 +99,20 @@ function crisper() {
   const y = 18;
   const d = 86;
   out.push(box(12, y, W - 24, 2, FLOOR, 22));
-  out.push(box(12, y, 2, d, FLOOR, 22));
+  out.push(box(12, y, 2, d, FLOOR, 14));
   out.push(box(12, y, W - 24, d, FLOOR, 2));
-  out.push(`<g data-station="2">${box(22, 30, 40, 12, FLOOR + 2, 16, { tone: "hi" }, 5)}${box(66, 30, 34, 12, FLOOR + 2, 18, { tone: "hi" }, 5)}${can(34, 60, 8, FLOOR + 2, 14, { tone: "hi" })}${can(54, 62, 7, FLOOR + 2, 13, { tone: "hi" })}${box(70, 54, 28, 10, FLOOR + 2, 12, { tone: "hi" }, 4)}</g>`);
-  out.push(box(W - 14, y, 2, d, FLOOR, 22));
-  out.push(box(10, y + d - 2, W - 20, 4, FLOOR, 26, {}, 1, 0.3));
-  out.push(box(44, y + d + 2, 32, 2, FLOOR + 18, 3, { tone: "lo" }));
+  out.push(`<g data-station="2">${inDepth([
+    [[32, 40, 0], ball(32, 40, FLOOR + 2, 11)],
+    [[74, 36, 0], lying(52, 36, FLOOR + 2, 46, 4.5)],
+    [[78, 50, 0], lying(58, 50, FLOOR + 2, 40, 4)],
+    [[34, 74, 0], ball(34, 74, FLOOR + 2, 6.5) + stem(34, 74, FLOOR + 15)],
+    [[52, 80, 0], ball(52, 80, FLOOR + 2, 6.5) + stem(52, 80, FLOOR + 15)],
+    [[72, 76, 0], ball(72, 76, FLOOR + 2, 5.5)],
+    [[88, 78, 0], ball(88, 78, FLOOR + 2, 5.5)],
+  ])}</g>`);
+  out.push(box(W - 14, y, 2, d, FLOOR, 14));
+  out.push(box(10, y + d - 2, W - 20, 4, FLOOR, 14, {}, 1, 0.3));
+  out.push(box(44, y + d + 2, 32, 2, FLOOR + 8, 3, { tone: "lo" }));
   return `<g data-part="gron">${out.join("")}</g>`;
 }
 
@@ -109,7 +126,7 @@ function fridge() {
   out.push(box(0, 0, T, D, FLOOR, CEIL - FLOOR));
   out.push(box(T, 0, W - T * 2, T, FLOOR, CEIL - FLOOR));
   // Gångjärnen ritas före lådan, som kan dras ut framför dem.
-  for (const z of [FLOOR + 4, TOP - 12]) out.push(box(-DOOR_T - 1, D - 3, DOOR_T + 1, 4, z, 8, { tone: "lo" }));
+  out.push(box(-DOOR_T - 1, D - 3, DOOR_T + 1, 4, FLOOR + 4, 8, { tone: "lo" }));
   out.push(crisper());
   out.push(shelf(SHELVES[0]));
   const s1 = SHELVES[0] + 2;
@@ -119,7 +136,9 @@ function fridge() {
   const s2 = SHELVES[1] + 2;
   out.push(box(16, 50, 32, 26, s2, 14, {}, 3, 0.4));
   out.push(L(k.sideSeam({ x: 16, y: 50, w: 32, d: 26, r: 3 }, s2 + 11, P, 3), { tone: "lo" }));
-  out.push(can(92, 50, 8, s2, 18));
+  out.push(frontText(32, 76, s2 + 7.5, "RESTER", 3.4, "mid"));
+  out.push(can(92, 50, 8, s2, 16));
+  out.push(can(92, 50, 8.4, s2 + 16, 3, { tone: "lo" }));
   out.push(`<g data-station="0">${box(64, 82, 12, 3, s2, 22, { tone: "hi" }, 1)}${frontText(70, 85, s2 + 16, "4°", 5, "hi")}${L(k.segment([70, 85, s2 + 9], [70, 85, s2 + 3], P), { tone: "hi", free: "both" })}</g>`);
 
   out.push(box(W - T, 0, T, D, FLOOR, CEIL - FLOOR));
@@ -134,15 +153,16 @@ const INWARD = [Math.sin(SWING), -Math.cos(SWING)];
 const onDoor = (u, v) => [ALONG[0] * u + INWARD[0] * v, D + ALONG[1] * u + INWARD[1] * v];
 const doorSlab = (u0, u1, v0, v1, z, h, style = {}) =>
   S(k.extrude([onDoor(u0, v0), onDoor(u1, v0), onDoor(u1, v1), onDoor(u0, v1)], z, h, P), { tone: "mid", ...style });
-const doorCan = (u, r, z, h) => { const [x, y] = onDoor(u, 6); return can(x, y, r, z, h); };
+const doorBottle = (u, r, z, h) => { const [x, y] = onDoor(u, 6); return bottle(x, y, z, r, h); };
 
 function door() {
   const out = [];
+  out.push(box(-DOOR_T - 1, D - 3, DOOR_T + 1, 4, TOP - 12, 8, { tone: "lo" }));
   out.push(doorSlab(0, DOOR_W, -DOOR_T, 0, FLOOR - 2, TOP - FLOOR + 2));
   out.push(`<path class="iso-line" data-tone="lo" d="${quad([[...onDoor(5, 0), FLOOR + 3], [...onDoor(DOOR_W - 5, 0), FLOOR + 3], [...onDoor(DOOR_W - 5, 0), TOP - 5], [...onDoor(5, 0), TOP - 5]])}"/>`);
   const bins = [
-    { z: 118, items: (z) => doorCan(22, 4.5, z, 26) + doorCan(36, 4.5, z, 22) + doorCan(50, 4, z, 24) },
-    { z: 162, items: (z) => doorCan(30, 4, z, 16) + doorCan(44, 4, z, 14) + doorSlab(64, 74, 1, 11, z, 30) },
+    { z: 118, items: (z) => doorBottle(22, 4.5, z, 30) + doorBottle(36, 4.5, z, 26) + doorBottle(50, 4, z, 28) },
+    { z: 162, items: (z) => doorBottle(30, 3.6, z, 20) + doorBottle(42, 3.6, z, 18) + doorSlab(62, 74, 1, 11, z, 28) + doorSlab(62.5, 73.5, 5.3, 6.7, z + 28, 3) },
     { z: 206, items: (z) => doorSlab(20, 42, 2, 10, z, 7) + doorSlab(70, 96, 2, 10, z, 10) },
   ];
   for (const { z, items } of bins) {
@@ -225,6 +245,16 @@ light();
 draw();
 `;
 
+// Aktivt läge i appens markeringsfärg (ockra), isen i frysen alltid blå.
+const LIT_CSS = [
+  ".iso-solid[data-lit]>.iso-fill,.iso-solid[data-lit]>.iso-top{fill:#fbecc4;stroke:#fbecc4}",
+  ...["#e9c87f", "#f0d595", "#f5dfaa", "#f9e8bd"].map((c, i) => `.iso-solid[data-lit]>.iso-shade[data-shade="${i}"]{fill:${c};stroke:${c}}`),
+  ".iso-solid[data-lit]>.iso-edge{stroke:#8a5a12;stroke-width:1.1px}",
+  ".iso-swatch[data-mark=lit] path{stroke:#8a5a12}",
+  ".is .iso-fill,.is .iso-top,.is .iso-shade{fill:#dfe8fb!important;stroke:none!important}",
+  ".is .iso-solid[data-lit]>.iso-edge{stroke:var(--anatomy-blue)}",
+].join("");
+
 const body = k.plateHtml({
   fig: "Fig 1",
   title: "Kyl och frys",
@@ -233,7 +263,7 @@ const body = k.plateHtml({
   keys: [{ mark: "lit", label: "Det som visas just nu" }],
   caption:
     "Kylen ska hålla 4 °C och frysen −18 °C eller kallare. Mät med en termometer, skalan på ratten visar inte grader. Källor: Livsmedelsverket, Electrolux.",
-  body: `<style>.is .iso-fill,.is .iso-top,.is .iso-shade{fill:#dfe8fb!important}</style><div class="iso-stage" tabindex="0" role="slider" aria-label="Kyl och frys: piltangenterna byter vad som visas" aria-valuemin="1" aria-valuemax="${STATIONS.length}" aria-valuenow="1">${svg}</div>`,
+  body: `<style>${LIT_CSS}</style><div class="iso-stage" tabindex="0" role="slider" aria-label="Kyl och frys: piltangenterna byter vad som visas" aria-valuemin="1" aria-valuemax="${STATIONS.length}" aria-valuenow="1">${svg}</div>`,
 });
 
 const page = k.pageHtml({ title: "Kyl och frys", theme: "light", body, script: kitScript() + live }).replace('<html lang="en">', '<html lang="sv">');
