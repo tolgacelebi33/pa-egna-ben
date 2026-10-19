@@ -1,0 +1,32 @@
+---
+// Figur byggd med anatomy-kitet (figurer-anatomy/<id>/build.mjs), visad som egen sida i en iframe.
+// Sidan berättar sin höjd med postMessage, så att iframen aldrig får egen rullning.
+import { url } from '../lib/url.js';
+
+interface Props {
+  id: string;
+  titel: string;
+}
+const { id, titel } = Astro.props;
+---
+
+<iframe class="anatomifigur" src={url(`figurer/anatomi/${id}.html?embed`)} title={titel} loading="lazy"></iframe>
+
+<script is:inline>
+  window.addEventListener('message', (e) => {
+    const hojd = e.data && e.data.anatomiHojd;
+    if (!hojd) return;
+    for (const f of document.querySelectorAll('iframe.anatomifigur')) if (f.contentWindow === e.source) f.style.height = `${hojd}px`;
+  });
+</script>
+
+<style>
+  .anatomifigur {
+    display: block;
+    width: 100%;
+    height: 1250px;
+    border: 0;
+    border-radius: var(--radie);
+    background: #f5f0e5;
+  }
+</style>

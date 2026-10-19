@@ -310,6 +310,8 @@ ${Object.entries(MATERIALS).map(([n, t]) => tones(n, t)).join("")}
 .scene{--krom-l:${MATERIALS.krom[0]};--krom-m:${MATERIALS.krom[1]};--krom-d:${MATERIALS.krom[2]};--por-l:${SWATCHES.mint[0]};--por-m:${SWATCHES.mint[1]};--por-d:${SWATCHES.mint[2]}}
 @media (prefers-reduced-motion:reduce){.manual .pill.next{animation:none}}
 .render *,.render *::before{transition:none!important;animation:none!important}
+.embed .kicker,.embed h1{display:none}
+.embed .page{padding-top:4px}
 @media (max-width:860px){.page{padding:14px 16px}h1{font-size:22px}.hint{font-size:17px;min-height:0}.layout{grid-template-columns:minmax(0,1fr);gap:12px}.steps{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}.pill{font-size:14px;padding:6px 10px 6px 6px}.pill .nr{width:26px;height:26px;font-size:13px}.stage{height:auto;order:-1}.stage svg{width:100%;height:auto}.reglage{margin-top:12px}}
 `;
 
@@ -476,6 +478,12 @@ document.querySelectorAll(".swatches button").forEach((b) => b.addEventListener(
   document.querySelectorAll(".swatches button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
 }));
 if (render) document.body.classList.add("render");
+// Inbäddad i appen: dölj egen rubrik och berätta sidans höjd för iframen.
+if (new URLSearchParams(location.search).has("embed")) {
+  document.body.classList.add("embed");
+  const tell = () => parent.postMessage({ anatomiHojd: Math.ceil(document.querySelector(".page").getBoundingClientRect().height) }, "*");
+  new ResizeObserver(tell).observe(document.querySelector(".page"));
+}
 window.seek = (time) => { draw(Math.min(TOUR, Math.max(0, time))); };
 window.TOUR = TOUR;
 setClip();
@@ -526,4 +534,5 @@ const html = `<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta n
 </body></html>`;
 
 writeFileSync(join(HERE, "cistern.html"), html);
+writeFileSync(join(HERE, "../../public/figurer/anatomi/cistern.html"), html);
 console.log("wrote cistern.html", (html.length / 1024).toFixed(0) + " kB");

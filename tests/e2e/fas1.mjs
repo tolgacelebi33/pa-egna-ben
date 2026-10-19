@@ -306,13 +306,17 @@ for (const [profilNamn, profil] of [['mobil', MOBIL], ['dator', DATOR]]) {
   for (const fig of figurer) {
     fel.length = 0;
     await page.goto(`${BAS}/figur/${fig.id}/`, { waitUntil: 'networkidle' });
-    const yta = page.locator('.figur .scen svg, .figur .scen img, .beslutstrad').first();
+    const yta = page.locator('.figur .scen svg, .figur .scen img, .beslutstrad, iframe.anatomifigur').first();
     await yta.waitFor({ timeout: 10000 }).catch(() => {});
     const forsta = page.locator('.figur3d-steg .chip, .figur3d-val .chip, .beslutstrad .svar').first();
     if (await forsta.count()) await forsta.click();
     await page.waitForTimeout(300);
     const bredd = await page.evaluate(() => document.documentElement.scrollWidth);
-    kontroll(`figur ${fig.id}: visas utan fel och ryms på mobil`, (await yta.count()) === 1 && fel.length === 0 && bredd <= 375, `${fel.join(' | ')} bredd ${bredd}`);
+    // Anatomifigurer är egna sidor i en iframe: de får inte heller rulla i sidled.
+    const ram = page.frames().find((f) => f.url().includes('/figurer/anatomi/'));
+    if (ram) await ram.evaluate(() => new Promise((r) => (document.readyState === 'complete' ? r() : addEventListener('load', r))));
+    const ramBred = ram ? await ram.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth) : false;
+    kontroll(`figur ${fig.id}: visas utan fel och ryms på mobil`, (await yta.count()) === 1 && fel.length === 0 && bredd <= 375 && !ramBred, `${fel.join(' | ')} bredd ${bredd}${ramBred ? ' iframe rullar i sidled' : ''}`);
   }
   await ctx.close();
 }

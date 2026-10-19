@@ -33,6 +33,8 @@ import { hamtaAmnen } from '../lib/innehall.js';
 import { amnenI } from '../figurer/beslutstrad/trad.js';
 import { nodnummer } from '../lib/kontakter.js';
 import BildFigur from '../figurer/delat/BildFigur.jsx';
+import AnatomiFigur from './AnatomiFigur.astro';
+import { figur } from '../data/figurer.js';
 
 interface Props {
   id: string;
@@ -40,7 +42,9 @@ interface Props {
 }
 const { id, del } = Astro.props;
 // Figurer som består av AI-bilder, ett läge per steg (filer i public/figurer/bilder/<id>/).
-const BILDLAGEN: Record<string, string[]> = {"cistern": ["grund", "spolar", "lacker"], "diskmaskin": ["oppen", "korg-ute", "filter"], "dammsugare": ["grund", "oppen", "munstycken", "filter"], "paslakan": ["steg1", "steg2", "steg3", "klar"], "cykel": ["grund", "punktering", "pump", "kedja"], "vattenlas": ["grund", "torr", "loss"], "spis": ["kastrull", "ugn-oppen"], "tavla": ["gips", "betong", "tra"], "faktura": ["grund"]};
+const BILDLAGEN: Record<string, string[]> = {"diskmaskin": ["oppen", "korg-ute", "filter"], "dammsugare": ["grund", "oppen", "munstycken", "filter"], "paslakan": ["steg1", "steg2", "steg3", "klar"], "cykel": ["grund", "punktering", "pump", "kedja"], "vattenlas": ["grund", "torr", "loss"], "spis": ["kastrull", "ugn-oppen"], "tavla": ["gips", "betong", "tra"], "faktura": ["grund"]};
+// Figurer gjorda med anatomy-kitet som egna sidor (public/figurer/anatomi/<id>.html).
+const ANATOMI = ['cistern'];
 const alla = id === 'beslutstrad' ? await hamtaAmnen() : [];
 const titlar = Object.fromEntries(amnenI().map((a) => [a, alla.find((p) => p.data.id === a)?.data.titel ?? a]));
 ---
@@ -50,6 +54,7 @@ const titlar = Object.fromEntries(amnenI().map((a) => [a, alla.find((p) => p.dat
     <>
       {BILDLAGEN[id] && <BildFigur client:visible id={id} lagen={BILDLAGEN[id]} />}
       {id === 'kyl' && <KylFigur client:visible />}
+      {ANATOMI.includes(id) && <AnatomiFigur id={id} titel={figur(id)?.titel ?? id} />}
       {id === 'tvattmaskin' && <Tvattmaskin client:visible />}
       {id === 'brandvarnare' && <Brandvarnare client:visible />}
       {id === 'elskap' && <Elskap client:visible />}

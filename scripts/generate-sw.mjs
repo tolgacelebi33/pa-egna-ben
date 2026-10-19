@@ -36,7 +36,7 @@ const { count, size, warnings } = await generateSW({
   clientsClaim: true,
   skipWaiting: true,
   // ?q= används av söksidan. Utan detta matchar /sok/?q=... inte den förcachade sidan.
-  ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^q$/],
+  ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^q$/, /^embed$/],
   // Sidor som inte finns i förcachen hämtas från nätet. Bara utan nät visas 404-sidan.
   // (navigateFallback skickade alla sådana sidor till 404 även med nät, se rapporten för fas 1.)
   runtimeCaching: [

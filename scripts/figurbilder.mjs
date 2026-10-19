@@ -20,7 +20,12 @@ for (const f of FIGURER.filter((x) => x.klar && (!bara || x.id === bara))) {
       await page.getByLabel(falt, { exact: true }).fill(v);
     }
   }
-  const scen = page.locator(f.id === 'beslutstrad' ? '.beslutstrad .kort-nod' : '.figur .scen').first();
+  // Anatomifigurer ligger i en iframe: fotografera figuren inuti den.
+  const ram = await page.locator('iframe.anatomifigur').elementHandle().catch(() => null);
+  const inre = ram && (await ram.contentFrame());
+  const scen = inre
+    ? inre.locator('.stage svg').first()
+    : page.locator(f.id === 'beslutstrad' ? '.beslutstrad .kort-nod' : '.figur .scen').first();
   await scen.waitFor();
   await page.waitForTimeout(600);
   // Etiketter och verktyg döljs, bilden ska bara visa figuren.
