@@ -1,21 +1,21 @@
-// Stillbilder, rörelsekontroll och inspelning av cisternens tur via window.seek(t).
-//   node render.mjs stills <mapp>          mitt i varje steg + överfyllt läge
-//   node render.mjs scrub <mapp>           var 0,1 s över hela turen, bara scenen
-//   node render.mjs video <fil.mp4>        60 bilder/s, 1500×1320, H.264
+// Stillbilder, rörelsekontroll och inspelning av en figurs tur via window.seek(t).
+//   node delat/render.mjs <figur> stills <mapp> [reglage]   mitt i varje steg, och med reglaget på värdet om det anges
+//   node delat/render.mjs <figur> scrub <mapp>              var 0,1 s över hela turen, bara scenen (+ tidslinje.json)
+//   node delat/render.mjs <figur> video <fil.mp4>           60 bilder/s, 1500×1320, H.264
 import { chromium } from "playwright";
 import { spawn } from "node:child_process";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import * as M from "./model.mjs";
-
-const HERE = dirname(fileURLToPath(import.meta.url));
-const [what, out] = process.argv.slice(2);
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const [id, what, out, extra] = process.argv.slice(2);
+const HERE = join(ROOT, id);
+const M = await import(pathToFileURL(join(HERE, "model.mjs")).href);
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1500, height: 1320 }, deviceScaleFactor: 1 });
 const errors = [];
 page.on("pageerror", (e) => errors.push(String(e)));
-await page.goto(pathToFileURL(join(HERE, "cistern.html")).href + "?render");
+await page.goto(pathToFileURL(join(HERE, `${id}.html`)).href + "?render");
 await page.waitForFunction(() => typeof window.seek === "function");
 await page.evaluate(() => document.fonts.ready);
 const seek = (t) => page.evaluate((x) => window.seek(x), t);
@@ -24,10 +24,11 @@ if (what === "stills") {
   mkdirSync(out, { recursive: true });
   const shots = [["0-start", 0], ...M.STEPS.map((n, i) => [`${i + 1}-${n}`, (M.START[i] + M.END[i]) / 2])];
   for (const [name, t] of shots) { await seek(t); await page.screenshot({ path: join(out, `${name}.png`) }); }
-  await page.evaluate(() => { const el = document.getElementById("flottorlage"); el.value = "1"; el.dispatchEvent(new Event("input")); });
-  await seek((M.START[4] + M.END[4]) / 2);
-  await page.screenshot({ path: join(out, "6-overfullt.png") });
-  console.log("stills:", shots.length + 1);
+  if (extra !== undefined) {
+    await page.evaluate((v) => { const el = document.getElementById("reglage"); el.value = v; el.dispatchEvent(new Event("input")); }, extra);
+    for (const [name, t] of shots.slice(1)) { await seek(t); await page.screenshot({ path: join(out, `reglage-${name}.png`) }); }
+  }
+  console.log("stills:", shots.length * (extra !== undefined ? 2 : 1) - (extra !== undefined ? 1 : 0));
 } else if (what === "scrub") {
   mkdirSync(out, { recursive: true });
   const stage = await page.locator(".stage").boundingBox();
@@ -36,6 +37,7 @@ if (what === "stills") {
     await seek(t);
     await page.screenshot({ path: join(out, `f${String(i).padStart(4, "0")}.png`), clip: stage });
   }
+  writeFileSync(join(out, "tidslinje.json"), JSON.stringify({ start: M.START, show: M.SHOW }));
   console.log("scrub frames:", i);
 } else if (what === "video") {
   const ff = spawn("ffmpeg", ["-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", "60", "-c:v", "png", "-i", "-", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", "-preset", "medium", "-movflags", "+faststart", out], { stdio: ["pipe", "inherit", "inherit"] });

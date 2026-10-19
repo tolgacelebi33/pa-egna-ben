@@ -1,7 +1,6 @@
 # Räknar ändrade pixlar mellan bilder tagna var 0,1 s och flaggar hopp: en bild som ändras mer än 3x grannarna.
-import sys, glob
+import sys, glob, json
 from PIL import Image, ImageChops
-sys.path.insert(0, ".")
 frames = sorted(glob.glob(sys.argv[1] + "/f*.png"))
 def changed(a, b):
     d = ImageChops.difference(a, b).convert("L").point(lambda v: 255 if v > 10 else 0)
@@ -9,7 +8,7 @@ def changed(a, b):
 imgs = [Image.open(f).convert("RGB") for f in frames]
 counts = [changed(imgs[i], imgs[i + 1]) for i in range(len(imgs) - 1)]
 # Steg och deras tider (från model.mjs): rörelser längre än 1 s.
-starts = [1.0, 3.1, 14.8, 19.5, 30.2]; shows = [1.4, 11, 4, 10, 3.8]
+tl = json.load(open(sys.argv[1] + "/tidslinje.json")); starts = tl["start"]; shows = tl["show"]
 jumps = []
 for i, c in enumerate(counts):
     t = i / 10

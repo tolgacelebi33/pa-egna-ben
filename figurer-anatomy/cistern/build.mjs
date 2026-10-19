@@ -1,12 +1,11 @@
 // Toalettens cistern som isometrisk figur med stegknappar, fönster in i cisternen och en modell som driver allt.
 // Kör: node figurer-anatomy/cistern/build.mjs  →  cistern.html
-import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as k from "../../vendor/anatomy/kit/iso-kit.mjs";
 import * as G from "../../vendor/anatomy/kit/lathe.mjs";
 import { tubePieces, tubeSvg } from "../../vendor/anatomy/kit/tube.mjs";
-import { kitScript } from "../../vendor/anatomy/scripts/inline-kit.mjs";
+import { writePage, ordSvg } from "../delat/sida.mjs";
 import * as M from "./model.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -197,11 +196,10 @@ const svg = k.figureSvg({
     `<path id="vattenfront" class="vattenfront" d=""/>`,
     cisternFront(),
     seat(),
-    `<g id="ord">${WORDS.map((w, i) => `<text class="ljud" id="ord${i}" text-anchor="middle">${w.text}</text>`).join("")}</g>`,
+    ordSvg(WORDS.length),
   ],
 });
 
-const STEP_LABELS = ["Tryck på knappen", "Vattnet forsar ut", "Proppen stänger", "Cisternen fylls", "Flottören stänger kranen"];
 const HINTS = {
   start: "Cisternen är full. Tryck på knappen så ser du vad som händer inuti.",
   steps: [
@@ -216,323 +214,111 @@ const HINTS = {
   doneRuns: "Det slutar aldrig rinna. Sänk flottören med reglaget.",
 };
 
-const SWATCHES = {
-  mint: ["#c4ebdf", "#93d2bf", "#6fb5a2"],
-  gul: ["#f8e3a0", "#f1c75a", "#d6a73c"],
-  rosa: ["#f8cfd8", "#ee9fb2", "#d27b92"],
-  vit: ["#fbf8f1", "#e9e3d6", "#cfc6b4"],
+// Figurens egen kod på sidan: ritar de rörliga delarna och ger texter och siffror. Körs med modellen i räckvidd.
+const FIG_JS = `
+const zOf = (h) => Z0 + ZH * h;
+const FIG = {
+  id: "cistern",
+  init(s) { $("klamma").innerHTML = solidSvg(cylinder(FILL[0], FILL[1], 2.1, zOf(s.close) + 2.2, 1.4, P, 36, 0.3), { className: "c-krom" }); },
+  reglage: (s) => (s.runs ? '<span class="varning">För högt: vattnet rinner över</span>' : fmt(s.liters) + " l per spolning"),
+  rita(st, t, s) {
+    const zL = zOf(st.h);
+    $("vatten").innerHTML = solidSvg(slabOf({ ...IN, r: 0 }, Z0, Math.max(0.05, zL - Z0), P, 1), { className: "c-vatten", crease: "none" });
+    $("vattenfront").setAttribute("d", pathOf([[IN.x, IN.y + IN.d, Z0], [IN.x + IN.w, IN.y + IN.d, Z0], [IN.x + IN.w, IN.y + IN.d, zL], [IN.x, IN.y + IN.d, zL]].map((p) => iso(p, P)), true));
+    $("flottor").setAttribute("transform", translateAlong(P, [0, 0, ZH * st.h]));
+    $("propp").setAttribute("transform", translateAlong(P, [0, 0, 5 * st.lift]));
+    $("knapp").setAttribute("transform", translateAlong(P, [0, 0, -1.2 * st.press]));
+    $("stang").setAttribute("d", segment([FLUSH[0], FLUSH[1], 72.5 + 5 * st.lift], [FLUSH[0], FLUSH[1], 80 - 1.2 * st.press], P));
+    const strale = $("strale");
+    strale.setAttribute("d", segment(NOZZLE, [NOZZLE[0], NOZZLE[1], zL + 0.2], P));
+    strale.style.opacity = st.valve < 0.01 ? 0 : Math.min(1, 0.25 + st.valve);
+    strale.style.strokeDashoffset = String(-t * 34);
+    const over = $("over");
+    over.setAttribute("d", segment([OVF[0] - 3.5, OVF[1], zL + 0.3], [OVF[0], OVF[1], zOf(OVERFLOW)], P) + segment([OVF[0], OVF[1] + 1.6, zOf(OVERFLOW) - 0.5], [OVF[0], OVF[1] + 1.6, Z0 + 2], P));
+    over.style.opacity = st.overflowing ? 1 : 0;
+    over.style.strokeDashoffset = String(-t * 30);
+    const swirl = st.step === 1 ? sm(0, 0.08, st.p) * (1 - sm(0.85, 1, st.p)) : 0;
+    $("virvel").setAttribute("d", ring(FLUSH[0], FLUSH[1], 6.5, zL + 0.15, P, 40));
+    $("virvel").style.opacity = swirl;
+    $("virvel").style.strokeDashoffset = String(-t * 40);
+    const splash = Math.max(st.step === 1 ? sm(0, 0.06, st.p) : st.step === 2 ? 1 - sm(0, 0.8, st.p) : 0, st.overflowing ? 0.55 : 0);
+    let rings = "";
+    if (splash > 0.001) for (let i = 0; i < 3; i++) {
+      const u = (t * 0.55 + i / 3) % 1;
+      rings += '<path class="ring" style="opacity:' + (splash * (1 - u)).toFixed(3) + '" d="' + ring(0, 39, 0.8 + 5 * u, 39.85, P, 32) + '"/>';
+    }
+    $("ringar").innerHTML = rings;
+    WORDS.forEach((w, i) => (i === 4 && s.runs ? visaOrd(i, "glugg glugg", [-4, 14, 62], st) : visaOrd(i, w.text, w.at, st)));
+  },
+  texter(st, t, s) {
+    let hint = HINTS.start;
+    if (t >= START[0]) hint = st.step === 4 && s.runs ? HINTS.runs : HINTS.steps[st.step];
+    if (t >= END[4]) hint = s.runs ? HINTS.doneRuns : HINTS.done;
+    return {
+      hint,
+      labels: s.runs ? [null, null, null, null, "Vattnet rinner över"] : null,
+      chips: {
+        out: fmt(st.out) + " l",
+        niva: Math.round(100 * st.h) + " %",
+        kran: st.valve < 0.01 ? "stängd" : "öppen " + Math.round(100 * st.valve) + " %",
+        tid: fmt(st.real) + " s",
+        volym: s.runs ? ["rinner hela tiden", true] : fmt(s.liters) + " l",
+      },
+    };
+  },
 };
-const MATERIALS = {
-  vagg: ["#efe8da", "#e6dece", "#d6ccb8"],
-  golv: ["#e6dbc6", "#d6c9b0", "#c3b499"],
-  vatten: ["#cfe9f7", "#8cc8ea", "#5fa8d6"],
-  flottor: ["#ffc58a", "#f39c4a", "#d27a2c"],
-  plast: ["#dbe1ec", "#a9b4c8", "#8592aa"],
-  vitplast: ["#ffffff", "#ece7dc", "#cfc7b6"],
-  gummi: ["#f19a96", "#d9534f", "#b33b38"],
-  krom: ["#f4f6f9", "#c9ced6", "#98a1ad"],
-  massing: ["#f6dc95", "#d9b155", "#ad8733"],
-  sits: ["#fffdf8", "#f1ece1", "#d9d1c0"],
-  vit: ["#fbf8f1", "#e9e3d6", "#cfc6b4"],
-};
-const tones = (name, [l, m, d]) => `.c-${name}{--l:${l};--m:${m};--d:${d}}`;
+`;
 
-const CSS = `
-:root{--ink:#22304a;--paper:#f5f0e5;--hand:"Bradley Hand","Segoe Print","Comic Sans MS",cursive;--sans:"Avenir Next","Avenir","Segoe UI",system-ui,sans-serif;--sol:#ffd76a}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans)}
-.page{position:relative;max-width:1460px;margin:0 auto;padding:22px 24px 18px}
-.kicker{font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.65;margin:0}
-h1{font-size:30px;margin:4px 0 12px;font-weight:700;letter-spacing:-.01em}
-.hint{min-height:64px;display:flex;align-items:center;font-size:21px;line-height:1.35;background:#fffaf0;border:2px solid var(--ink);border-radius:16px;padding:12px 18px;max-width:1060px}
-.layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:24px;margin-top:16px}
-.switch{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-bottom:16px}
-.switch button{font:600 15px var(--sans);color:var(--ink);background:#fffaf0;border:0;padding:8px 18px;cursor:pointer}
-.switch button[aria-pressed="true"]{background:var(--ink);color:#fffaf0}
-.steps{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.pill{width:100%;display:flex;align-items:center;gap:12px;font:600 17px var(--sans);color:var(--ink);background:#fffaf0;border:2px solid var(--ink);border-radius:999px;padding:9px 18px 9px 9px;text-align:left;cursor:pointer;transition:background .25s,opacity .25s,transform .12s}
-.pill .nr{flex:none;width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-size:16px;background:#fff}
-.pill.run{background:var(--sol)}
-.pill.run .nr{background:var(--ink);color:#fff}
-.pill.done{opacity:.42}
-.pill.tryckt{transform:scale(.96)}
-.pill:disabled{cursor:default}
-.manual .pill:disabled:not(.done):not(.run){opacity:.62}
-.manual .pill.next{animation:puls 1.3s ease-in-out infinite}
-@keyframes puls{0%,100%{box-shadow:0 0 0 0 rgba(34,48,74,.35)}50%{box-shadow:0 0 0 7px rgba(34,48,74,0)}}
-.restart{display:inline-block;margin-top:14px;color:var(--ink);font-size:15px}
-.reglage{margin-top:22px;padding:14px;border:2px solid var(--ink);border-radius:16px;background:#fffaf0}
-.reglage label{display:block;font-weight:700;font-size:15px;margin-bottom:6px}
-.reglage input{width:100%;accent-color:var(--ink)}
-.reglage output{display:block;font-size:15px;margin-top:4px}
-.reglage .rinner{color:#b33b38;font-weight:700}
-.stage{position:relative;margin:0;height:860px}
-.stage svg{display:block;height:100%;width:auto;max-width:100%;margin:0 auto}
-.badge{position:absolute;top:8px;right:8px;font:700 16px var(--sans);background:var(--ink);color:#fffaf0;border-radius:999px;padding:6px 14px;opacity:0;transition:opacity .2s}
-.under{display:grid;gap:10px;margin-top:6px}
-.chips{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0}
-.chips li{border:2px solid var(--ink);border-radius:999px;padding:6px 14px;background:#fffaf0;font-size:15px}
-.chips b{font-variant-numeric:tabular-nums;margin-left:6px}
-.idea{font-size:20px;margin:4px 0 0}
-.swatches{display:flex;gap:8px;align-items:center;font-size:14px}
-.swatches button{width:28px;height:28px;border-radius:50%;border:2px solid var(--ink);cursor:pointer}
-.swatches button[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:2px}
-.kallor{font-size:12.5px;opacity:.75;max-width:1200px;margin:0}
-.kallor a{color:var(--ink)}
-#cursor{position:absolute;left:0;top:0;width:30px;height:30px;pointer-events:none;opacity:0;z-index:5}
-.scene .iso-solid>.iso-top{fill:var(--l);stroke:none}
-.scene .iso-solid>.iso-fill,.scene .iso-solid>.iso-shade[data-shade="2"],.scene .iso-solid>.iso-shade[data-shade="3"]{fill:var(--m)}
-.scene .iso-solid>.iso-shade[data-shade="0"],.scene .iso-solid>.iso-shade[data-shade="1"]{fill:var(--d)}
-.scene .iso-solid[data-seamless]>.iso-top{stroke:var(--l)}
-.scene .iso-solid[data-seamless]>.iso-shade[data-shade="2"],.scene .iso-solid[data-seamless]>.iso-shade[data-shade="3"]{stroke:var(--m)}
-.scene .iso-solid[data-seamless]>.iso-shade[data-shade="0"],.scene .iso-solid[data-seamless]>.iso-shade[data-shade="1"]{stroke:var(--d)}
-.scene .iso-line{stroke:var(--ink);stroke-width:1.2px}
-.scene .iso-crease,.scene .iso-bevel,.scene .inre{stroke-width:.8px;opacity:.45}
-.scene .iso-line[data-tone="faint"]{stroke:#c9bda5;stroke-width:.9px;opacity:1}
-.scene .tb-body{fill:var(--krom-m)}
-.scene .tb-shine{fill:var(--krom-l)}
-.scene .tb-shade{fill:var(--krom-d)}
-.scene .tb-ring{stroke:#7d8693;stroke-width:.5}
-.scene .skugga{fill:#ddd4c3}
+writePage({
+  id: "cistern",
+  here: HERE,
+  P,
+  kicker: "Fig 2 · Toalettens cistern",
+  title: "Hur fyller toaletten på sig själv?",
+  question: "Hur fyller toaletten på sig själv efter att du spolat?",
+  startHint: HINTS.start,
+  steps: ["Tryck på knappen", "Vattnet forsar ut", "Proppen stänger", "Cisternen fylls", "Flottören stänger kranen"],
+  slider: { label: "Flottörens läge", min: 0, max: 1, step: 0.01, value: M.SETTING_DEFAULT.toFixed(2) },
+  chips: [
+    { id: "out", label: "Ute i skålen" },
+    { id: "niva", label: "Vattennivå" },
+    { id: "kran", label: "Kranen" },
+    { id: "tid", label: "Tid i verkligheten", star: true },
+    { id: "volym", label: "Per spolning" },
+  ],
+  idea: "flottören flyter upp med vattnet och stänger kranen själv.",
+  swatch: {
+    label: "Färg på porslinet",
+    var: "por",
+    options: { mint: ["#c4ebdf", "#93d2bf", "#6fb5a2"], gul: ["#f8e3a0", "#f1c75a", "#d6a73c"], rosa: ["#f8cfd8", "#ee9fb2", "#d27b92"], vit: ["#fbf8f1", "#e9e3d6", "#cfc6b4"] },
+  },
+  materials: {
+    vagg: ["#efe8da", "#e6dece", "#d6ccb8"],
+    golv: ["#e6dbc6", "#d6c9b0", "#c3b499"],
+    vatten: ["#cfe9f7", "#8cc8ea", "#5fa8d6"],
+    flottor: ["#ffc58a", "#f39c4a", "#d27a2c"],
+    plast: ["#dbe1ec", "#a9b4c8", "#8592aa"],
+    vitplast: ["#ffffff", "#ece7dc", "#cfc7b6"],
+    gummi: ["#f19a96", "#d9534f", "#b33b38"],
+    krom: ["#f4f6f9", "#c9ced6", "#98a1ad"],
+    massing: ["#f6dc95", "#d9b155", "#ad8733"],
+    sits: ["#fffdf8", "#f1ece1", "#d9d1c0"],
+    vit: ["#fbf8f1", "#e9e3d6", "#cfc6b4"],
+  },
+  css: `
 .scene .skal{fill:var(--por-d);stroke:var(--ink);stroke-width:1.2px}
 .scene .skalvatten{fill:#8cc8ea;stroke:var(--ink);stroke-width:1px}
 .scene .hal{fill:#3d4a63;stroke:var(--ink);stroke-width:1px}
 .scene .vattenfront{fill:#5fa8d6;opacity:.38;stroke:none}
-.scene .strale{fill:none;stroke:#3f8fc7;stroke-width:2.2px;stroke-dasharray:5 5;stroke-linecap:round}
+.scene .strale{fill:none;stroke:#3f8fc7;stroke-width:2.8px;stroke-dasharray:5 5;stroke-linecap:round}
 .scene .virvel{fill:none;stroke:#2f78ad;stroke-width:1.4px;stroke-dasharray:6 6;stroke-linecap:round}
 .scene .ring{fill:none;stroke:#2f78ad;stroke-width:1.1px}
 .scene .stang{stroke-width:1.6px}
-.scene .strale{stroke-width:2.8px}
 .scene #over{stroke:#1f6fa8;stroke-width:3px}
-.scene .ljud{font-family:var(--hand);font-size:22px;font-weight:700;fill:var(--ink);opacity:0}
-${Object.entries(MATERIALS).map(([n, t]) => tones(n, t)).join("")}
-.c-por{--l:var(--por-l);--m:var(--por-m);--d:var(--por-d)}
-.scene{--krom-l:${MATERIALS.krom[0]};--krom-m:${MATERIALS.krom[1]};--krom-d:${MATERIALS.krom[2]};--por-l:${SWATCHES.mint[0]};--por-m:${SWATCHES.mint[1]};--por-d:${SWATCHES.mint[2]}}
-@media (prefers-reduced-motion:reduce){.manual .pill.next{animation:none}}
-.render *,.render *::before{transition:none!important;animation:none!important}
-.embed .kicker,.embed h1{display:none}
-.embed .page{padding-top:4px}
-@media (max-width:860px){.page{padding:14px 16px}h1{font-size:22px}.hint{font-size:17px;min-height:0}.layout{grid-template-columns:minmax(0,1fr);gap:12px}.steps{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}.pill{font-size:14px;padding:6px 10px 6px 6px}.pill .nr{width:26px;height:26px;font-size:13px}.stage{height:auto;order:-1}.stage svg{width:100%;height:auto}.reglage{margin-top:12px}}
-`;
-
-const MODEL_SRC = readFileSync(join(HERE, "model.mjs"), "utf8").replace(/^export /gm, "");
-
-const live = `
-${MODEL_SRC}
-const P = ${JSON.stringify(P)};
-const IN = ${JSON.stringify(IN)}, Z0 = ${Z0}, ZH = ${ZH}, FILL = ${JSON.stringify(FILL)}, FLUSH = ${JSON.stringify(FLUSH)}, OVF = ${JSON.stringify(OVF)}, NOZZLE = ${JSON.stringify(NOZZLE)};
-const WORDS = ${JSON.stringify(WORDS)};
-const HINTS = ${JSON.stringify(HINTS)};
-const SWATCHES = ${JSON.stringify(SWATCHES)};
-const zOf = (h) => Z0 + ZH * h;
-const $ = (id) => document.getElementById(id);
-const page = document.querySelector(".page");
-const scene = document.querySelector(".scene");
-const pills = [...document.querySelectorAll(".pill")];
-const cursor = $("cursor");
-const render = new URLSearchParams(location.search).has("render");
-const still = matchMedia("(prefers-reduced-motion: reduce)");
-const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
-let mode = render ? "auto" : store.get("cistern-mode") === "auto" ? "auto" : "manual";
-let s = setup(Number($("flottorlage").value));
-let t = 0, next = 0, playingTo = null, frame = 0, last = 0;
-const sm = (a, b, x) => { const u = Math.min(1, Math.max(0, (x - a) / (b - a))); return u * u * (3 - 2 * u); };
-const fmt = (x, d = 1) => x.toFixed(d).replace(".", ",");
-const floatGroup = $("flottor"), plugGroup = $("propp"), knapp = $("knapp");
-
-function setClip() { $("klamma").innerHTML = solidSvg(cylinder(FILL[0], FILL[1], 2.1, zOf(s.close) + 2.2, 1.4, P, 36, 0.3), { className: "c-krom" }); }
-
-function draw(time) {
-  t = time;
-  const st = at(t, s);
-  const zL = zOf(st.h);
-  $("vatten").innerHTML = solidSvg(slabOf({ ...IN, r: 0 }, Z0, Math.max(0.05, zL - Z0), P, 1), { className: "c-vatten", crease: "none" });
-  $("vattenfront").setAttribute("d", pathOf([[IN.x, IN.y + IN.d, Z0], [IN.x + IN.w, IN.y + IN.d, Z0], [IN.x + IN.w, IN.y + IN.d, zL], [IN.x, IN.y + IN.d, zL]].map((p) => iso(p, P)), true));
-  floatGroup.setAttribute("transform", translateAlong(P, [0, 0, ZH * st.h]));
-  plugGroup.setAttribute("transform", translateAlong(P, [0, 0, 5 * st.lift]));
-  knapp.setAttribute("transform", translateAlong(P, [0, 0, -1.2 * st.press]));
-  $("stang").setAttribute("d", segment([FLUSH[0], FLUSH[1], 72.5 + 5 * st.lift], [FLUSH[0], FLUSH[1], 80 - 1.2 * st.press], P));
-  const flow = st.valve;
-  const strale = $("strale");
-  strale.setAttribute("d", segment(NOZZLE, [NOZZLE[0], NOZZLE[1], zL + 0.2], P));
-  strale.style.opacity = flow < 0.01 ? 0 : Math.min(1, 0.25 + flow);
-  strale.style.strokeDashoffset = String(-t * 34);
-  const over = $("over");
-  over.setAttribute("d", segment([OVF[0] - 3.5, OVF[1], zL + 0.3], [OVF[0], OVF[1], zOf(OVERFLOW)], P) + segment([OVF[0], OVF[1] + 1.6, zOf(OVERFLOW) - 0.5], [OVF[0], OVF[1] + 1.6, Z0 + 2], P));
-  $("ovfror").classList.toggle("rinner", st.overflowing);
-  over.style.opacity = st.overflowing ? 1 : 0;
-  over.style.strokeDashoffset = String(-t * 30);
-  const swirl = st.step === 1 ? sm(0, 0.08, st.p) * (1 - sm(0.85, 1, st.p)) : 0;
-  $("virvel").setAttribute("d", ring(FLUSH[0], FLUSH[1], 6.5, zL + 0.15, P, 40));
-  $("virvel").style.opacity = swirl;
-  $("virvel").style.strokeDashoffset = String(-t * 40);
-  const splash = Math.max(st.step === 1 ? sm(0, 0.06, st.p) : st.step === 2 ? 1 - sm(0, 0.8, st.p) : 0, st.overflowing ? 0.55 : 0);
-  let rings = "";
-  if (splash > 0.001) for (let i = 0; i < 3; i++) {
-    const u = (t * 0.55 + i / 3) % 1;
-    rings += '<path class="ring" style="opacity:' + (splash * (1 - u)).toFixed(3) + '" d="' + ring(0, 39, 0.8 + 5 * u, 39.85, P, 32) + '"/>';
-  }
-  $("ringar").innerHTML = rings;
-  WORDS.forEach((w, i) => {
-    const el = $("ord" + i);
-    let a = 0;
-    if (st.step === i) a = sm(0, 0.12, st.p) * (1 - sm(0.82, 1, st.p));
-    if (i === 4 && s.runs) el.textContent = "glugg glugg"; else el.textContent = w.text;
-    const p = iso(i === 4 && s.runs ? [-4, 14, 62] : w.at, P);
-    const rise = st.step === i ? 6 * st.p : 0;
-    el.setAttribute("x", p[0].toFixed(1));
-    el.setAttribute("y", (p[1] - rise).toFixed(1));
-    el.setAttribute("transform", "rotate(-8 " + p[0].toFixed(1) + " " + p[1].toFixed(1) + ")");
-    el.style.opacity = a.toFixed(3);
-  });
-  // Knappar, ledtråd, fartmärke och siffror.
-  pills.forEach((b, i) => {
-    const running = st.running && st.step === i;
-    b.classList.toggle("run", running);
-    b.classList.toggle("done", t >= END[i] && !(st.running && st.step === i));
-    b.classList.toggle("next", mode === "manual" && i === next && playingTo === null);
-    b.classList.toggle("tryckt", mode === "auto" && Math.abs(t - CLICK[i]) < 0.12);
-    b.disabled = mode === "auto" || i !== next || playingTo !== null;
-    b.querySelector(".txt").textContent = i === 4 && s.runs ? "Vattnet rinner över" : b.dataset.label;
-  });
-  let hint = HINTS.start;
-  if (t >= START[0]) hint = st.step === 4 && s.runs ? HINTS.runs : HINTS.steps[st.step];
-  if (t >= END[4]) hint = s.runs ? HINTS.doneRuns : HINTS.done;
-  if ($("hint").textContent !== hint) $("hint").textContent = hint;
-  // Fartmärket tonas in och ut över 0,2 s så att det inte blinkar till.
-  const speed = speedOf(st.step, s);
-  const show = t >= START[0] ? sm(START[st.step], START[st.step] + 0.2, t) * (1 - sm(END[st.step] - 0.2, END[st.step], t)) : 0;
-  $("speed").textContent = speed ? speed + (speed.includes("/") ? " · slowmotion" : " · snabbspolat") : "";
-  $("speed").style.opacity = speed ? show.toFixed(3) : 0;
-  $("c-out").textContent = fmt(st.out) + " l";
-  $("c-niva").textContent = Math.round(100 * st.h) + " %";
-  $("c-kran").textContent = flow < 0.01 ? "stängd" : "öppen " + Math.round(100 * flow) + " %";
-  $("c-tid").textContent = fmt(st.real) + " s";
-  $("c-volym").textContent = s.runs ? "rinner hela tiden" : fmt(s.liters) + " l";
-  drawCursor();
-}
-
-function centreOf(el) {
-  const a = el.getBoundingClientRect(), b = page.getBoundingClientRect();
-  return [a.left - b.left + a.width * 0.32, a.top - b.top + a.height * 0.62];
-}
-function drawCursor() {
-  if (mode !== "auto") { cursor.style.opacity = 0; return; }
-  const stageBox = document.querySelector(".stage");
-  const home = centreOf(stageBox);
-  let from = home, to = home, u = 1, press = 0;
-  for (let i = 0; i < CLICK.length; i++) {
-    const target = centreOf(pills[i]);
-    if (t >= CLICK[i] - 0.6) { from = i ? centreOf(pills[i - 1]) : home; to = target; u = sm(CLICK[i] - 0.6, CLICK[i], t); }
-    press = Math.max(press, 1 - Math.min(1, Math.abs(t - CLICK[i]) / 0.12));
-  }
-  const x = from[0] + (to[0] - from[0]) * u, y = from[1] + (to[1] - from[1]) * u;
-  cursor.style.opacity = 1;
-  cursor.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) scale(" + (1 - 0.18 * press).toFixed(3) + ")";
-}
-
-// Spela: auto loopar hela turen, manuell spelar ett steg i taget.
-function tick(now) {
-  const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
-  last = now;
-  if (mode === "auto") draw((t + dt) % TOUR);
-  else if (playingTo !== null) {
-    const goal = END[playingTo];
-    const nt = Math.min(goal, t + dt);
-    if (nt >= goal) { next = playingTo + 1; playingTo = null; }
-    draw(nt);
-  }
-  frame = mode === "auto" || playingTo !== null ? requestAnimationFrame(tick) : 0;
-}
-const run = () => { if (!frame && !render) { last = 0; frame = requestAnimationFrame(tick); } };
-function play(i) {
-  if (mode !== "manual" || i !== next || playingTo !== null) return;
-  playingTo = i;
-  if (still.matches) { next = i + 1; playingTo = null; draw(END[i]); return; }
-  draw(START[i]);
-  run();
-}
-function restart() { next = 0; playingTo = null; draw(0); if (mode === "auto") run(); }
-function setMode(m) {
-  mode = m;
-  if (!render) store.set("cistern-mode", m);
-  document.body.classList.toggle("manual", m === "manual");
-  document.querySelectorAll(".switch button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === m)));
-  restart();
-}
-pills.forEach((b, i) => b.addEventListener("click", () => play(i)));
-document.querySelectorAll(".switch button").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.mode)));
-$("restart").addEventListener("click", (e) => { e.preventDefault(); restart(); });
-$("flottorlage").addEventListener("input", (e) => {
-  s = setup(Number(e.target.value));
-  $("flottorut").innerHTML = s.runs ? '<span class="rinner">För högt: vattnet rinner över</span>' : fmt(s.liters) + " l per spolning";
-  setClip();
-  draw(t);
+`,
+  svg,
+  sources:
+    'Källor: spolmängd 4 och 2 liter, <a href="https://www.bauhaus.se/toalett-gustavsberg-skandic-1410-ink-standardsits" target="_blank" rel="noopener">Gustavsberg Skandic 1410 (Bauhaus)</a>. Justerbar upp till 6 liter, <a href="https://www.bauhaus.se/toalett-gustavsberg-nautic-1500-hygienic-flush-inkl-mjuksits" target="_blank" rel="noopener">Gustavsberg Nautic 1500 (Bauhaus)</a>. Att vattnet ska stå under överfallsröret: <a href="https://www.byggahus.se/forum/threads/oka-vattenmangd-i-toans-spolbehallare.359217/" target="_blank" rel="noopener">Byggahus forum</a> (TODO-KONTROLL: ersätt med tillverkarkälla). * Tiderna är uppskattade och inte källbelagda (TODO-KONTROLL).',
+  figData: { IN, Z0, ZH, FILL, FLUSH, OVF, NOZZLE, WORDS, HINTS },
+  figJs: FIG_JS,
 });
-document.addEventListener("keydown", (e) => {
-  if ((e.key === " " || e.key === "Enter") && !e.target.closest("button, input, a")) { e.preventDefault(); play(next); }
-});
-document.querySelectorAll(".swatches button").forEach((b) => b.addEventListener("click", () => {
-  const [l, m, d] = SWATCHES[b.dataset.farg];
-  scene.style.setProperty("--por-l", l); scene.style.setProperty("--por-m", m); scene.style.setProperty("--por-d", d);
-  document.querySelectorAll(".swatches button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-}));
-if (render) document.body.classList.add("render");
-// Inbäddad i appen: dölj egen rubrik och berätta sidans höjd för iframen.
-if (new URLSearchParams(location.search).has("embed")) {
-  document.body.classList.add("embed");
-  const tell = () => parent.postMessage({ anatomiHojd: Math.ceil(document.querySelector(".page").getBoundingClientRect().height) }, "*");
-  new ResizeObserver(tell).observe(document.querySelector(".page"));
-}
-window.seek = (time) => { draw(Math.min(TOUR, Math.max(0, time))); };
-window.TOUR = TOUR;
-setClip();
-$("flottorut").textContent = fmt(s.liters).replace(".", ",") + " l per spolning";
-setMode(mode);
-`;
-
-const CURSOR = `<svg id="cursor" viewBox="0 0 30 30" aria-hidden="true"><path d="M4 2 L4 24 L10 18.5 L14.5 28 L18.5 26.2 L14 17 L22 17 Z" fill="#fffaf0" stroke="#22304a" stroke-width="2" stroke-linejoin="round"/></svg>`;
-
-const html = `<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hur fyller toaletten på sig själv?</title><style>${k.ISO_CSS}${CSS}</style></head>
-<body class="iso manual" data-theme="light">
-<main class="page">
-  <p class="kicker">Fig 2 · Toalettens cistern</p>
-  <h1>Hur fyller toaletten på sig själv efter att du spolat?</h1>
-  <p class="hint" id="hint" aria-live="polite">${HINTS.start}</p>
-  <div class="layout">
-    <aside>
-      <div class="switch" role="group" aria-label="Läge">
-        <button type="button" data-mode="manual" aria-pressed="true">Manuell</button>
-        <button type="button" data-mode="auto" aria-pressed="false">Auto</button>
-      </div>
-      <ol class="steps">${STEP_LABELS.map((label, i) => `<li><button type="button" class="pill" data-label="${label}"><span class="nr">${i + 1}</span><span class="txt">${label}</span></button></li>`).join("")}</ol>
-      <a href="#" class="restart" id="restart">Börja om</a>
-      <div class="reglage">
-        <label for="flottorlage">Flottörens läge</label>
-        <input type="range" id="flottorlage" min="0" max="1" step="0.01" value="${M.SETTING_DEFAULT.toFixed(2)}">
-        <output id="flottorut" for="flottorlage"></output>
-      </div>
-    </aside>
-    <figure class="stage scene">${svg}<div class="badge" id="speed"></div></figure>
-  </div>
-  <section class="under">
-    <ul class="chips">
-      <li>Ute i skålen<b id="c-out"></b></li>
-      <li>Vattennivå<b id="c-niva"></b></li>
-      <li>Kranen<b id="c-kran"></b></li>
-      <li>Tid i verkligheten<b id="c-tid"></b>*</li>
-      <li>Per spolning<b id="c-volym"></b></li>
-    </ul>
-    <p class="idea"><strong>Den stora idén:</strong> flottören flyter upp med vattnet och stänger kranen själv.</p>
-    <div class="swatches"><span>Färg på porslinet:</span>${Object.entries(SWATCHES).map(([n, [, m]], i) => `<button type="button" data-farg="${n}" aria-label="${n}" aria-pressed="${i === 0}" style="background:${m}"></button>`).join("")}</div>
-    <p class="kallor">Källor: spolmängd 4 och 2 liter, <a href="https://www.bauhaus.se/toalett-gustavsberg-skandic-1410-ink-standardsits" target="_blank" rel="noopener">Gustavsberg Skandic 1410 (Bauhaus)</a>. Justerbar upp till 6 liter, <a href="https://www.bauhaus.se/toalett-gustavsberg-nautic-1500-hygienic-flush-inkl-mjuksits" target="_blank" rel="noopener">Gustavsberg Nautic 1500 (Bauhaus)</a>. Att vattnet ska stå under överfallsröret: <a href="https://www.byggahus.se/forum/threads/oka-vattenmangd-i-toans-spolbehallare.359217/" target="_blank" rel="noopener">Byggahus forum</a> (TODO-KONTROLL: ersätt med tillverkarkälla). * Tiderna är uppskattade och inte källbelagda (TODO-KONTROLL).</p>
-  </section>
-  ${CURSOR}
-</main>
-<script type="module">${(kitScript() + "\n" + live).replace(/<\/(script)/gi, "<\\/$1")}</script>
-</body></html>`;
-
-writeFileSync(join(HERE, "cistern.html"), html);
-writeFileSync(join(HERE, "../../public/figurer/anatomi/cistern.html"), html);
-console.log("wrote cistern.html", (html.length / 1024).toFixed(0) + " kB");
