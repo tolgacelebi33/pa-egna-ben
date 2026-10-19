@@ -4,3 +4,6 @@ dist/
 .DS_Store
 rapport-tmp/
 bilder-original/
+
+# Inspelningar och ljud från figurerna (stora, går att göra om med render.mjs och score.mjs)
+figurer-anatomy/*/ut/
