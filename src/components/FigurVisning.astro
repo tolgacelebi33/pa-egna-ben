@@ -41,9 +41,9 @@ interface Props {
 }
 const { id, del } = Astro.props;
 // Figurer som består av AI-bilder, ett läge per steg (filer i public/figurer/bilder/<id>/).
-const BILDLAGEN: Record<string, string[]> = {"dammsugare": ["grund", "oppen", "munstycken", "filter"], "paslakan": ["steg1", "steg2", "steg3", "klar"], "cykel": ["grund", "punktering", "pump", "kedja"], "spis": ["kastrull", "ugn-oppen"], "tavla": ["gips", "betong", "tra"], "faktura": ["grund"]};
+const BILDLAGEN: Record<string, string[]> = {"dammsugare": ["grund", "oppen", "munstycken", "filter"], "paslakan": ["steg1", "steg2", "steg3", "klar"], "cykel": ["grund", "punktering", "pump", "kedja"], "tavla": ["gips", "betong", "tra"], "faktura": ["grund"]};
 // Figurer gjorda med anatomy-kitet som egna sidor (public/figurer/anatomi/<id>.html).
-const ANATOMI = ['cistern', 'kyl', 'vattenlas', 'diskmaskin'];
+const ANATOMI = ['cistern', 'kyl', 'vattenlas', 'diskmaskin', 'spis'];
 const alla = id === 'beslutstrad' ? await hamtaAmnen() : [];
 const titlar = Object.fromEntries(amnenI().map((a) => [a, alla.find((p) => p.data.id === a)?.data.titel ?? a]));
 ---
