@@ -25,7 +25,7 @@ const FRZ_OUT = 64;
 const OPEN = { x0: 6, x1: W - 6, z0: 58, z1: 96 };
 
 const P = k.fitProjection(
-  [...k.boxCorners({ x: -DOOR_T, y: 0, w: W + DOOR_T, d: D + DOOR_W }, 0, TOP), [W, D + FRZ_OUT, 0]],
+  [...k.boxCorners({ x: -60, y: 0, w: W + 60, d: D + DOOR_W }, 0, TOP), [W, D + FRZ_OUT, 0]],
   WIDTH,
   HEIGHT,
   { pad: 20, azimuth: 58, elevation: 22 },
@@ -125,21 +125,29 @@ function fridge() {
   return out.join("");
 }
 
+// Dörren står på 115 grader så att lådorna går fria. u går längs dörrens bredd, v ut från insidan.
+const SWING = (115 * Math.PI) / 180;
+const ALONG = [Math.cos(SWING), Math.sin(SWING)];
+const INWARD = [Math.sin(SWING), -Math.cos(SWING)];
+const onDoor = (u, v) => [ALONG[0] * u + INWARD[0] * v, D + ALONG[1] * u + INWARD[1] * v];
+const doorSlab = (u0, u1, v0, v1, z, h, style = {}) =>
+  S(k.extrude([onDoor(u0, v0), onDoor(u1, v0), onDoor(u1, v1), onDoor(u0, v1)], z, h, P), { tone: "mid", ...style });
+const doorCan = (u, r, z, h) => { const [x, y] = onDoor(u, 6); return can(x, y, r, z, h); };
+
 function door() {
   const out = [];
-  const y0 = D;
-  out.push(box(-DOOR_T, y0, DOOR_T, DOOR_W, FLOOR - 2, TOP - FLOOR + 2, {}, 1.5, 0.4));
-  out.push(`<path class="iso-line" data-tone="lo" d="${quad([[0, y0 + 5, FLOOR + 3], [0, y0 + DOOR_W - 5, FLOOR + 3], [0, y0 + DOOR_W - 5, TOP - 5], [0, y0 + 5, TOP - 5]])}"/>`);
+  out.push(doorSlab(0, DOOR_W, -DOOR_T, 0, FLOOR - 2, TOP - FLOOR + 2));
+  out.push(`<path class="iso-line" data-tone="lo" d="${quad([[...onDoor(5, 0), FLOOR + 3], [...onDoor(DOOR_W - 5, 0), FLOOR + 3], [...onDoor(DOOR_W - 5, 0), TOP - 5], [...onDoor(5, 0), TOP - 5]])}"/>`);
   for (const z of [FLOOR + 4, TOP - 12]) out.push(box(-DOOR_T - 1, D - 3, DOOR_T + 1, 4, z, 8, { tone: "lo" }));
   const bins = [
-    { z: 118, items: (z) => can(6, y0 + 22, 4.5, z, 26) + can(6, y0 + 36, 4.5, z, 22) + can(6, y0 + 50, 4, z, 24) },
-    { z: 162, items: (z) => box(1, y0 + 66, 10, 10, z, 30, {}, 1) + can(6, y0 + 30, 4, z, 16) + can(6, y0 + 44, 4, z, 14) },
-    { z: 206, items: (z) => box(2, y0 + 20, 8, 22, z, 7, {}, 1) + box(2, y0 + 70, 8, 26, z, 10, {}, 2) },
+    { z: 118, items: (z) => doorCan(22, 4.5, z, 26) + doorCan(36, 4.5, z, 22) + doorCan(50, 4, z, 24) },
+    { z: 162, items: (z) => doorCan(30, 4, z, 16) + doorCan(44, 4, z, 14) + doorSlab(64, 74, 1, 11, z, 30) },
+    { z: 206, items: (z) => doorSlab(20, 42, 2, 10, z, 7) + doorSlab(70, 96, 2, 10, z, 10) },
   ];
   for (const { z, items } of bins) {
-    out.push(box(0, y0 + 10, 12, DOOR_W - 20, z, 2));
+    out.push(doorSlab(10, DOOR_W - 10, 0, 12, z, 2));
     out.push(items(z + 2));
-    out.push(box(10, y0 + 10, 2, DOOR_W - 20, z, 12, {}, 0.5));
+    out.push(doorSlab(10, DOOR_W - 10, 10, 12, z, 12));
   }
   return out.join("");
 }
