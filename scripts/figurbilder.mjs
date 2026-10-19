@@ -1,7 +1,7 @@
 // Tar stillbilder av de färdiga figurerna till startsidan och figurlistan.
 // Körs för hand när en figur ändras, mot ett körande utkastbygge:
 //   npm run build:utkast && npx astro preview --port 4323
-//   node scripts/figurbilder.mjs
+//   node scripts/figurbilder.mjs [figur-id]   (utan id: alla färdiga figurer)
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 import { FIGURER } from '../src/data/figurer.js';
@@ -11,7 +11,8 @@ mkdirSync('public/figurer', { recursive: true });
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1000, height: 900 }, deviceScaleFactor: 1.5 });
 
-for (const f of FIGURER.filter((x) => x.klar)) {
+const bara = process.argv[2];
+for (const f of FIGURER.filter((x) => x.klar && (!bara || x.id === bara))) {
   await page.goto(`${ADRESS}/figur/${f.id}/`, { waitUntil: 'networkidle' });
   // Budgeten fylls med belopp så att staplarna syns. Siffrorna döljs, bilden visar bara formerna.
   if (f.id === 'budget') {

@@ -31,3 +31,9 @@ Beslut som har tagits vid kontrollpunkterna. Öppna beslut finns i `CLAUDE.md`, 
 
 - Användaren tyckte inte att 3D-modellen höll. Beslut: figurerna görs som statisk 3D, det vill säga isometriska SVG-bilder med djup och genomskärning, interaktiva med steg men inte vridbara. three.js är borttaget.
 - Alla 19 figurer i katalogen byggs i den stilen, med gemensam ram (FigurRam) och gemensamma byggstenar (src/figurer/delat/former.jsx).
+
+## 2026-10-19, kylen med anatomy-kitet
+
+- Kylen byggs om med anatomy-kitet (MIT, kopierat till vendor/anatomy/) i stället för AI-bilder. Källan är figurer-anatomy/kyl/build.mjs, som skriver både en fristående sida och src/figurer/kyl/anatomy.js för appen.
+- I appen styr FigurRams stegknappar vad som markeras (appens ockra) och vilken låda som dras ut. Punktlistorna och textversionen är oförändrade.
+- Figuren är alltid ljus, också i mörkt läge. Övriga figurer görs om på samma sätt en i taget, efter godkännande.

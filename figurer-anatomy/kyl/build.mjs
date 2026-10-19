@@ -184,7 +184,7 @@ const svg = k.figureSvg({
   width: WIDTH,
   height: HEIGHT,
   label:
-    "Kyl och frys med öppen kyldörr. I kylen står en termometer som visar 4 grader på mittenhyllan, en tallrik med rått kött på den nedersta hyllan och en grönsakslåda längst ner. Under kylen sitter frysen med två lådor; den övre märkt minus 18 grader kan dras ut och visar is under taket.",
+    "Kyl och frys med öppen kyldörr. I kylen står en termometer som visar 4 grader på mittenhyllan, en tallrik med rått kött på den nedersta hyllan och en grönsakslåda längst ner. Under kylen sitter frysen med två lådor; den övre märkt minus 18 grader kan dras ut och visar is längs innerväggarna.",
   body: [cabinet(), freezer(), fridge(), door()],
 });
 
@@ -269,3 +269,18 @@ const body = k.plateHtml({
 const page = k.pageHtml({ title: "Kyl och frys", theme: "light", body, script: kitScript() + live }).replace('<html lang="en">', '<html lang="sv">');
 writeFileSync(join(HERE, "kyl.html"), page);
 console.log("wrote kyl.html");
+
+// Samma figur till appen: stegknapparna i FigurRam väljer läge (src/figurer/kyl/KylFigur.jsx).
+const APP_LAGEN = {
+  oppen: { lyser: ["0"], gron: 0, frys: 0 },
+  "oppen-mat": { lyser: ["1", "2"], gron: CRISP_OUT, frys: 0 },
+  "frys-ute": { lyser: ["3"], gron: 0, frys: FRZ_OUT },
+};
+const modul = `// Genererad av figurer-anatomy/kyl/build.mjs. Ändra där, inte här.
+export const SVG = ${JSON.stringify(svg)};
+export const CSS = ${JSON.stringify(k.ISO_CSS + LIT_CSS)};
+export const PER_Y = ${JSON.stringify(k.axisVector(P, [0, 1, 0]))};
+export const LAGEN = ${JSON.stringify(APP_LAGEN)};
+`;
+writeFileSync(join(HERE, "../../src/figurer/kyl/anatomy.js"), modul);
+console.log("wrote src/figurer/kyl/anatomy.js");
