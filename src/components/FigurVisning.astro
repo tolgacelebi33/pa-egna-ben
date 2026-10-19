@@ -6,7 +6,6 @@ import Brandvarnare from '../figurer/brandvarnare/Brandvarnare.jsx';
 import BrandvarnareText from '../figurer/brandvarnare/Textversion.astro';
 import Elskap from '../figurer/elskap/Elskap.jsx';
 import ElskapText from '../figurer/elskap/Textversion.astro';
-import KylFigur from '../figurer/kyl/KylFigur.jsx';
 import KylText from '../figurer/kyl/Textversion.astro';
 import VattenlasText from '../figurer/vattenlas/Textversion.astro';
 import CisternText from '../figurer/cistern/Textversion.astro';
@@ -44,7 +43,7 @@ const { id, del } = Astro.props;
 // Figurer som består av AI-bilder, ett läge per steg (filer i public/figurer/bilder/<id>/).
 const BILDLAGEN: Record<string, string[]> = {"diskmaskin": ["oppen", "korg-ute", "filter"], "dammsugare": ["grund", "oppen", "munstycken", "filter"], "paslakan": ["steg1", "steg2", "steg3", "klar"], "cykel": ["grund", "punktering", "pump", "kedja"], "vattenlas": ["grund", "torr", "loss"], "spis": ["kastrull", "ugn-oppen"], "tavla": ["gips", "betong", "tra"], "faktura": ["grund"]};
 // Figurer gjorda med anatomy-kitet som egna sidor (public/figurer/anatomi/<id>.html).
-const ANATOMI = ['cistern'];
+const ANATOMI = ['cistern', 'kyl'];
 const alla = id === 'beslutstrad' ? await hamtaAmnen() : [];
 const titlar = Object.fromEntries(amnenI().map((a) => [a, alla.find((p) => p.data.id === a)?.data.titel ?? a]));
 ---
@@ -53,7 +52,6 @@ const titlar = Object.fromEntries(amnenI().map((a) => [a, alla.find((p) => p.dat
   del === 'figur' ? (
     <>
       {BILDLAGEN[id] && <BildFigur client:visible id={id} lagen={BILDLAGEN[id]} />}
-      {id === 'kyl' && <KylFigur client:visible />}
       {ANATOMI.includes(id) && <AnatomiFigur id={id} titel={figur(id)?.titel ?? id} />}
       {id === 'tvattmaskin' && <Tvattmaskin client:visible />}
       {id === 'brandvarnare' && <Brandvarnare client:visible />}

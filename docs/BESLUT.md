@@ -37,3 +37,9 @@ Beslut som har tagits vid kontrollpunkterna. Öppna beslut finns i `CLAUDE.md`, 
 - Kylen byggs om med anatomy-kitet (MIT, kopierat till vendor/anatomy/) i stället för AI-bilder. Källan är figurer-anatomy/kyl/build.mjs, som skriver både en fristående sida och src/figurer/kyl/anatomy.js för appen.
 - I appen styr FigurRams stegknappar vad som markeras (appens ockra) och vilken låda som dras ut. Punktlistorna och textversionen är oförändrade.
 - Figuren är alltid ljus, också i mörkt läge. Övriga figurer görs om på samma sätt en i taget, efter godkännande.
+
+## 2026-10-19, ny figurstil efter cisternen
+
+- Användaren godkände cisternens stil och upplägg: barnboksstil med marinblå konturer, stegknappar där bara nästa går, Manuell och Auto, ett fönster in i mekanismen, en modell som driver alla siffror, ljudord, fartmärke, reglage, färgval och "Den stora idén" under figuren.
+- De 12 maskinfigurerna görs om i den stilen, en i taget, och visas innan nästa. Faktura, budget, städschema, tvättsymboler, källsortering och beslutsträd behålls tills vidare.
+- Figurerna byggs med en gemensam mall (figurer-anatomy/delat/sida.mjs) och visas i appen som egna sidor i en iframe (AnatomiFigur.astro). Klara: cistern, kyl.
