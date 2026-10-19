@@ -108,6 +108,8 @@ function fridge() {
   out.push(box(0, 0, W, D, FZ_TOP, FLOOR - FZ_TOP, {}, 1));
   out.push(box(0, 0, T, D, FLOOR, CEIL - FLOOR));
   out.push(box(T, 0, W - T * 2, T, FLOOR, CEIL - FLOOR));
+  // Gångjärnen ritas före lådan, som kan dras ut framför dem.
+  for (const z of [FLOOR + 4, TOP - 12]) out.push(box(-DOOR_T - 1, D - 3, DOOR_T + 1, 4, z, 8, { tone: "lo" }));
   out.push(crisper());
   out.push(shelf(SHELVES[0]));
   const s1 = SHELVES[0] + 2;
@@ -138,7 +140,6 @@ function door() {
   const out = [];
   out.push(doorSlab(0, DOOR_W, -DOOR_T, 0, FLOOR - 2, TOP - FLOOR + 2));
   out.push(`<path class="iso-line" data-tone="lo" d="${quad([[...onDoor(5, 0), FLOOR + 3], [...onDoor(DOOR_W - 5, 0), FLOOR + 3], [...onDoor(DOOR_W - 5, 0), TOP - 5], [...onDoor(5, 0), TOP - 5]])}"/>`);
-  for (const z of [FLOOR + 4, TOP - 12]) out.push(box(-DOOR_T - 1, D - 3, DOOR_T + 1, 4, z, 8, { tone: "lo" }));
   const bins = [
     { z: 118, items: (z) => doorCan(22, 4.5, z, 26) + doorCan(36, 4.5, z, 22) + doorCan(50, 4, z, 24) },
     { z: 162, items: (z) => doorCan(30, 4, z, 16) + doorCan(44, 4, z, 14) + doorSlab(64, 74, 1, 11, z, 30) },
