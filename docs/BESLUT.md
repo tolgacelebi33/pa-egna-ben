@@ -42,4 +42,4 @@ Beslut som har tagits vid kontrollpunkterna. Öppna beslut finns i `CLAUDE.md`, 
 
 - Användaren godkände cisternens stil och upplägg: barnboksstil med marinblå konturer, stegknappar där bara nästa går, Manuell och Auto, ett fönster in i mekanismen, en modell som driver alla siffror, ljudord, fartmärke, reglage, färgval och "Den stora idén" under figuren.
 - De 12 maskinfigurerna görs om i den stilen, en i taget, och visas innan nästa. Faktura, budget, städschema, tvättsymboler, källsortering och beslutsträd behålls tills vidare.
-- Figurerna byggs med en gemensam mall (figurer-anatomy/delat/sida.mjs) och visas i appen som egna sidor i en iframe (AnatomiFigur.astro). Klara: cistern, kyl.
+- Figurerna byggs med en gemensam mall (figurer-anatomy/delat/sida.mjs) och visas i appen som egna sidor i en iframe (AnatomiFigur.astro). Klara: cistern, kyl, vattenlås.
