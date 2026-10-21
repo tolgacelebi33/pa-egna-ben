@@ -14,11 +14,11 @@ const HEIGHT = 820;
 
 // Världen i cm. Dammsugarens kropp: x 98..134, y 20..50, uppskuren vid framsidan y = 50.
 const MOUTH = [70, 68, 1]; // munstyckets öppning
-const INLET = [98, 35, 16];
+const INLET = [98, 35, 14];
 const HANDLE = [84, 56, 46];
 const PLUG = [128, 0.8, 26];
 const CABLE_END = [128, 10, 26];
-const BAG = { x: 102, y: 23, w: 14, d: 24, z: 8, h: 15 };
+const BAG = { x: 103, y: 27, w: 13, d: 16, z: 7, h: 14 };
 const LIFT = 22; // så högt påse och filter lyfts ur
 const HOSE_TOP = [92, 50, 52];
 const HOSE_MID = [96, 42, 30];
@@ -68,11 +68,15 @@ function nozzle() {
   const out = [];
   const [mx, my] = MOUTH;
   out.push(`<path class="skugga" d="${k.planOutline({ x: mx - 14, y: my - 5, w: 26, d: 10, r: 2 }, 0.62, P)}"/>`);
-  out.push(box(mx - 12, my - 4, 24, 8, 0.6, 3.6, "dsug", 2, 0.4));
-  out.push(box(mx - 3, my - 4, 6, 5, 4.2, 3, "dsug", 1.5, 0.3));
+  // Munstycket: brett och platt, med två små hjul bak, en borstlist fram och en ledad hals.
+  for (const x of [mx - 9, mx + 9]) out.push(S(G.disc(-0.8, 0.8, 1.6, G.frameAlong([x, my - 4.6, 1.6], [0, 1, 0]), P), "hjul"));
+  out.push(box(mx - 14, my - 4, 28, 8.4, 0.6, 2.8, "dsug", 3.4, 0.5));
+  out.push(box(mx - 13, my + 3.6, 26, 0.8, 0.6, 1.4, "borste", 0.3));
+  out.push(box(mx - 4, my - 4.4, 8, 4, 3.2, 1.6, "dsug", 1.5, 0.3));
+  out.push(S(G.sphereOf([mx, my - 2.4, 5.2], 2.4, P), "dsug"));
   out.push(`<g id="har"><path class="har" d="${seg([mx - 10, my + 4.1, 1.2], [mx - 6, my + 4.1, 2.8]) + seg([mx - 6, my + 4.1, 2.8], [mx - 8.5, my + 4.1, 3.6])}"/><path class="har" d="${seg([mx + 5, my + 4.1, 1], [mx + 8, my + 4.1, 3]) + seg([mx + 8, my + 4.1, 3], [mx + 10, my + 4.1, 1.6])}"/></g>`);
   // Röret upp till handtaget.
-  const neck = [mx, my - 2, 7];
+  const neck = [mx, my - 2.4, 6.6];
   const dir = G.unit3(G.sub3(HANDLE, neck));
   const len = Math.hypot(...G.sub3(HANDLE, neck));
   out.push(along(neck, dir, [[0, 1.6], [len, 1.6]], "ror"));
@@ -81,7 +85,7 @@ function nozzle() {
 }
 
 function hose() {
-  const route = G.fillet([G.add3(HANDLE, [1.4, -0.8, 3]), HOSE_TOP, HOSE_MID, [93, 35, 17], [97.2, 35, 16]], 7, 7, { P, tube: 2 });
+  const route = G.fillet([G.add3(HANDLE, [1.4, -0.8, 3]), HOSE_TOP, HOSE_MID, [93, 35, 15], [94.6, 35, 14]], 7, 7, { P, tube: 2 });
   return tubePieces(route, 2, P, { maxLength: 14, rings: { pitch: 1.5, fade: [0.1, 0.55] } })
     .sort((a, b) => k.depthOf(a.mid, P) - k.depthOf(b.mid, P)).map((p) => tubeSvg(p, { tone: "lo" })).join("");
 }
@@ -90,29 +94,36 @@ function bagGroup(id) {
   return `<g id="${id}"><g id="${id}-damm"></g>${box(BAG.x, BAG.y, BAG.w, BAG.d, BAG.z, BAG.h, "pase", 1.5, 0.3, { className: "c-pase genom" })}${box(BAG.x - 1, BAG.y + 6, 1, 12, BAG.z + 3, 9, "kartong", 0.4)}</g>`;
 }
 
+// Kroppen är ett rundat skal kring en axel längs x: fram ett genomskinligt lock över påsen, bak ett täckt motorhus.
+const NOSE = [98, 35, 14];
+const FRONT = [[0, 5], [1.5, 8.6, 1], [6, 12.2, 1], [13, 13.6, 1], [20, 13.8, 1]];
+const REAR = [[20, 13.8, 1], [27, 13.5, 1], [33, 11.6, 1], [37, 8.2, 1], [38, 6.8]];
+const shell = (profile, c, extra) => S(G.solidOf(profile, G.frameAlong(NOSE, [1, 0, 0]), P), c, extra);
+const wheel = (y) => S(G.disc(-1.6, 1.6, 10, G.frameAlong([127, y, 10], [0, 1, 0]), P), "hjul") + S(G.disc(-1.9, 1.9, 3.4, G.frameAlong([127, y, 10], [0, 1, 0]), P), "krom");
+const ringYZ = (x, cy, cz, r, n = 40) => k.pathOf(Array.from({ length: n }, (_, i) => { const a = (i / n) * Math.PI * 2; return at([x, cy + r * Math.cos(a), cz + r * Math.sin(a)]); }), true);
+
 function body() {
   const out = [];
-  out.push(`<path class="skugga" d="${k.planOutline({ x: 95, y: 17, w: 40, d: 34, r: 6 }, 0.02, P)}"/>`);
-  for (const [x, y] of [[102, 20], [130, 20]]) out.push(along([x, y - 1, 6], [0, 1, 0], [[0, 5], [2, 5]], "hjul"));
-  out.push(box(98, 20, 36, 30, 3, 4, "dsug", 4, 0.6));
-  out.push(box(98, 20, 36, 2, 7, 18, "dsug", 0.6));
-  out.push(box(98, 22, 3, 28, 7, 18, "dsug", 0.6));
-  out.push(along([98.2, 35, 16], [-1, 0, 0], [[0, 3.6], [3, 3.6]], "dsug"));
+  out.push(`<path class="skugga" d="${k.planOutline({ x: 97, y: 19, w: 40, d: 33, r: 14 }, 0.02, P)}"/>`);
+  out.push(wheel(35 - 15.6));
+  out.push(S(G.sphereOf([104, 35, 2.4], 2.4, P), "hjul"));
+  // Inuti: påsen, motorfiltret och luften. Syns genom locket.
   out.push(bagGroup("pase-gammal"), bagGroup("pase-ny"));
-  out.push(`<g id="filter-motor">${box(117, 22, 1.6, 26, 8, 16, "filter", 0.4)}<g id="smuts-motor" class="smuts">${box(117, 22, 1.6, 26, 8, 16, "smuts", 0.4)}</g></g>`);
-  out.push(along([120, 35, 16], [1, 0, 0], [[0, 6.6], [0.6, 7, 1], [7.4, 7, 1], [8, 6.6]], "motor"));
-  out.push(`<path id="flakt" class="flakt" d="${k.pathOf(Array.from({ length: 40 }, (_, i) => { const a = (i / 40) * Math.PI * 2; return at([128.05, 35 + 5.4 * Math.cos(a), 16 + 5.4 * Math.sin(a)]); }), true)}"/>`);
-  out.push(`<g id="filter-bak">${box(129.6, 22, 1.6, 26, 8, 16, "filter", 0.4)}<g id="smuts-bak" class="smuts">${box(129.6, 22, 1.6, 26, 8, 16, "smuts", 0.4)}</g></g>`);
+  const disc = (x, r, c) => S(G.disc(-0.7, 0.7, r, G.frameAlong([x, 35, 14], [1, 0, 0]), P), c);
+  out.push(`<g id="filter-motor">${disc(117.6, 11.4, "filter")}<g id="smuts-motor" class="smuts">${disc(117.6, 11.4, "smuts")}</g></g>`);
   out.push(`<g id="luft"></g>`);
-  out.push(box(131, 22, 3, 28, 7, 18, "dsug", 0.6));
-  out.push(box(98, 48, 36, 2, 7, 2, "dsug", 0.4));
-  out.push(box(98, 48, 3, 2, 9, 16, "dsug", 0.4));
-  out.push(box(131, 48, 3, 2, 9, 16, "dsug", 0.4));
-  out.push(box(118.6, 48, 1.4, 2, 9, 16, "dsug", 0.3));
-  out.push(box(98, 48, 36, 2, 23, 2, "dsug", 0.4));
-  out.push(box(118, 20, 16, 30, 25, 2.4, "dsug", 2, 0.5));
-  out.push(box(122, 30, 8, 10, 27.4, 3, "dsug", 1.5, 0.3));
-  out.push(`<g id="lock">${box(98, 20, 20, 30, 25, 2.4, "dsug", 2, 0.5)}${box(104, 31, 8, 8, 27.4, 0.8, "krom", 1)}</g>`);
+  // Locket fram: genomskinligt, med en tät kant mot motorhuset. Lyfts när påsen byts. Ritas före motorhuset, som ligger närmare.
+  out.push(`<g id="lock">${shell(FRONT, "lock", { className: "c-lock skal-genom" })}</g>`);
+  // Motorhuset bak, täckt, med bärhandtag och knapp för sladden.
+  out.push(shell(REAR, "dsug", { inner: L(G.arcOf(G.frameAlong(NOSE, [1, 0, 0]), 20.6, 13.8, P), "lo") }));
+  const handle = G.fillet([[116, 35, 27.4], [116, 35, 32.4], [129, 35, 32.4], [129, 35, 26.4]], 3, 7, { P, tube: 1.5 });
+  out.push(...tubePieces(handle, 1.5, P, { maxLength: 40 }).map((piece) => tubeSvg(piece, { tone: "lo" })));
+  out.push(can(124, 41, 2.2, 26.2, 1.2, "krom"));
+  // Utblåsfiltret i bakänden, med galler.
+  out.push(`<g id="filter-bak">${disc(135.6, 6.6, "filter")}<g id="smuts-bak" class="smuts">${disc(135.6, 6.6, "smuts")}</g><path class="galler" d="${[-4, -2, 0, 2, 4].map((dz) => { const w = Math.sqrt(36 - dz * dz); return k.segment([136.31, 35 - w, 14 + dz], [136.31, 35 + w, 14 + dz], P); }).join("")}"/></g>`);
+  out.push(`<path id="flakt" class="flakt" d="${ringYZ(136.6, 35, 14, 8.4)}"/>`);
+  out.push(along([98.6, 35, 14], [-1, 0, 0], [[0, 3.8], [3.2, 3.8]], "dsug"));
+  out.push(wheel(35 + 15.6));
   return out.join("");
 }
 
@@ -153,7 +164,7 @@ const HINTS = {
 };
 
 const FIG_JS = `
-const AIR = [[MOUTH[0], MOUTH[1], 2.4], [MOUTH[0], MOUTH[1] - 2, 7], HANDLE, HOSE_TOP, HOSE_MID, INLET, [104, 35, 16], [117.8, 35, 16], [128, 35, 16], [131, 35, 16], [140, 35, 16]];
+const AIR = [[MOUTH[0], MOUTH[1], 2.4], [MOUTH[0], MOUTH[1] - 2, 7], HANDLE, HOSE_TOP, HOSE_MID, INLET, [104, 35, 14], [117.6, 35, 14], [128, 35, 14], [136, 35, 14], [146, 35, 14]];
 const airPath = (from, to) => pathOf(AIR.slice(from, to).map((p) => iso(p, P)));
 function dust(st) {
   let svg = "";
@@ -261,6 +272,8 @@ writePage({
     uttag: ["#fbf8f1", "#e9e3d6", "#cfc6b4"],
     matta: ["#d9e6f7", "#b2c9ea", "#8faad3"],
     ror: ["#f4f6f9", "#c9ced6", "#98a1ad"],
+    lock: ["#eef6fc", "#cfe2f2", "#a9c6e0"],
+    borste: ["#5d6675", "#3d4553", "#2c323d"],
     hjul: ["#5d6675", "#3d4553", "#2c323d"],
     pase: ["#fffdf6", "#f5f0e2", "#e2d9c4"],
     kartong: ["#e9d2ae", "#d4b483", "#b8955f"],
@@ -273,6 +286,8 @@ writePage({
   css: `
 .stage svg{overflow:hidden}
 .scene .genom{opacity:.34}
+.scene .skal-genom{opacity:.42}
+.scene .galler{fill:none;stroke:var(--ink);stroke-width:1px}
 .scene .mattmonster{stroke:#7f99c4;stroke-dasharray:3 3}
 .scene .har{fill:none;stroke:#5a4632;stroke-width:1.3px;stroke-linecap:round}
 .scene .dammkorn{fill:#9a8c7e;stroke:#635749;stroke-width:.8px}
